@@ -1,33 +1,251 @@
-<!doctype html>
-<html class="no-js" lang="">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
-  <link rel="stylesheet" href="css/style.css">
-  <meta name="description" content="">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - Fresh From Farm To Table</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ── Splash: dark green body override ── */
+    body { background: #e0ead8; }
 
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
+    /* Splash layout */
+    .splash-screen {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      padding: 60px 28px 40px;
+      text-align: center;
+      background: linear-gradient(
+          160deg,
+          #1f6f3d 0%,
+          #2a8a4a 50%,
+          #3aa35c 100%
+        );
+    }
 
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.png">
+    .splash-screen::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.07);
+      pointer-events: none;
+    }
+    .splash-screen::after {
+      content: '';
+      position: absolute;
+      bottom: 60px; left: -70px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
+      pointer-events: none;
+    }
+    .splash-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
 
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
+    /* Logo box — frosted glass tile */
+    .splash-logo {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 24px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.12);
+    }
+    .splash-logo img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+    }
+
+    /* Brand text — identical values to login's .app-name / .app-sub */
+    .splash-title {
+      font-family: var(--font-display);
+      font-size: 38px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 6px;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+    .splash-tagline {
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255,255,255,.85);
+      margin-top: 10px;
+      letter-spacing: .2px;
+    }
+
+    /* Feature cards */
+    .feature-stack { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+
+    .feature-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 15px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      backdrop-filter: blur(14px);
+    }
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,.15);
+      flex-shrink: 0;
+    }
+    .feature-icon i { font-size: 22px; }
+    .feature-card:nth-child(1) .feature-icon i { color: #bbf7d0; }
+    .feature-card:nth-child(2) .feature-icon i { color: #bfdbfe; }
+    .feature-card:nth-child(3) .feature-icon i { color: #fde68a; }
+
+    .feature-content { flex: 1; text-align: left; }
+    .feature-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 4px;
+    }
+    .feature-desc {
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(255,255,255,.75);
+    }
+
+    /* Pagination dots */
+    .dots { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; }
+    .dot { width: 8px; height: 8px; border-radius: 999px; background: rgba(255,255,255,.3); }
+    .dot.active { width: 24px; background: white; }
+
+    /* CTA */
+    .cta-subtitle {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,.7);
+      margin-bottom: 18px;
+    }
+    .btn-splash {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 16px;
+      background: white;
+      color: var(--green-700);
+      border-radius: 16px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.15);
+    }
+    .btn-splash i { color: var(--green-600); }
+
+    .splash-login {
+      margin-top: 18px;
+      text-align: center;
+      font-size: 14px;
+      color: rgba(255,255,255,.75);
+    }
+    .splash-login a { color: white; text-decoration: none; font-weight: 700; }
+
+    /* Status bar on dark background */
+    .status-bar { background: #1f6f3d; color: rgba(255,255,255,.9); }
+    .status-icons { display: flex; align-items: center; gap: 6px; }
+    .status-icons i { font-size: 12px; color: rgba(255,255,255,.9); }
+  </style>
 </head>
-
 <body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <i class="fas fa-signal"></i>
+      <i class="fas fa-wifi"></i>
+      <i class="fas fa-battery-three-quarters"></i>
+    </div>
+  </div>
 
-  <!-- Add your site or application content here -->
-  <p>Hello world! This is HTML5 Boilerplate.</p>
-  <script src="js/app.js"></script>
+  <div class="screen" style="display:flex; flex-direction:column;">
+    <div class="splash-screen">
 
+      <!-- Header / brand -->
+      <div class="splash-header">
+        <div class="splash-logo">
+          <img src="img/aeryhub-logo.png" alt="AeryHub Logo">
+        </div>
+        <div class="splash-title">AeryHub</div>
+        <div class="splash-tagline">Fresh From Farm To Table</div>
+      </div>
+
+      <!-- Bottom content -->
+      <div class="splash-bottom">
+        <div class="feature-stack">
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-tractor"></i></div>
+            <div class="feature-content">
+              <div class="feature-title">Local Farmers</div>
+              <div class="feature-desc">Supporting 10+ trusted local farmers</div>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-truck-fast"></i></div>
+            <div class="feature-content">
+              <div class="feature-title">Fast Delivery</div>
+              <div class="feature-desc">Same day delivery right to your door</div>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><i class="fas fa-basket-shopping"></i></div>
+            <div class="feature-content">
+              <div class="feature-title">Fresh Products</div>
+              <div class="feature-desc">50+ fresh vegetables, fruits &amp; more</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dots">
+          <div class="dot active"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+
+        <div class="splash-cta">
+          <div class="cta-subtitle">Support local farmers. Eat fresh. Live better.</div>
+          <a href="register.html" class="btn-splash">
+            <i class="fas fa-seedling"></i> Get Started
+          </a>
+        </div>
+        <div class="splash-login">
+          Already have an account? <a href="login.html">Sign In</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
 </body>
-
 </html>

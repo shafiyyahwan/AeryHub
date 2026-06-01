@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - Earnings</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <style>
+    body { background: #e0ead8; }
+    .earn-header { background: linear-gradient(135deg, #14532d, #16a34a); padding: 20px; }
+    .earn-total { text-align: center; padding: 12px 0; }
+    .earn-total-label { font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 4px; }
+    .earn-total-value { font-size: 36px; font-weight: 800; color: white; font-family: var(--font-display); }
+    .earn-total-sub { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 4px; }
+    .period-tabs { display: flex; background: rgba(255,255,255,0.12); border-radius: 12px; padding: 4px; margin-top: 16px; }
+    .p-tab { flex: 1; padding: 8px; text-align: center; border-radius: 9px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.65); cursor: pointer; transition: all 0.2s; }
+    .p-tab.active { background: white; color: var(--green-700); }
+    .earn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 16px; }
+    .earn-stat { background: var(--surface); border-radius: var(--radius-sm); padding: 14px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .es-label { font-size: 11px; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; }
+    .es-value { font-size: 20px; font-weight: 800; color: var(--text); font-family: var(--font-display); }
+    .es-sub { font-size: 11px; margin-top: 4px; }
+    .commission-box { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 16px; margin: 0 16px; }
+    .cb-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .cb-row:last-child { border-bottom: none; font-weight: 800; color: var(--text); font-size: 15px; }
+    .cb-label { color: var(--text-muted); }
+    .cb-value { font-weight: 700; }
+    .breakdown-bar { margin: 16px; }
+    .bb-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+    .bb-track { height: 10px; background: var(--gray-100); border-radius: 10px; overflow: hidden; display: flex; }
+    .bb-farmer { height: 100%; background: linear-gradient(90deg, var(--green-500), var(--green-400)); }
+    .bb-aeryhub { height: 100%; background: linear-gradient(90deg, #d97706, #f59e0b); }
+    .chart-area { padding: 0 16px 16px; }
+    .mini-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; background: var(--surface); border-radius: var(--radius-sm); padding: 12px; border: 1px solid var(--border); }
+    .mc-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; height: 100%; justify-content: flex-end; }
+    .mc-bar { width: 100%; border-radius: 4px 4px 0 0; min-height: 3px; }
+    .mc-bar.green { background: linear-gradient(180deg, var(--green-400), var(--green-700)); }
+    .mc-bar.gold { background: linear-gradient(180deg, #f59e0b, #d97706); }
+    .mc-lbl { font-size: 9px; color: var(--text-muted); font-weight: 600; }
+    .plan-section { padding: 0 16px 16px; }
+    .plan-toggle { display: flex; background: var(--gray-100); border-radius: 12px; padding: 4px; margin-bottom: 16px; }
+    .plan-toggle-btn { flex: 1; padding: 9px; text-align: center; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
+    .plan-toggle-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .free-plan { border: 2px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 12px; background: var(--surface); }
+    .pro-plan { background: linear-gradient(135deg, #14532d, #166534); border-radius: var(--radius); padding: 20px; color: white; position: relative; overflow: hidden; border: 2px solid var(--green-500); }
+    .pro-plan::after { content: '⭐'; position: absolute; right: -8px; bottom: -8px; font-size: 80px; opacity: 0.1; }
+    .plan-name { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+    .plan-price { font-size: 28px; font-weight: 800; font-family: var(--font-display); margin-bottom: 12px; }
+    .plan-price span { font-size: 14px; font-weight: 400; opacity: 0.75; }
+    .plan-feat { display: flex; align-items: center; gap: 8px; font-size: 13px; margin-bottom: 8px; opacity: 0.9; }
+    .plan-feat.free-feat { color: var(--text-muted); }
+    .plan-feat.free-feat span { color: var(--text); opacity: 1; }
+    .payout-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); padding: 16px; margin: 0 16px 16px; }
+    .payout-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .payout-row:last-child { border-bottom: none; }
+    .payout-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .payout-info { flex: 1; }
+    .payout-desc { font-size: 13px; font-weight: 700; color: var(--text); }
+    .payout-date { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .payout-amount { font-size: 14px; font-weight: 800; }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar" style="background:transparent">
+    <span style="color:white">9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons" style="color:white">📶 🔋</div>
+  </div>
+
+  <div class="screen">
+    <!-- Header -->
+    <div class="earn-header">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <a href="farmer-dashboard.html" class="back-btn" style="background:rgba(255,255,255,0.15);color:white">←</a>
+        <div style="font-size:18px;font-weight:800;color:white">Earnings & Plans</div>
+      </div>
+      <div class="earn-total">
+        <div class="earn-total-label" id="periodLabel">This Month</div>
+        <div class="earn-total-value" id="periodValue">RM 3,240.00</div>
+        <div class="earn-total-sub" id="periodSub">↑ 18% vs last month · 47 orders</div>
+      </div>
+      <div class="period-tabs">
+        <div class="p-tab active" onclick="setPeriod('today',this)">Today</div>
+        <div class="p-tab" onclick="setPeriod('week',this)">Week</div>
+        <div class="p-tab" onclick="setPeriod('month',this)">Month</div>
+        <div class="p-tab" onclick="setPeriod('all',this)">All Time</div>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="earn-grid">
+      <div class="earn-stat">
+        <div class="es-label">Gross Revenue</div>
+        <div class="es-value" id="grossRev">RM 3,240</div>
+        <div class="es-sub" style="color:var(--green-600)">↑ 18% vs last period</div>
+      </div>
+      <div class="earn-stat">
+        <div class="es-label">AeryHub Commission</div>
+        <div class="es-value" style="color:var(--red-500)" id="commVal">RM 162</div>
+        <div class="es-sub" style="color:var(--text-muted)">5% of gross revenue</div>
+      </div>
+      <div class="earn-stat">
+        <div class="es-label">Net Earnings (You)</div>
+        <div class="es-value" style="color:var(--primary)" id="netVal">RM 3,078</div>
+        <div class="es-sub" style="color:var(--text-muted)">95% of gross</div>
+      </div>
+      <div class="earn-stat">
+        <div class="es-label">Pending Payout</div>
+        <div class="es-value" style="color:var(--accent)" id="pendingVal">RM 284</div>
+        <div class="es-sub" style="color:var(--text-muted)">Pays out Friday</div>
+      </div>
+    </div>
+
+    <!-- Revenue Split Bar -->
+    <div class="breakdown-bar">
+      <div class="bb-label">
+        <span style="color:var(--green-600)">● You (95%) — RM 3,078</span>
+        <span style="color:var(--accent)">● AeryHub (5%) — RM 162</span>
+      </div>
+      <div class="bb-track">
+        <div class="bb-farmer" style="width:95%"></div>
+        <div class="bb-aeryhub" style="width:5%"></div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-area">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <div style="font-size:14px;font-weight:800;color:var(--text)">Revenue Chart</div>
+        <div style="display:flex;gap:10px;font-size:11px;font-weight:600">
+          <span style="color:var(--green-600)">● Net</span>
+          <span style="color:var(--accent)">● Commission</span>
+        </div>
+      </div>
+      <div class="mini-chart" id="earningsChart"></div>
+    </div>
+
+    <!-- Commission Breakdown -->
+    <div style="padding:0 16px 16px">
+      <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px">This Month Breakdown</div>
+      <div class="commission-box">
+        <div class="cb-row">
+          <span class="cb-label">Total Orders</span>
+          <span class="cb-value">47 orders</span>
+        </div>
+        <div class="cb-row">
+          <span class="cb-label">Delivery Orders</span>
+          <span class="cb-value">38 orders</span>
+        </div>
+        <div class="cb-row">
+          <span class="cb-label">Farm Pickup Orders</span>
+          <span class="cb-value">9 orders</span>
+        </div>
+        <div class="cb-row">
+          <span class="cb-label">Gross Revenue</span>
+          <span class="cb-value" style="color:var(--text)">RM 3,240.00</span>
+        </div>
+        <div class="cb-row">
+          <span class="cb-label">Commission Paid (5%)</span>
+          <span class="cb-value" style="color:var(--red-500)">- RM 162.00</span>
+        </div>
+        <div class="cb-row">
+          <span class="cb-label">Net Earnings</span>
+          <span class="cb-value" style="color:var(--primary)">RM 3,078.00</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Payout History -->
+    <div style="padding:0 16px 16px">
+      <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px">Payout History</div>
+      <div class="payout-card">
+        <div class="payout-row">
+          <div class="payout-icon" style="background:var(--green-100)">💸</div>
+          <div class="payout-info">
+            <div class="payout-desc">May 2025 Payout</div>
+            <div class="payout-date">Paid 31 May 2025 · Maybank ****1234</div>
+          </div>
+          <div class="payout-amount" style="color:var(--green-600)">+ RM 2,714</div>
+        </div>
+        <div class="payout-row">
+          <div class="payout-icon" style="background:var(--green-100)">💸</div>
+          <div class="payout-info">
+            <div class="payout-desc">April 2025 Payout</div>
+            <div class="payout-date">Paid 30 Apr 2025 · Maybank ****1234</div>
+          </div>
+          <div class="payout-amount" style="color:var(--green-600)">+ RM 2,308</div>
+        </div>
+        <div class="payout-row">
+          <div class="payout-icon" style="background:var(--green-100)">💸</div>
+          <div class="payout-info">
+            <div class="payout-desc">March 2025 Payout</div>
+            <div class="payout-date">Paid 31 Mar 2025 · Maybank ****1234</div>
+          </div>
+          <div class="payout-amount" style="color:var(--green-600)">+ RM 1,976</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Plan Section -->
+    <div class="plan-section">
+      <div style="font-size:17px;font-weight:800;color:var(--text);margin-bottom:4px">Subscription Plans</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px">You are on the <strong>Free Plan</strong></div>
+
+      <!-- Free Plan Card -->
+      <div class="free-plan">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div>
+            <div class="plan-name" style="color:var(--text)">Free Plan</div>
+            <div class="plan-price" style="color:var(--text)">RM 0 <span>/month</span></div>
+          </div>
+          <span class="badge badge-green" style="padding:6px 14px;font-size:12px">Current Plan</span>
+        </div>
+        <div class="plan-feat free-feat"><span>✅</span> Unlimited product listings</div>
+        <div class="plan-feat free-feat"><span>✅</span> Unlimited orders</div>
+        <div class="plan-feat free-feat"><span>✅</span> Customer chat</div>
+        <div class="plan-feat free-feat"><span>✅</span> Basic sales overview</div>
+        <div class="plan-feat free-feat"><span>✅</span> Delivery & farm pickup</div>
+        <div class="plan-feat free-feat"><span>✅</span> Basic farmer profile</div>
+        <div class="plan-feat free-feat"><span>✅</span> Standard marketplace visibility</div>
+        <div class="plan-feat" style="color:var(--gray-300)"><span>🔒</span> Advanced analytics</div>
+        <div class="plan-feat" style="color:var(--gray-300)"><span>🔒</span> Featured placement</div>
+        <div class="plan-feat" style="color:var(--gray-300)"><span>🔒</span> Verified badge</div>
+      </div>
+
+      <!-- Pro Plan Card -->
+      <div class="pro-plan">
+        <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(245,158,11,0.2);border-radius:20px;padding:4px 12px;margin-bottom:12px;border:1px solid rgba(245,158,11,0.4)">
+          <span style="font-size:14px">⭐</span>
+          <span style="font-size:11px;font-weight:800;color:#f59e0b;letter-spacing:0.5px">AERYHUB PRO</span>
+        </div>
+        <div class="plan-name">Pro Plan</div>
+        <div class="plan-price">RM 29 <span>/month</span></div>
+        <div style="font-size:12px;opacity:0.7;margin-bottom:16px">Everything in Free, plus:</div>
+        <div class="plan-feat">⭐ Verified Farmer Badge</div>
+        <div class="plan-feat">🔝 Featured Product Placement</div>
+        <div class="plan-feat">📊 Advanced Sales Analytics</div>
+        <div class="plan-feat">📈 Revenue Forecasting</div>
+        <div class="plan-feat">👥 Customer Insights</div>
+        <div class="plan-feat">🌦️ Seasonal Demand Trends</div>
+        <div class="plan-feat">📣 Marketing Tools</div>
+        <div class="plan-feat">🎯 Higher Search Ranking</div>
+        <div class="plan-feat">🛎️ Priority Support</div>
+
+        <div style="margin-top:20px">
+          <button class="btn btn-full" style="background:linear-gradient(135deg,#d97706,#f59e0b);color:white;box-shadow:0 4px 20px rgba(217,119,6,0.4)" onclick="upgradeToPro()">
+            🚀 Upgrade to Pro — RM29/month
+          </button>
+          <div style="text-align:center;margin-top:10px;font-size:12px;opacity:0.65">Cancel anytime · No commitment</div>
+        </div>
+      </div>
+
+      <!-- Pro ROI note -->
+      <div style="background:var(--green-50);border:1.5px solid var(--green-200);border-radius:12px;padding:14px;margin-top:12px">
+        <div style="font-size:13px;font-weight:700;color:var(--green-700);margin-bottom:4px">💡 Is Pro worth it?</div>
+        <div style="font-size:12px;color:var(--green-800);line-height:1.5">Farmers on Pro average <strong>43% more monthly revenue</strong> thanks to featured placement and advanced analytics. At RM29/month, just 1–2 extra orders covers the cost!</div>
+      </div>
+
+      <div style="height:24px"></div>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div class="modal-overlay" id="proModal" style="display:none">
+      <div class="modal" style="text-align:center">
+        <div style="font-size:56px;margin-bottom:12px">⭐</div>
+        <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px">Upgrade to AeryHub Pro</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.5">You'll be charged <strong>RM 29.00</strong> monthly. Cancel anytime from settings.</div>
+        <div style="background:var(--green-50);border-radius:12px;padding:12px;margin-bottom:20px;text-align:left">
+          <div style="font-size:12px;font-weight:700;color:var(--green-700);margin-bottom:8px">Select Payment Method</div>
+          <div class="pay-method selected" style="padding:10px;border:1.5px solid var(--primary);background:var(--green-50);border-radius:10px;display:flex;align-items:center;gap:10px;margin-bottom:6px;cursor:pointer">
+            <span style="font-size:20px">🏦</span><span style="font-size:13px;font-weight:700">FPX Online Banking</span>
+          </div>
+          <div style="padding:10px;border:1.5px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showToast('Switch payment method')">
+            <span style="font-size:20px">💙</span><span style="font-size:13px;font-weight:700">Touch n Go eWallet</span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" style="background:linear-gradient(135deg,#d97706,#f59e0b)" onclick="confirmUpgrade()">Confirm Upgrade — RM29/month</button>
+        <button class="btn btn-ghost btn-full" style="margin-top:10px" onclick="document.getElementById('proModal').style.display='none'">Maybe Later</button>
+      </div>
+    </div>
+
+    <!-- Success upgrade modal -->
+    <div class="modal-overlay" id="proSuccessModal" style="display:none">
+      <div class="modal" style="text-align:center">
+        <div style="font-size:64px;margin-bottom:12px;animation:pulse 1s">🎉</div>
+        <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px">Welcome to Pro!</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.5">Your Verified Farmer Badge is now active. Your products will get featured placement starting tomorrow!</div>
+        <div style="background:linear-gradient(135deg,#14532d,#166534);border-radius:14px;padding:16px;margin-bottom:20px">
+          <div style="font-size:14px;font-weight:800;color:white;margin-bottom:12px">Pro Features Unlocked ✓</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.85);text-align:left">
+            <div style="margin-bottom:6px">⭐ Verified Farmer Badge — Active</div>
+            <div style="margin-bottom:6px">🔝 Featured Placement — Active tomorrow</div>
+            <div style="margin-bottom:6px">📊 Advanced Analytics — Active now</div>
+            <div>🎯 Higher Search Ranking — Active now</div>
+          </div>
+        </div>
+        <a href="farmer-dashboard.html" class="btn btn-primary btn-full">Back to Dashboard →</a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="farmer-dashboard.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      Dashboard
+    </a>
+    <a href="manage-products.html" class="nav-item">
+      <span class="nav-icon">📦</span>
+      Products
+    </a>
+    <a href="earnings.html" class="nav-item active">
+      <span class="nav-icon">💰</span>
+      Earnings
+    </a>
+    <a href="chat.html" class="nav-item">
+      <span class="nav-icon">💬</span>
+      Chat
+    </a>
+    <a href="farmer-profile.html" class="nav-item">
+      <span class="nav-icon">👤</span>
+      Profile
+    </a>
+  </nav>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  const periods = {
+    today: { label: 'Today', value: 'RM 145.50', sub: '3 orders today', gross: 145, comm: 7.28, net: 137.72, pending: 145 },
+    week: { label: 'This Week', value: 'RM 892.00', sub: '14 orders · ↑ 12% vs last week', gross: 892, comm: 44.60, net: 847.40, pending: 284 },
+    month: { label: 'This Month', value: 'RM 3,240.00', sub: '↑ 18% vs last month · 47 orders', gross: 3240, comm: 162, net: 3078, pending: 284 },
+    all: { label: 'All Time', value: 'RM 18,920.00', sub: 'Since Jan 2024 · 412 orders', gross: 18920, comm: 946, net: 17974, pending: 284 },
+  };
+
+  function setPeriod(key, el) {
+    document.querySelectorAll('.p-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    const p = periods[key];
+    document.getElementById('periodLabel').textContent = p.label;
+    document.getElementById('periodValue').textContent = p.value;
+    document.getElementById('periodSub').textContent = p.sub;
+    document.getElementById('grossRev').textContent = `RM ${p.gross.toLocaleString()}`;
+    document.getElementById('commVal').textContent = `RM ${p.comm.toFixed(2)}`;
+    document.getElementById('netVal').textContent = `RM ${p.net.toFixed(2)}`;
+    document.getElementById('pendingVal').textContent = `RM ${p.pending}`;
+  }
+
+  function upgradeToPro() { document.getElementById('proModal').style.display = 'flex'; }
+
+  function confirmUpgrade() {
+    document.getElementById('proModal').style.display = 'none';
+    const btn = document.querySelector('[onclick="confirmUpgrade()"]');
+    setTimeout(() => {
+      document.getElementById('proSuccessModal').style.display = 'flex';
+    }, 1000);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    AppState.init();
+    // Build chart
+    const weekData = [42, 38, 51, 29, 64, 89, 14];
+    const weekComm = weekData.map(v => Math.round(v * 0.05));
+    const days = ['M','T','W','T','F','S','S'];
+    const max = Math.max(...weekData);
+    const chart = document.getElementById('earningsChart');
+    weekData.forEach((v, i) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'mc-bar-wrap';
+      const netH = Math.round((v / max) * 70);
+      const commH = Math.round((weekComm[i] / max) * 70);
+      wrap.innerHTML = `
+      <div class="mc-bar green" style="height:${netH}px" title="Net: RM ${v * 10}"></div>
+      <div class="mc-bar gold" style="height:${commH}px;margin-top:2px" title="Commission: RM ${weekComm[i] * 10}"></div>
+      <div class="mc-lbl">${days[i]}</div>
+    `;
+      chart.appendChild(wrap);
+    });
+  });
+</script>
+</body>
+</html>

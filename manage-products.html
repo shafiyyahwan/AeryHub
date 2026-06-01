@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - Manage Products</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <style>
+    body { background: #e0ead8; }
+    .product-row { display: flex; gap: 12px; align-items: center; padding: 12px; background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 10px; cursor: pointer; transition: all 0.2s; }
+    .product-row:active { transform: scale(0.98); }
+    .product-row img { width: 64px; height: 64px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
+    .pr-info { flex: 1; }
+    .pr-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .pr-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .pr-price { font-size: 14px; font-weight: 800; color: var(--primary); margin-top: 4px; }
+    .pr-actions { display: flex; flex-direction: column; gap: 6px; }
+    .pr-edit { padding: 5px 12px; background: var(--green-100); border: none; border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--green-700); cursor: pointer; }
+    .pr-delete { padding: 5px 12px; background: #fee2e2; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--red-500); cursor: pointer; }
+    .stock-low { color: var(--red-500); font-weight: 700; }
+    .stock-ok { color: var(--green-600); font-weight: 700; }
+    .filter-tabs { display: flex; gap: 6px; padding: 12px 16px 0; overflow-x: auto; scrollbar-width: none; }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .f-tab { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; white-space: nowrap; }
+    .f-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+    .summary-strip { display: flex; gap: 10px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none; }
+    .summary-strip::-webkit-scrollbar { display: none; }
+    .ss-card { min-width: 100px; background: var(--surface); border-radius: var(--radius-sm); padding: 10px 14px; border: 1px solid var(--border); text-align: center; flex-shrink: 0; }
+    .ss-val { font-size: 18px; font-weight: 800; color: var(--text); font-family: var(--font-display); }
+    .ss-label { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+    .toggle-switch { display: flex; align-items: center; gap: 6px; }
+    .tiny-toggle { width: 36px; height: 20px; position: relative; }
+    .tiny-toggle input { opacity: 0; width: 0; height: 0; }
+    .tiny-slider { position: absolute; inset: 0; background: var(--gray-200); border-radius: 10px; cursor: pointer; transition: 0.2s; }
+    .tiny-slider:before { content:''; position: absolute; width: 14px; height: 14px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.2s; }
+    .tiny-toggle input:checked + .tiny-slider { background: var(--primary); }
+    .tiny-toggle input:checked + .tiny-slider:before { transform: translateX(16px); }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">📶 🔋</div>
+  </div>
+
+  <div class="screen">
+    <div class="page-header">
+      <a href="farmer-dashboard.html" class="back-btn">←</a>
+      <div class="page-title">My Products</div>
+      <a href="add-product.html" class="btn btn-primary btn-sm" style="padding:8px 14px">+ Add</a>
+    </div>
+
+    <!-- Summary Strip -->
+    <div class="summary-strip">
+      <div class="ss-card">
+        <div class="ss-val">12</div>
+        <div class="ss-label">Total Products</div>
+      </div>
+      <div class="ss-card">
+        <div class="ss-val" style="color:var(--green-600)">10</div>
+        <div class="ss-label">Active</div>
+      </div>
+      <div class="ss-card">
+        <div class="ss-val" style="color:var(--red-500)">2</div>
+        <div class="ss-label">Low Stock</div>
+      </div>
+      <div class="ss-card">
+        <div class="ss-val" style="color:var(--gray-400)">1</div>
+        <div class="ss-label">Paused</div>
+      </div>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <div class="f-tab active" onclick="filterTab(this,'all')">All (12)</div>
+      <div class="f-tab" onclick="filterTab(this,'active')">Active (10)</div>
+      <div class="f-tab" onclick="filterTab(this,'low')">Low Stock (2)</div>
+      <div class="f-tab" onclick="filterTab(this,'paused')">Paused (1)</div>
+    </div>
+
+    <!-- Search -->
+    <div style="padding:12px 16px 0">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search your products..." id="prodSearch" oninput="filterProds()">
+      </div>
+    </div>
+
+    <!-- Product List -->
+    <div style="padding:12px 16px 24px" id="productList"></div>
+
+    <!-- Delete Confirm Modal -->
+    <div class="modal-overlay" id="deleteModal" style="display:none">
+      <div class="modal" style="text-align:center">
+        <div style="font-size:48px;margin-bottom:12px">🗑️</div>
+        <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:8px">Delete Product?</div>
+        <div style="font-size:14px;color:var(--text-muted);margin-bottom:24px">This action cannot be undone. The product will be removed from the marketplace.</div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost btn-full" onclick="closeDelete()">Cancel</button>
+          <button class="btn btn-full" style="background:#ef4444;color:white" onclick="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal-overlay" id="editModal" style="display:none">
+      <div class="modal" style="text-align:left;max-height:80vh;overflow-y:auto">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <div style="font-size:18px;font-weight:800;color:var(--text)">Edit Product</div>
+          <button onclick="closeEdit()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-muted)">✕</button>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Product Name</label>
+          <input type="text" class="input" id="editName">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Price (RM)</label>
+          <input type="number" class="input" id="editPrice" step="0.10">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Stock (units)</label>
+          <input type="number" class="input" id="editStock">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Description</label>
+          <textarea class="input" id="editDesc" rows="3" style="resize:none"></textarea>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="saveEdit()">Save Changes ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="farmer-dashboard.html" class="nav-item">
+      <span class="nav-icon">🏠</span>
+      Dashboard
+    </a>
+    <a href="manage-products.html" class="nav-item active">
+      <span class="nav-icon">📦</span>
+      Products
+    </a>
+    <a href="earnings.html" class="nav-item">
+      <span class="nav-icon">💰</span>
+      Earnings
+    </a>
+    <a href="chat.html" class="nav-item">
+      <span class="nav-icon">💬</span>
+      Chat
+    </a>
+    <a href="farmer-profile.html" class="nav-item">
+      <span class="nav-icon">👤</span>
+      Profile
+    </a>
+  </nav>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  // Only Ahmad's products (farmerId 1, 2 for demo)
+  let myProducts = PRODUCTS.filter(p => p.farmerId === 1 || p.farmerId === 2).map((p,i) => ({
+    ...p,
+    active: i !== 2,
+    farmerId: 1
+  }));
+  let currentFilter = 'all';
+  let deleteTarget = null;
+  let editTarget = null;
+
+  function renderProducts() {
+    const q = (document.getElementById('prodSearch')?.value || '').toLowerCase();
+    let list = myProducts;
+    if (currentFilter === 'active') list = list.filter(p => p.active && p.stock > 20);
+    else if (currentFilter === 'low') list = list.filter(p => p.stock <= 20);
+    else if (currentFilter === 'paused') list = list.filter(p => !p.active);
+    if (q) list = list.filter(p => p.name.toLowerCase().includes(q));
+
+    const container = document.getElementById('productList');
+    container.innerHTML = '';
+
+    list.forEach(p => {
+      const isLow = p.stock <= 20;
+      const div = document.createElement('div');
+      div.className = 'product-row';
+      div.innerHTML = `
+      <img src="${p.images[0]}" alt="${p.name}">
+      <div class="pr-info">
+        <div class="pr-name">${p.name} ${p.organic ? '<span class="badge badge-green" style="font-size:9px">Organic</span>' : ''}</div>
+        <div class="pr-meta">${p.category} · ${p.unit}</div>
+        <div class="pr-meta">Stock: <span class="${isLow ? 'stock-low' : 'stock-ok'}">${p.stock} units ${isLow ? '⚠️' : ''}</span></div>
+        <div class="pr-price">RM ${p.price.toFixed(2)}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
+          <span style="font-size:11px;color:var(--text-muted)">Listed</span>
+          <label class="tiny-toggle">
+            <input type="checkbox" ${p.active ? 'checked' : ''} onchange="toggleActive(${p.id},this.checked)" onclick="event.stopPropagation()">
+            <span class="tiny-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="pr-actions">
+        <button class="pr-edit" onclick="event.stopPropagation();openEdit(${p.id})">✏️ Edit</button>
+        <button class="pr-delete" onclick="event.stopPropagation();openDelete(${p.id})">🗑️ Del</button>
+      </div>
+    `;
+      container.appendChild(div);
+    });
+
+    if (list.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">No products here</div></div>';
+    }
+  }
+
+  function filterTab(el, filter) {
+    document.querySelectorAll('.f-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    currentFilter = filter;
+    renderProducts();
+  }
+
+  function filterProds() { renderProducts(); }
+
+  function toggleActive(id, val) {
+    const p = myProducts.find(p => p.id === id);
+    if (p) p.active = val;
+    showToast(val ? '✅ Product listed' : '⏸️ Product paused');
+  }
+
+  function openDelete(id) {
+    deleteTarget = id;
+    document.getElementById('deleteModal').style.display = 'flex';
+  }
+  function closeDelete() { document.getElementById('deleteModal').style.display = 'none'; }
+  function confirmDelete() {
+    myProducts = myProducts.filter(p => p.id !== deleteTarget);
+    closeDelete();
+    renderProducts();
+    showToast('🗑️ Product deleted');
+  }
+
+  function openEdit(id) {
+    editTarget = id;
+    const p = myProducts.find(p => p.id === id);
+    if (!p) return;
+    document.getElementById('editName').value = p.name;
+    document.getElementById('editPrice').value = p.price;
+    document.getElementById('editStock').value = p.stock;
+    document.getElementById('editDesc').value = p.description;
+    document.getElementById('editModal').style.display = 'flex';
+  }
+  function closeEdit() { document.getElementById('editModal').style.display = 'none'; }
+  function saveEdit() {
+    const p = myProducts.find(p => p.id === editTarget);
+    if (p) {
+      p.name = document.getElementById('editName').value;
+      p.price = parseFloat(document.getElementById('editPrice').value);
+      p.stock = parseInt(document.getElementById('editStock').value);
+      p.description = document.getElementById('editDesc').value;
+    }
+    closeEdit();
+    renderProducts();
+    showToast('✅ Product updated!');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => { AppState.init(); renderProducts(); });
+</script>
+</body>
+</html>

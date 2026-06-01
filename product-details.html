@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - Product Details</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <style>
+    body { background: #e0ead8; }
+    .img-gallery { position: relative; height: 280px; background: var(--gray-100); overflow: hidden; }
+    .img-gallery img { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 40%); }
+    .gallery-back { position: absolute; top: 16px; left: 16px; width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.9); border: none; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; backdrop-filter: blur(4px); }
+    .gallery-wish { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 10px; background: rgba(255,255,255,0.9); border: none; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+    .gallery-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; }
+    .gallery-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+    .gallery-dot.active { background: white; width: 18px; border-radius: 3px; }
+    .product-body { padding: 20px; }
+    .product-title-row { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
+    .product-title { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text); flex: 1; }
+    .product-price-big { font-size: 24px; font-weight: 800; color: var(--primary); }
+    .meta-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+    .meta-chip { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: var(--gray-100); border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--text-muted); }
+    .farmer-preview { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 20px; cursor: pointer; }
+    .farmer-preview img { width: 48px; height: 48px; border-radius: 14px; object-fit: cover; }
+    .fp-info { flex: 1; }
+    .fp-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .fp-farm { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .fp-rating { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .desc-text { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+    .review-card { padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .review-card:last-child { border-bottom: none; }
+    .reviewer-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .reviewer-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .review-date { font-size: 11px; color: var(--text-muted); }
+    .review-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .bottom-actions { position: sticky; bottom: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 16px 20px; display: flex; gap: 12px; z-index: 10; }
+    .stock-bar { margin: 16px 0; }
+    .stock-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">📶 🔋</div>
+  </div>
+
+  <div class="screen" id="mainScreen">
+    <!-- Loading placeholder -->
+    <div id="loadingState" class="loading"><div class="spinner"></div></div>
+    <div id="productContent" style="display:none">
+
+      <!-- Gallery -->
+      <div class="img-gallery">
+        <img id="mainImg" src="" alt="">
+        <div class="gallery-overlay"></div>
+        <a href="marketplace.html" class="gallery-back">←</a>
+        <button class="gallery-wish" id="wishBtn">🤍</button>
+        <div class="gallery-dots" id="galleryDots"></div>
+      </div>
+
+      <div class="product-body">
+        <!-- Title & Price -->
+        <div class="product-title-row">
+          <div class="product-title" id="prodTitle">...</div>
+          <div>
+            <div class="product-price-big" id="prodPrice"></div>
+            <div style="font-size:11px;color:var(--text-muted);text-align:right" id="prodUnit"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span class="stars" id="prodStars">★★★★★</span>
+          <span style="font-size:12px;color:var(--text-muted)" id="prodReviews"></span>
+          <span id="organicBadge"></span>
+        </div>
+
+        <!-- Meta -->
+        <div class="meta-row" id="metaRow">
+          <div class="meta-chip">📦 Stock: <span id="stockVal"></span></div>
+          <div class="meta-chip">🌱 Harvest: <span id="harvestVal"></span></div>
+          <div class="meta-chip">📍 <span id="distVal"></span></div>
+        </div>
+
+        <!-- Stock bar -->
+        <div class="stock-bar">
+          <div class="stock-label">
+            <span>Available Stock</span>
+            <span id="stockPct"></span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="stockBar"></div>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="tagsRow"></div>
+
+        <!-- Farmer Preview -->
+        <div class="section-title" style="margin-bottom:12px">Farmer</div>
+        <div class="farmer-preview" id="farmerPreview" onclick="">
+          <img id="farmerImg" src="" alt="">
+          <div class="fp-info">
+            <div class="fp-name" id="farmerName"></div>
+            <div class="fp-farm" id="farmerFarm"></div>
+            <div class="fp-rating" id="farmerRating"></div>
+          </div>
+          <div style="font-size:20px;color:var(--text-muted)">→</div>
+        </div>
+
+        <!-- Description -->
+        <div class="section-title" style="margin-bottom:8px">About This Product</div>
+        <div class="desc-text" id="prodDesc"></div>
+
+        <!-- Reviews -->
+        <div class="section-header" style="margin-bottom:12px">
+          <div class="section-title">Reviews</div>
+          <span class="section-link" onclick="showToast('All reviews feature coming soon!')">See All →</span>
+        </div>
+        <div id="reviewsContainer"></div>
+
+        <div style="height:100px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quantity & Actions -->
+  <div class="bottom-actions" id="bottomActions" style="display:none">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+      <div style="font-size:11px;color:var(--text-muted);font-weight:600">QTY</div>
+      <div class="qty-control">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span class="qty-value" id="qtyDisplay">1</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+    </div>
+    <button class="btn btn-outline" style="flex:1" onclick="chatFarmer()">💬 Chat</button>
+    <button class="btn btn-primary" style="flex:2" onclick="addProductToCart()">🛒 Add to Cart</button>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  let currentProduct = null;
+  let currentQty = 1;
+
+  const REVIEWS = [
+    { name: "Amir Hamzah", rating: 5, date: "28 May 2025", text: "Super fresh! The tomatoes arrived the same day they were harvested. Will definitely order again." },
+    { name: "Nurul Ain", rating: 4, date: "25 May 2025", text: "Good quality, packaging was excellent. Only wish the portions were bigger." },
+    { name: "Jason Tan", rating: 5, date: "20 May 2025", text: "Best organic produce I've ever had from an online marketplace. Highly recommended!" },
+  ];
+
+  document.addEventListener('DOMContentLoaded', () => {
+    AppState.init();
+    const pid = parseInt(localStorage.getItem('currentProduct') || '1');
+    currentProduct = PRODUCTS.find(p => p.id === pid) || PRODUCTS[0];
+    const farmer = FARMERS.find(f => f.id === currentProduct.farmerId);
+
+    setTimeout(() => {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('productContent').style.display = 'block';
+      document.getElementById('bottomActions').style.display = 'flex';
+
+      // Image
+      document.getElementById('mainImg').src = currentProduct.images[0];
+
+      // Gallery dots
+      const dots = document.getElementById('galleryDots');
+      currentProduct.images.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+        dots.appendChild(d);
+      });
+
+      // Wishlist
+      const wishBtn = document.getElementById('wishBtn');
+      wishBtn.textContent = AppState.wishlist.includes(currentProduct.id) ? '❤️' : '🤍';
+      wishBtn.onclick = () => {
+        AppState.toggleWishlist(currentProduct.id);
+        wishBtn.textContent = AppState.wishlist.includes(currentProduct.id) ? '❤️' : '🤍';
+        showToast(AppState.wishlist.includes(currentProduct.id) ? '❤️ Saved to wishlist' : 'Removed from wishlist');
+      };
+
+      document.getElementById('prodTitle').textContent = currentProduct.name;
+      document.getElementById('prodPrice').textContent = 'RM ' + currentProduct.price.toFixed(2);
+      document.getElementById('prodUnit').textContent = 'per ' + currentProduct.unit;
+      document.getElementById('prodStars').textContent = '★'.repeat(Math.floor(currentProduct.rating));
+      document.getElementById('prodReviews').textContent = `${currentProduct.rating} (${currentProduct.reviews} reviews)`;
+
+      if (currentProduct.organic) {
+        document.getElementById('organicBadge').innerHTML = '<span class="badge badge-green">✓ Organic</span>';
+      }
+
+      document.getElementById('stockVal').textContent = currentProduct.stock;
+      document.getElementById('harvestVal').textContent = formatDate(currentProduct.harvestDate);
+      document.getElementById('distVal').textContent = farmer?.distance || '';
+
+      const pct = Math.min(100, Math.round((currentProduct.stock / 300) * 100));
+      document.getElementById('stockPct').textContent = `${currentProduct.stock} units left`;
+      document.getElementById('stockBar').style.width = pct + '%';
+
+      const tagsRow = document.getElementById('tagsRow');
+      currentProduct.tags.forEach(t => {
+        const s = document.createElement('span');
+        s.className = 'tag';
+        s.textContent = '#' + t;
+        tagsRow.appendChild(s);
+      });
+
+      // Farmer
+      if (farmer) {
+        document.getElementById('farmerImg').src = farmer.image;
+        document.getElementById('farmerName').textContent = farmer.name + (farmer.certified ? ' ✓' : '');
+        document.getElementById('farmerFarm').textContent = farmer.farm + ' · ' + farmer.location;
+        document.getElementById('farmerRating').textContent = `⭐ ${farmer.rating} · ${farmer.experience} experience`;
+        document.getElementById('farmerPreview').onclick = () => {
+          localStorage.setItem('currentFarmer', farmer.id);
+          window.location.href = 'farmer-profile.html';
+        };
+      }
+
+      document.getElementById('prodDesc').textContent = currentProduct.description;
+
+      // Reviews
+      const rc = document.getElementById('reviewsContainer');
+      REVIEWS.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'review-card';
+        div.innerHTML = `
+        <div class="reviewer-row">
+          <div style="width:36px;height:36px;border-radius:50%;background:var(--green-100);display:flex;align-items:center;justify-content:center;font-size:18px">👤</div>
+          <div>
+            <div class="reviewer-name">${r.name}</div>
+            <div class="review-date">${'⭐'.repeat(r.rating)} · ${r.date}</div>
+          </div>
+        </div>
+        <div class="review-text">${r.text}</div>
+      `;
+        rc.appendChild(div);
+      });
+    }, 500);
+  });
+
+  function changeQty(delta) {
+    currentQty = Math.max(1, Math.min(99, currentQty + delta));
+    document.getElementById('qtyDisplay').textContent = currentQty;
+  }
+
+  function addProductToCart() {
+    AppState.addToCart(currentProduct.id, currentQty);
+    showToast(`✅ Added ${currentQty}× ${currentProduct.name} to cart!`);
+    setTimeout(() => window.location.href = 'cart.html', 800);
+  }
+
+  function chatFarmer() {
+    const f = FARMERS.find(f => f.id === currentProduct.farmerId);
+    localStorage.setItem('chatFarmer', f?.id || 1);
+    window.location.href = 'chat.html';
+  }
+</script>
+</body>
+</html>

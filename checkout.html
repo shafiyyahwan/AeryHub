@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - Checkout</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <style>
+    body { background: #e0ead8; }
+    .section-box { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
+    .section-box-title { font-size: 13px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .address-card { display: flex; gap: 10px; align-items: flex-start; }
+    .address-icon { font-size: 24px; }
+    .address-info { flex: 1; }
+    .address-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .address-text { font-size: 13px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
+    .change-link { font-size: 13px; color: var(--primary); font-weight: 700; }
+    .order-item { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .order-item:last-child { border-bottom: none; }
+    .order-item img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; }
+    .order-item-name { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; }
+    .order-item-price { font-size: 13px; font-weight: 700; color: var(--primary); }
+    .price-summary { }
+    .ps-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+    .ps-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; color: var(--text); border-top: 1.5px solid var(--border); padding-top: 12px; margin-top: 4px; }
+    .pay-method { display: flex; align-items: center; gap: 12px; padding: 12px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; margin-bottom: 8px; transition: all 0.2s; }
+    .pay-method.selected { border-color: var(--primary); background: var(--green-50); }
+    .pay-icon-big { font-size: 28px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--gray-100); border-radius: 10px; }
+    .pay-info { flex: 1; }
+    .pay-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .pay-desc { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+    .radio-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; }
+    .pay-method.selected .radio-circle { border-color: var(--primary); background: var(--primary); }
+    .pay-method.selected .radio-circle::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: white; }
+    .fulfill-opt { border: 2px solid var(--border); border-radius: 14px; padding: 16px 12px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--surface); }
+    .fulfill-opt.selected { border-color: var(--primary); background: var(--green-50); }
+    .slot-chip { padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+    .slot-chip.selected { background: var(--primary); border-color: var(--primary); color: white; }
+    /* Success Modal */
+    .success-modal { text-align: center; }
+    .success-icon { font-size: 64px; margin-bottom: 16px; animation: pulse 1s ease; }
+    .success-title { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .success-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+    .order-number-box { background: var(--green-50); border-radius: 12px; padding: 14px; margin-bottom: 24px; }
+    .order-number-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .order-number { font-size: 18px; font-weight: 800; color: var(--primary); font-family: monospace; letter-spacing: 1px; }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">📶 🔋</div>
+  </div>
+
+  <div class="screen" id="mainScreen">
+    <div class="page-header">
+      <a href="cart.html" class="back-btn">←</a>
+      <div class="page-title">Checkout</div>
+    </div>
+
+    <div style="padding:16px 16px 100px">
+      <!-- Fulfillment Method -->
+      <div class="section-box">
+        <div class="section-box-title">🚚 Fulfillment Method</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+          <div class="fulfill-opt selected" id="opt-delivery" onclick="setFulfill('delivery')">
+            <div style="font-size:28px;margin-bottom:6px">🚚</div>
+            <div style="font-size:13px;font-weight:800;color:var(--text)">Delivery</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">We deliver to your door</div>
+            <div style="font-size:12px;font-weight:700;color:var(--primary);margin-top:6px">+RM 5.00</div>
+          </div>
+          <div class="fulfill-opt" id="opt-pickup" onclick="setFulfill('pickup')">
+            <div style="font-size:28px;margin-bottom:6px">🧑‍🌾</div>
+            <div style="font-size:13px;font-weight:800;color:var(--text)">Farm Pickup</div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Collect fresh at the farm</div>
+            <div style="font-size:12px;font-weight:700;color:var(--green-600);margin-top:6px">FREE</div>
+          </div>
+        </div>
+
+        <!-- Delivery section -->
+        <div id="delivery-section">
+          <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Delivery Address</div>
+          <div class="address-card">
+            <div class="address-icon">🏠</div>
+            <div class="address-info">
+              <div class="address-name">Sarah Lim <span class="badge badge-green" style="font-size:10px">Home</span></div>
+              <div class="address-text">No 12, Jalan Subang 3, Putra Heights,<br>47650 Subang Jaya, Selangor</div>
+            </div>
+            <span class="change-link" onclick="showToast('Address management coming soon!')">Change</span>
+          </div>
+          <div style="margin-top:12px">
+            <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Delivery Slot</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div class="slot-chip selected" onclick="selectSlot(this,'Today 12–2 PM')">Today 12–2 PM</div>
+              <div class="slot-chip" onclick="selectSlot(this,'Today 3–5 PM')">Today 3–5 PM</div>
+              <div class="slot-chip" onclick="selectSlot(this,'Tomorrow 9–11 AM')">Tomorrow 9–11 AM</div>
+              <div class="slot-chip" onclick="selectSlot(this,'Tomorrow 2–4 PM')">Tomorrow 2–4 PM</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pickup section -->
+        <div id="pickup-section" style="display:none">
+          <div style="background:var(--green-50);border:1.5px solid var(--green-200);border-radius:14px;padding:14px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" style="width:40px;height:40px;border-radius:10px;object-fit:cover">
+              <div>
+                <div style="font-size:14px;font-weight:700;color:var(--text)">Ladang Hijau Selangor</div>
+                <div style="font-size:12px;color:var(--text-muted)">Ahmad Razif · 12 km away</div>
+              </div>
+            </div>
+            <div style="font-size:13px;color:var(--gray-600);display:flex;align-items:flex-start;gap:6px;margin-bottom:8px">
+              <span>📍</span><span>Lot 45, Jalan Ladang, Kuala Kubu Bharu, 44000 Selangor</span>
+            </div>
+            <div style="font-size:13px;color:var(--gray-600);display:flex;align-items:center;gap:6px;margin-bottom:12px">
+              <span>🕐</span><span>Pickup hours: Mon–Sat 7AM – 12PM</span>
+            </div>
+            <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Pick a Pickup Slot</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div class="slot-chip selected" onclick="selectSlot(this,'Today 8–10 AM')">Today 8–10 AM</div>
+              <div class="slot-chip" onclick="selectSlot(this,'Today 10–12 PM')">Today 10–12 PM</div>
+              <div class="slot-chip" onclick="selectSlot(this,'Tomorrow 7–9 AM')">Tomorrow 7–9 AM</div>
+            </div>
+            <button class="btn btn-sm btn-ghost" style="margin-top:12px;width:100%" onclick="showToast('Opening maps...')">🗺️ Get Directions</button>
+          </div>
+          <div style="background:var(--earth-100);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:12px;color:var(--earth-500)">
+            🌿 <strong>Farm Pickup Perks:</strong> Meet your farmer in person, see the farm, and get ultra-fresh produce harvested minutes before pickup!
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="section-box">
+        <div class="section-box-title">🛒 Order Summary</div>
+        <div id="checkoutItems"></div>
+      </div>
+
+      <!-- Payment -->
+      <div class="section-box">
+        <div class="section-box-title">💳 Payment Method</div>
+        <div class="pay-method selected" onclick="selectPay(this)" data-method="COD">
+          <div class="pay-icon-big">💵</div>
+          <div class="pay-info">
+            <div class="pay-name">Cash on Delivery</div>
+            <div class="pay-desc">Pay when your order arrives</div>
+          </div>
+          <div class="radio-circle"></div>
+        </div>
+        <div class="pay-method" onclick="selectPay(this)" data-method="FPX">
+          <div class="pay-icon-big">🏦</div>
+          <div class="pay-info">
+            <div class="pay-name">FPX Online Banking</div>
+            <div class="pay-desc">Maybank, CIMB, RHB & more</div>
+          </div>
+          <div class="radio-circle"></div>
+        </div>
+        <div class="pay-method" onclick="selectPay(this)" data-method="TNG">
+          <div class="pay-icon-big">💙</div>
+          <div class="pay-info">
+            <div class="pay-name">Touch 'n Go eWallet</div>
+            <div class="pay-desc">Scan or enter amount</div>
+          </div>
+          <div class="radio-circle"></div>
+        </div>
+        <div class="pay-method" onclick="selectPay(this)" data-method="GrabPay">
+          <div class="pay-icon-big">🟢</div>
+          <div class="pay-info">
+            <div class="pay-name">GrabPay</div>
+            <div class="pay-desc">Pay with Grab wallet</div>
+          </div>
+          <div class="radio-circle"></div>
+        </div>
+      </div>
+
+      <!-- Price Summary -->
+      <div class="section-box">
+        <div class="section-box-title">💰 Price Details</div>
+        <div class="price-summary">
+          <div class="ps-row"><span>Subtotal</span><span id="co-subtotal">RM 0.00</span></div>
+          <div class="ps-row"><span>Delivery</span><span id="co-delivery">RM 5.00</span></div>
+          <div class="ps-row" style="color:var(--primary)"><span>AeryHub Commission (5%)</span><span id="co-commission">RM 0.00</span></div>
+          <div class="ps-total"><span>Total</span><span id="co-total">RM 0.00</span></div>
+        </div>
+      </div>
+
+      <div class="commission-info">
+        💚 <strong>Supporting Local Farmers:</strong> AeryHub charges a 5% platform fee per transaction. Your farmer receives 95% of the product price. Thank you for supporting Malaysian agriculture!
+      </div>
+    </div>
+
+    <!-- Success Modal (hidden) -->
+    <div class="modal-overlay" id="successModal" style="display:none">
+      <div class="modal success-modal">
+        <div class="success-icon">✅</div>
+        <div class="success-title">Order Placed!</div>
+        <div class="success-subtitle" id="successSubtitle">Your fresh produce is being prepared. Estimated delivery: Today 3–5 PM</div>
+        <div class="order-number-box">
+          <div class="order-number-label">Order Number</div>
+          <div class="order-number" id="orderNumber">AH-20250601-XXX</div>
+        </div>
+        <a href="orders.html" class="btn btn-primary btn-full">Track My Order →</a>
+        <a href="home.html" class="btn btn-ghost btn-full" style="margin-top:10px">Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Place Order Button -->
+  <div style="padding:16px;background:var(--surface);border-top:1px solid var(--border)">
+    <button class="btn btn-primary btn-full" onclick="placeOrder()">
+      Place Order · <span id="btnTotal">RM 0.00</span>
+    </button>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  let selectedPayment = 'COD';
+  let fulfillMethod = 'delivery';
+  let selectedSlot = 'Today 12–2 PM';
+
+  function setFulfill(method) {
+    fulfillMethod = method;
+    document.getElementById('opt-delivery').classList.toggle('selected', method === 'delivery');
+    document.getElementById('opt-pickup').classList.toggle('selected', method === 'pickup');
+    document.getElementById('delivery-section').style.display = method === 'delivery' ? 'block' : 'none';
+    document.getElementById('pickup-section').style.display = method === 'pickup' ? 'block' : 'none';
+    // Recalc
+    const subtotal = AppState.getCartTotal();
+    const delivery = method === 'delivery' ? 5 : 0;
+    const commission = subtotal * 0.05;
+    const total = subtotal + delivery;
+    document.getElementById('co-subtotal').textContent = `RM ${subtotal.toFixed(2)}`;
+    document.getElementById('co-delivery').textContent = method === 'delivery' ? 'RM 5.00' : 'FREE';
+    document.getElementById('co-commission').textContent = `RM ${commission.toFixed(2)}`;
+    document.getElementById('co-total').textContent = `RM ${total.toFixed(2)}`;
+    document.getElementById('btnTotal').textContent = `RM ${total.toFixed(2)}`;
+  }
+
+  function selectSlot(el, slot) {
+    selectedSlot = slot;
+    document.querySelectorAll('.slot-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectPay(el) {
+    document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPayment = el.dataset.method;
+  }
+
+  function placeOrder() {
+    const btn = document.querySelector('[onclick="placeOrder()"]');
+    btn.textContent = 'Processing...';
+    setTimeout(() => {
+      const orderNum = 'AH-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.floor(Math.random()*900+100);
+      document.getElementById('orderNumber').textContent = orderNum;
+      const subtitle = fulfillMethod === 'pickup'
+        ? `Your order is confirmed! Head to the farm for pickup at: ${selectedSlot}. Bring this order number.`
+        : `Your fresh produce is being prepared. Estimated delivery: ${selectedSlot}`;
+      document.getElementById('successSubtitle').textContent = subtitle;
+      document.getElementById('successModal').style.display = 'flex';
+      AppState.cart = []; AppState.saveCart();
+      localStorage.setItem('lastOrder', orderNum);
+      localStorage.setItem('fulfillMethod', fulfillMethod);
+    }, 1500);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    AppState.init();
+
+    const items = document.getElementById('checkoutItems');
+    let subtotal = 0;
+
+    AppState.cart.forEach(item => {
+      const p = PRODUCTS.find(p => p.id === item.productId);
+      if (!p) return;
+      const lineTotal = p.price * item.qty;
+      subtotal += lineTotal;
+      const div = document.createElement('div');
+      div.className = 'order-item';
+      div.innerHTML = `
+      <img src="${p.images[0]}" alt="${p.name}">
+      <div class="order-item-name">${p.name} × ${item.qty}</div>
+      <div class="order-item-price">RM ${lineTotal.toFixed(2)}</div>
+    `;
+      items.appendChild(div);
+    });
+
+    if (AppState.cart.length === 0) {
+      items.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">No items in cart</div>';
+    }
+
+    const delivery = 5;
+    const commission = subtotal * 0.05;
+    const total = subtotal + delivery;
+
+    document.getElementById('co-subtotal').textContent = `RM ${subtotal.toFixed(2)}`;
+    document.getElementById('co-commission').textContent = `RM ${commission.toFixed(2)}`;
+    document.getElementById('co-total').textContent = `RM ${total.toFixed(2)}`;
+    document.getElementById('btnTotal').textContent = `RM ${total.toFixed(2)}`;
+  });
+</script>
+</body>
+</html>
