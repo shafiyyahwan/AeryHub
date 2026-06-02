@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - Manage Orders</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    body { background: #e0ead8; }
+
+    /* CORE SCREEN CANVAS */
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      background: #fafafa;
+      position: relative;
+      scrollbar-width: none;
+      padding-bottom: 90px;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+
+    /* APPBAR SYSTEM */
+    .orders-header {
+      padding: 16px 20px 12px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+    .header-row { display: flex; align-items: center; justify-content: space-between; }
+
+    /* MINI REVENUE EXPANDED WIDGET */
+    .revenue-mini-card {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      border-radius: 14px;
+      margin: 14px 16px 4px;
+      padding: 14px 16px;
+      color: white;
+      box-shadow: 0 4px 12px rgba(22,163,74,0.15);
+    }
+    .rev-label { font-size: 11px; opacity: 0.85; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .rev-amount { font-size: 22px; font-weight: 800; margin-top: 2px; }
+
+    /* SEGMENTED STATUS TABS */
+    .status-tabs {
+      display: flex;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 10;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .status-tabs::-webkit-scrollbar { display: none; }
+    .stab {
+      flex: 1; min-width: 90px; padding: 12px 6px; text-align: center;
+      font-size: 12px; font-weight: 700; color: var(--text-muted);
+      cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;
+    }
+    .stab.active { color: var(--primary); border-bottom-color: var(--primary); background: #fbfdfa; }
+
+    /* ORDER CARD ENGINE CONTAINER */
+    .orders-feed { padding: 12px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+    .order-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .oc-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 10px; }
+    .oc-id { font-size: 12.5px; font-weight: 700; color: var(--text); }
+    .oc-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Type Badge system (Pickup vs Delivery) */
+    .type-badge { font-size: 10.5px; font-weight: 800; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
+    .type-badge.pickup { background: #eff6ff; color: #1d4ed8; }
+    .type-badge.delivery { background: #faf5ff; color: #6b21a8; }
+
+    /* Customer metadata info layout */
+    .customer-info-line { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+    .customer-img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
+    .customer-name { font-size: 12.5px; font-weight: 700; color: var(--text); }
+
+    /* Product layout lists inside order card */
+    .order-items-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+    .oi-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; color: var(--text-muted); }
+    .oi-name { color: var(--text); font-weight: 600; }
+
+    .oc-total-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f3f4f6; padding-top: 10px; margin-top: 4px; }
+    .total-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .total-price { font-size: 14.5px; font-weight: 800; color: var(--primary); }
+
+    /* STATUS COLOR INDICATORS */
+    .status-lbl { font-size: 11.5px; font-weight: 700; }
+    .status-lbl.pending { color: #d97706; }
+    .status-lbl.preparing { color: #2563eb; }
+    .status-lbl.ready { color: #16a34a; }
+    .status-lbl.completed { color: var(--text-muted); }
+
+    /* TOAST SYSTEM */
+    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
+  </div>
+
+  <div class="screen">
+
+    <div class="orders-header">
+      <div class="header-row">
+        <div style="font-size:20px; font-weight:800; color:var(--text)">
+          Manage Orders
+        </div>
+        <button class="icon-btn" style="width:36px; height:36px; border-radius:10px; background:#f4f5f7; border:none; display:flex; align-items:center; justify-content:center;" onclick="showToast('Refreshing dashboard...'), setTimeout(renderOrders, 600)">
+          <i class="fa-solid fa-rotate"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="revenue-mini-card">
+      <div class="rev-label">This Week's Net Revenue</div>
+      <div class="rev-amount" id="revenueWidget">RM 0.00</div>
+    </div>
+
+    <div class="status-tabs">
+      <div class="stab active" id="tab-all" onclick="filterTab('all', this)">All Orders</div>
+      <div class="stab" id="tab-pending" onclick="filterTab('pending', this)">Pending <span id="badge-p" style="color:#d97706"></span></div>
+      <div class="stab" id="tab-preparing" onclick="filterTab('preparing', this)">Preparing</div>
+      <div class="stab" id="tab-ready" onclick="filterTab('ready', this)">Ready</div>
+    </div>
+
+    <div class="orders-feed" id="ordersContainer"></div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="farmer-dashboard.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
+    </a>
+    <a href="manage-products.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Products
+    </a>
+    <a href="manage-orders.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
+    </a>
+    <a href="farmer-chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
+    </a>
+    <a href="farmer-profile.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
+    </a>
+  </nav>
+</div>
+
+<div class="toast" id="customToast"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  // Menggunakan Storage Lokal atau Runtime Array untuk struktur data pesanan pembeli
+  let SELLER_ORDERS = [
+    {
+      orderId: "AERY-9821",
+      customerName: "Khairul Amri",
+      customerAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100",
+      time: "10 mins ago",
+      type: "pickup",
+      status: "pending",
+      total: 13.50,
+      items: [
+        { name: "Organic Red Tomato", qty: 2, unit: "1 kg", price: 9.00 },
+        { name: "Fresh Butterhead Lettuce", qty: 1, unit: "250g", price: 4.50 }
+      ]
+    },
+    {
+      orderId: "AERY-9754",
+      customerName: "Sarah Tan",
+      customerAvatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100",
+      time: "2 hours ago",
+      type: "delivery",
+      status: "preparing",
+      total: 24.00,
+      items: [
+        { name: "Fresh Butterhead Lettuce", qty: 4, unit: "250g", price: 18.00 },
+        { name: "Organic Red Tomato", qty: 1, unit: "1 kg", price: 6.00 }
+      ]
+    },
+    {
+      orderId: "AERY-9612",
+      customerName: "Muaz Jamil",
+      customerAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100",
+      time: "Yesterday",
+      type: "pickup",
+      status: "ready",
+      total: 9.00,
+      items: [
+        { name: "Organic Red Tomato", qty: 2, unit: "1 kg", price: 9.00 }
+      ]
+    },
+    {
+      orderId: "AERY-9500",
+      customerName: "Siti Aminah",
+      customerAvatar: "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=100",
+      time: "3 days ago",
+      type: "delivery",
+      status: "completed",
+      total: 35.00,
+      items: [
+        { name: "Premium Cameron Strawberries", qty: 1, unit: "Box", price: 35.00 }
+      ]
+    }
+  ];
+
+  let currentFilter = 'all';
+
+  function renderOrders() {
+    const container = document.getElementById('ordersContainer');
+    if(!container) return;
+    container.innerHTML = '';
+
+    // Hitung jumlah jualan bersih mingguan (Hanya yang status 'completed')
+    let totalEarnings = SELLER_ORDERS
+      .filter(o => o.status === 'completed')
+      .reduce((sum, o) => sum + o.total, 0);
+    document.getElementById('revenueWidget').textContent = `RM ${totalEarnings.toFixed(2)}`;
+
+    // Update bilangan pending badge secara dinamik
+    let pendingCount = SELLER_ORDERS.filter(o => o.status === 'pending').length;
+    document.getElementById('badge-p').textContent = pendingCount > 0 ? `(${pendingCount})` : '';
+
+    // Buat tapisan susunan pesanan mengikut tab aktif
+    let filtered = SELLER_ORDERS.filter(o => currentFilter === 'all' || o.status === currentFilter);
+
+    if(filtered.length === 0) {
+      container.innerHTML = `
+        <div style="text-align:center; padding:40px 20px; color:var(--text-muted)">
+          <i class="fa-solid fa-box-open" style="font-size:36px; opacity:0.3; margin-bottom:10px;"></i>
+          <div style="font-size:13px; font-weight:600;">No orders found in this category</div>
+        </div>`;
+      return;
+    }
+
+    filtered.forEach(order => {
+      const card = document.createElement('div');
+      card.className = 'order-card';
+
+      // Mengurus status label paparan teks & butang tindakan penjual
+      let statusHtml = '';
+      let actionBtnHtml = '';
+
+      if (order.status === 'pending') {
+        statusHtml = `<span class="status-lbl pending"><i class="fa-regular fa-clock"></i> Pending Approval</span>`;
+        actionBtnHtml = `
+          <div style="display:flex; gap:8px; margin-top:12px;">
+            <button class="btn btn-sm btn-ghost" style="flex:1; border: 1px solid #fca5a5; color:#ef4444;" onclick="updateStatus('${order.orderId}', 'cancelled')">Decline</button>
+            <button class="btn btn-sm btn-primary" style="flex:2" onclick="updateStatus('${order.orderId}', 'preparing')"><i class="fa-solid fa-check"></i> Accept Order</button>
+          </div>`;
+      } else if (order.status === 'preparing') {
+        statusHtml = `<span class="status-lbl preparing"><i class="fa-solid fa-spinner fa-spin"></i> Packing Produce</span>`;
+        let btnText = order.type === 'pickup' ? 'Ready for Pickup' : 'Dispatch / Ready to Ship';
+        actionBtnHtml = `
+          <button class="btn btn-sm btn-primary" style="width:100%; margin-top:12px; background:#2563eb; border-color:#2563eb;" onclick="updateStatus('${order.orderId}', 'ready')">
+            <i class="fa-solid fa-dolly"></i> Mark as ${btnText}
+          </button>`;
+      } else if (order.status === 'ready') {
+        statusHtml = `<span class="status-lbl ready"><i class="fa-solid fa-circle-check"></i> ${order.type === 'pickup' ? 'Awaiting Pickup' : 'Ready to Dispatch'}</span>`;
+        let btnText = order.type === 'pickup' ? 'Complete Pickup' : 'Mark as Delivered';
+        actionBtnHtml = `
+          <button class="btn btn-sm btn-primary" style="width:100%; margin-top:12px;" onclick="updateStatus('${order.orderId}', 'completed')">
+            <i class="fa-solid fa-flag-checkered"></i> ${btnText}
+          </button>`;
+      } else if (order.status === 'completed') {
+        statusHtml = `<span class="status-lbl completed"><i class="fa-solid fa-box"></i> Completed</span>`;
+      } else if (order.status === 'cancelled') {
+        statusHtml = `<span class="status-lbl" style="color:#ef4444"><i class="fa-solid fa-circle-xmark"></i> Declined</span>`;
+      }
+
+      // Generate senarai item jualan produk pembeli
+      let itemsHtml = '';
+      order.items.forEach(it => {
+        itemsHtml += `
+          <div class="oi-row">
+            <span class="oi-name">${it.name} <span style="font-weight:500; font-size:11px; color:var(--text-muted)">x${it.qty}</span></span>
+            <span>RM ${it.price.toFixed(2)}</span>
+          </div>`;
+      });
+
+      card.innerHTML = `
+        <div class="oc-top">
+          <div>
+            <div class="oc-id">${order.orderId}</div>
+            <div class="oc-time">${order.time}</div>
+          </div>
+          <span class="type-badge ${order.type}">${order.type}</span>
+        </div>
+
+        <div class="customer-info-line">
+          <img src="${order.customerAvatar}" class="customer-img" alt="">
+          <div class="customer-name">${order.customerName}</div>
+          <a href="farmer-chat.html" style="margin-left:auto; color:var(--primary); font-size:14px;"><i class="fa-solid fa-comment-dots"></i></a>
+        </div>
+
+        <div class="order-items-list">
+          ${itemsHtml}
+        </div>
+
+        <div class="oc-total-row">
+          ${statusHtml}
+          <div>
+            <span class="total-label">Total payout:</span>
+            <span class="total-price">RM ${order.total.toFixed(2)}</span>
+          </div>
+        </div>
+
+        ${actionBtnHtml}
+      `;
+      container.appendChild(card);
+    });
+  }
+
+  function filterTab(status, element) {
+    document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
+    element.classList.add('active');
+    currentFilter = status;
+    renderOrders();
+  }
+
+  function updateStatus(orderId, newStatus) {
+    let order = SELLER_ORDERS.find(o => o.orderId === orderId);
+    if(order) {
+      order.status = newStatus;
+
+      // Beri maklum balas toast mengikut status baru
+      if(newStatus === 'preparing') showToast('📦 Order accepted! Added to harvesting queue.');
+      if(newStatus === 'ready') showToast('✅ Status updated! Customer notified via notification.');
+      if(newStatus === 'completed') showToast('🎉 Order completed! Earnings added to wallet.');
+      if(newStatus === 'cancelled') showToast('❌ Order declined.');
+
+      renderOrders();
+    }
+  }
+
+  window.showToast = function(msg) {
+    const t = document.getElementById('customToast');
+    if(t) {
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if(typeof AppState !== 'undefined' && AppState.init) AppState.init();
+    renderOrders();
+  });
+</script>
+</body>
+</html>

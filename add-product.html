@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeryHub - Add Product</title>
   <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <style>
     body { background: #e0ead8; }
     .img-upload-area { border: 2px dashed var(--border); border-radius: var(--radius); padding: 30px; text-align: center; cursor: pointer; background: var(--surface); transition: all 0.2s; margin-bottom: 8px; }
     .img-upload-area:hover { border-color: var(--primary); background: var(--green-50); }
     .img-upload-area.has-image { border-style: solid; border-color: var(--primary); padding: 0; overflow: hidden; }
     .img-preview { width: 100%; height: 180px; object-fit: cover; border-radius: calc(var(--radius) - 2px); display: none; }
-    .upload-icon { font-size: 40px; margin-bottom: 8px; }
+    .upload-icon { font-size: 40px; margin-bottom: 8px; color: var(--text-muted); }
     .upload-text { font-size: 14px; font-weight: 700; color: var(--text-muted); }
     .upload-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
     .category-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .cat-option { padding: 10px 6px; border: 2px solid var(--border); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .cat-option { padding: 10px 6px; border: 2px solid var(--border); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--surface); }
     .cat-option.selected { border-color: var(--primary); background: var(--green-50); }
     .cat-option .co-icon { font-size: 22px; margin-bottom: 4px; }
     .cat-option .co-name { font-size: 11px; font-weight: 700; color: var(--text-muted); }
@@ -23,14 +24,29 @@
     .checkbox-row { display: flex; align-items: center; gap: 10px; padding: 12px 0; }
     .checkbox-row input { width: 20px; height: 20px; accent-color: var(--primary); }
     .checkbox-row label { font-size: 14px; font-weight: 600; color: var(--text); }
-    .price-preview { background: var(--green-50); border: 1.5px solid var(--green-200); border-radius: 12px; padding: 14px; margin-bottom: 16px; }
-    .pp-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
-    .pp-total { display: flex; justify-content: space-between; font-size: 15px; font-weight: 800; color: var(--green-700); border-top: 1px solid var(--green-200); padding-top: 8px; margin-top: 4px; }
+
+    /* Variation Styles */
+    .variation-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; position: relative; }
+    .remove-var-btn { position: absolute; top: 10px; right: 10px; border: none; background: transparent; color: var(--red-500); cursor: pointer; font-size: 14px; }
+
+    /* Fulfillment Flex Options */
     .fulfill-row { display: flex; gap: 10px; }
-    .fulfill-check { flex: 1; display: flex; align-items: center; gap: 8px; padding: 12px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; }
+    .fulfill-check { flex: 1; display: flex; align-items: center; gap: 10px; padding: 14px 12px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; background: var(--surface); transition: all 0.2s ease; }
     .fulfill-check.checked { border-color: var(--primary); background: var(--green-50); }
-    .fulfill-check input { width: 18px; height: 18px; accent-color: var(--primary); }
-    .fulfill-check label { font-size: 13px; font-weight: 700; color: var(--text); cursor: pointer; }
+    .fulfill-check input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+    .fulfill-check label { font-size: 14px; font-weight: 700; color: var(--text); cursor: pointer; }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .nav-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
   </style>
 </head>
 <body>
@@ -38,42 +54,44 @@
   <div class="status-bar">
     <span>9:41</span>
     <div class="notch"></div>
-    <div class="status-icons">📶 🔋</div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
   </div>
 
   <div class="screen">
-    <div class="page-header">
-      <a href="manage-products.html" class="back-btn">←</a>
-      <div class="page-title">Add New Product</div>
+    <div class="page-header" style="display: flex; align-items: center; padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border);">
+      <a href="manage-products.html" class="back-btn" style="font-size: 18px; color: var(--text); text-decoration: none; margin-right: 14px;">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+      <div class="page-title" style="font-size: 18px; font-weight: 800; color: var(--text);">Add New Product</div>
     </div>
 
     <div style="padding:16px">
 
-      <!-- Step progress -->
       <div style="display:flex;gap:8px;margin-bottom:20px">
         <div style="flex:1;height:4px;border-radius:2px;background:var(--primary)" id="s1"></div>
         <div style="flex:1;height:4px;border-radius:2px;background:var(--gray-200)" id="s2"></div>
         <div style="flex:1;height:4px;border-radius:2px;background:var(--gray-200)" id="s3"></div>
       </div>
 
-      <!-- STEP 1: Basic Info -->
       <div id="step1">
         <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px">Step 1: Product Info</div>
         <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Add your product details</div>
 
-        <!-- Image Upload -->
         <div style="margin-bottom:16px">
           <label class="input-label">Product Photo</label>
           <div class="img-upload-area" id="uploadArea" onclick="triggerUpload()">
             <img id="imgPreview" class="img-preview">
             <div id="uploadPlaceholder">
-              <div class="upload-icon">📷</div>
-              <div class="upload-text">Tap to upload photo</div>
+              <div class="upload-icon"><i class="fa-solid fa-camera"></i></div>
+              <div class="upload-text" style="margin-top: 8px;">Tap to upload photo</div>
               <div class="upload-sub">JPG, PNG up to 10MB</div>
             </div>
           </div>
           <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="previewImage(this)">
-          <!-- Demo image shortcuts -->
           <div style="display:flex;gap:6px;overflow-x:auto;padding:4px 0;scrollbar-width:none">
             <div style="font-size:11px;color:var(--text-muted);font-weight:600;white-space:nowrap;align-self:center">Quick pick:</div>
             <img src="https://images.unsplash.com/photo-1546470427-e26264be0b11?w=60&h=60&fit=crop" style="width:40px;height:40px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="setDemoImg(this.src)" title="Tomato">
@@ -93,27 +111,27 @@
           <label class="input-label">Category *</label>
           <div class="category-grid">
             <div class="cat-option selected" onclick="selectCat(this,'Vegetables')">
-              <div class="co-icon">🥬</div>
+              <div class="co-icon" style="color: #22c55e;"><i class="fa-solid fa-leaf"></i></div>
               <div class="co-name">Vegetables</div>
             </div>
             <div class="cat-option" onclick="selectCat(this,'Fruits')">
-              <div class="co-icon">🍎</div>
+              <div class="co-icon" style="color: #ef4444;"><i class="fa-solid fa-apple-whole"></i></div>
               <div class="co-name">Fruits</div>
             </div>
             <div class="cat-option" onclick="selectCat(this,'Herbs')">
-              <div class="co-icon">🌿</div>
+              <div class="co-icon" style="color: #10b981;"><i class="fa-solid fa-seedling"></i></div>
               <div class="co-name">Herbs</div>
             </div>
-            <div class="cat-option" onclick="selectCat(this,'Rice')">
-              <div class="co-icon">🌾</div>
-              <div class="co-name">Rice</div>
+            <div class="cat-option" onclick="selectCat(this,'Aquaculture products')">
+              <div class="co-icon" style="color: #eab308;"><i class="fa-solid fa-fish"></i></div>
+              <div class="co-name">Aquaculture</div>
             </div>
             <div class="cat-option" onclick="selectCat(this,'Dairy')">
-              <div class="co-icon">🥛</div>
+              <div class="co-icon" style="color: #78350f;"><i class="fa-solid fa-cow"></i></div>
               <div class="co-name">Dairy</div>
             </div>
             <div class="cat-option" onclick="selectCat(this,'Poultry')">
-              <div class="co-icon">🥚</div>
+              <div class="co-icon" style="color: #f97316;"><i class="fa-solid fa-egg"></i></div>
               <div class="co-name">Poultry</div>
             </div>
           </div>
@@ -124,49 +142,44 @@
           <textarea class="input" id="prodDesc" rows="3" placeholder="Describe your product — growing method, freshness, taste..." style="resize:none"></textarea>
         </div>
 
-        <button class="btn btn-primary btn-full" onclick="goStep(2)">Next: Pricing & Stock →</button>
+        <button class="btn btn-primary btn-full" onclick="goStep(2)">Next: Pricing & Variations →</button>
       </div>
 
-      <!-- STEP 2: Pricing & Stock -->
       <div id="step2" style="display:none">
-        <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px">Step 2: Pricing & Stock</div>
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Set your price and availability</div>
+        <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px">Step 2: Pricing & Variations</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px">Add multiple options or single item size details</div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-          <div class="input-group" style="margin:0">
-            <label class="input-label">Price (RM) *</label>
-            <input type="number" class="input" id="prodPrice" placeholder="0.00" step="0.50" oninput="updatePricePreview()">
-          </div>
-          <div class="input-group" style="margin:0">
-            <label class="input-label">Unit</label>
-            <select class="input" id="prodUnit">
-              <option>500g</option><option>1 kg</option><option>250g</option><option>100g</option>
-              <option>1 bunch</option><option>1 head</option><option>2 pieces</option><option>5 stalks</option>
-            </select>
+        <div id="variationsContainer">
+          <div class="variation-card">
+            <div class="input-group" style="margin-bottom:10px">
+              <label class="input-label" style="font-size:11px">Variation Label (e.g. 500g, 1kg, Grade A) *</label>
+              <input type="text" class="input var-label" placeholder="e.g. 1 kg" value="1 kg">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div class="input-group" style="margin:0">
+                <label class="input-label" style="font-size:11px">Price (RM) *</label>
+                <input type="number" class="input var-price" placeholder="0.00" step="0.10">
+              </div>
+              <div class="input-group" style="margin:0">
+                <label class="input-label" style="font-size:11px">Stock *</label>
+                <input type="number" class="input var-stock" placeholder="e.g. 50">
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="input-group">
-          <label class="input-label">Available Stock (units) *</label>
-          <input type="number" class="input" id="prodStock" placeholder="e.g. 200" oninput="updatePricePreview()">
-        </div>
+        <button class="btn btn-ghost btn-full" style="border: 1.5px dashed var(--primary); color: var(--primary); background: transparent; margin-bottom: 20px;" onclick="addVariationRow()">
+          <i class="fa-solid fa-plus"></i> Add Another Variation
+        </button>
 
         <div class="input-group">
           <label class="input-label">Harvest Date</label>
           <input type="date" class="input" id="prodHarvest">
         </div>
 
-        <div class="checkbox-row" style="border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:16px">
+        <div class="checkbox-row" style="border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:20px; background:var(--surface);">
           <input type="checkbox" id="isOrganic">
           <label for="isOrganic">🌿 This product is Organic / pesticide-free</label>
-        </div>
-
-        <!-- Price preview -->
-        <div class="price-preview" id="pricePreview">
-          <div style="font-size:12px;font-weight:800;color:var(--green-700);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px">Earnings Preview</div>
-          <div class="pp-row"><span>Your listed price</span><span id="pp-price">RM 0.00</span></div>
-          <div class="pp-row"><span>AeryHub commission (5%)</span><span id="pp-commission" style="color:var(--red-500)">- RM 0.00</span></div>
-          <div class="pp-total"><span>You receive per sale</span><span id="pp-net">RM 0.00</span></div>
         </div>
 
         <div style="display:flex;gap:10px">
@@ -175,63 +188,27 @@
         </div>
       </div>
 
-      <!-- STEP 3: Fulfillment -->
       <div id="step3" style="display:none">
         <div style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px">Step 3: Fulfillment</div>
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px">How will buyers receive their order?</div>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px">Choose how buyers can get this product. You can choose one or both.</div>
 
-        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px">Offer these fulfillment options:</div>
-        <div class="fulfill-row" style="margin-bottom:16px">
-          <div class="fulfill-check checked" id="fc-delivery" onclick="toggleFulfill('delivery',this)">
-            <input type="checkbox" id="f-delivery" checked onclick="event.stopPropagation();toggleFulfill('delivery',this.closest('.fulfill-check'))">
-            <div>
-              <div style="font-size:20px;margin-bottom:2px">🚚</div>
-              <label for="f-delivery">Delivery</label>
-              <div style="font-size:11px;color:var(--text-muted)">+RM 5 fee</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">Fulfillment Options *</div>
+        <div class="fulfill-row" style="margin-bottom:24px">
+          <div class="fulfill-check checked" id="fc-delivery" onclick="toggleFulfill('delivery')">
+            <input type="checkbox" id="f-delivery" checked onclick="event.stopPropagation(); toggleFulfill('delivery')">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size:18px; color:var(--primary)"><i class="fa-solid fa-truck"></i></span>
+              <label for="f-delivery" style="margin:0;">Delivery</label>
+              <span style="font-size:11px;color:var(--text-muted)">Available</span>
             </div>
           </div>
-          <div class="fulfill-check checked" id="fc-pickup" onclick="toggleFulfill('pickup',this)">
-            <input type="checkbox" id="f-pickup" checked onclick="event.stopPropagation();toggleFulfill('pickup',this.closest('.fulfill-check'))">
-            <div>
-              <div style="font-size:20px;margin-bottom:2px">🏡</div>
-              <label for="f-pickup">Farm Pickup</label>
-              <div style="font-size:11px;color:var(--text-muted)">Free for buyer</div>
+          <div class="fulfill-check checked" id="fc-pickup" onclick="toggleFulfill('pickup')">
+            <input type="checkbox" id="f-pickup" checked onclick="event.stopPropagation(); toggleFulfill('pickup')">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size:18px; color:var(--primary)"><i class="fa-solid fa-house-chimney"></i></span>
+              <label for="f-pickup" style="margin:0;">Farm Pickup</label>
+              <span style="font-size:11px;color:var(--text-muted)">Available</span>
             </div>
-          </div>
-        </div>
-
-        <div id="pickup-hours-section">
-          <div class="input-group">
-            <label class="input-label">Farm Pickup Address</label>
-            <input type="text" class="input" placeholder="Lot 45, Jalan Ladang, Kuala Kubu Bharu" id="pickupAddr" value="Lot 45, Jalan Ladang, Kuala Kubu Bharu, 44000 Selangor">
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-            <div class="input-group" style="margin:0">
-              <label class="input-label">Pickup From</label>
-              <select class="input"><option>7:00 AM</option><option>8:00 AM</option><option selected>9:00 AM</option></select>
-            </div>
-            <div class="input-group" style="margin:0">
-              <label class="input-label">Pickup Until</label>
-              <select class="input"><option>11:00 AM</option><option selected>12:00 PM</option><option>1:00 PM</option></select>
-            </div>
-          </div>
-          <div class="input-group">
-            <label class="input-label">Pickup Days</label>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <span class="filter-chip active" onclick="this.classList.toggle('active')">Mon</span>
-              <span class="filter-chip active" onclick="this.classList.toggle('active')">Tue</span>
-              <span class="filter-chip active" onclick="this.classList.toggle('active')">Wed</span>
-              <span class="filter-chip active" onclick="this.classList.toggle('active')">Thu</span>
-              <span class="filter-chip active" onclick="this.classList.toggle('active')">Fri</span>
-              <span class="filter-chip active" onclick="this.classList.toggle('active')">Sat</span>
-              <span class="filter-chip" onclick="this.classList.toggle('active')">Sun</span>
-            </div>
-          </div>
-        </div>
-
-        <div style="background:var(--green-50);border:1.5px solid var(--green-200);border-radius:12px;padding:12px;margin-bottom:20px">
-          <div style="font-size:12px;color:var(--green-800);line-height:1.5">
-            💡 <strong>Tip:</strong> Offering Farm Pickup attracts eco-conscious buyers who love visiting farms. It also eliminates delivery logistics for you!
           </div>
         </div>
 
@@ -241,9 +218,8 @@
         </div>
       </div>
 
-      <!-- Success -->
       <div id="successState" style="display:none;text-align:center;padding:40px 0">
-        <div style="font-size:72px;margin-bottom:16px;animation:pulse 1s">✅</div>
+        <div style="font-size:72px;margin-bottom:16px;color:var(--primary);"><i class="fa-solid fa-circle-check"></i></div>
         <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px">Product Published!</div>
         <div style="font-size:14px;color:var(--text-muted);line-height:1.6;margin-bottom:28px">Your product is now live on the AeryHub marketplace. Buyers can find and order it right away.</div>
         <a href="manage-products.html" class="btn btn-primary btn-full">View My Products →</a>
@@ -254,24 +230,19 @@
 
   <nav class="bottom-nav">
     <a href="farmer-dashboard.html" class="nav-item">
-      <span class="nav-icon">🏠</span>
-      Dashboard
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
     <a href="manage-products.html" class="nav-item active">
-      <span class="nav-icon">📦</span>
-      Products
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Products
     </a>
-    <a href="earnings.html" class="nav-item">
-      <span class="nav-icon">💰</span>
-      Earnings
+    <a href="manage-orders.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
     </a>
-    <a href="chat.html" class="nav-item">
-      <span class="nav-icon">💬</span>
-      Chat
+    <a href="farmer-chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
     </a>
     <a href="farmer-profile.html" class="nav-item">
-      <span class="nav-icon">👤</span>
-      Profile
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
     </a>
   </nav>
 </div>
@@ -280,7 +251,7 @@
 <script src="script.js"></script>
 <script>
   let selectedCat = 'Vegetables';
-  let demoImgSrc = null;
+  let demoImgSrc = 'https://images.unsplash.com/photo-1546470427-e26264be0b11?w=400&h=300&fit=crop';
 
   function triggerUpload() { document.getElementById('fileInput').click(); }
 
@@ -309,25 +280,71 @@
     el.classList.add('selected');
   }
 
-  function toggleFulfill(type, el) {
-    el.classList.toggle('checked');
-    const cb = el.querySelector('input');
-    cb.checked = el.classList.contains('checked');
-    if (type === 'pickup') {
-      document.getElementById('pickup-hours-section').style.display = cb.checked ? 'block' : 'none';
+  // Fungsi Toggle yang menyokong konsep bebas "Delivery Only" atau "Pickup Only"
+  function toggleFulfill(type) {
+    const card = document.getElementById('fc-' + type);
+    const cb = document.getElementById('f-' + type);
+
+    // Tukar status checkbox (jika fungsi dipanggil dari klik kad)
+    if (event.target.tagName !== 'INPUT') {
+      cb.checked = !cb.checked;
     }
+
+    // Kemas kini gaya visual border dan latar belakang kad
+    if (cb.checked) {
+      card.classList.add('checked');
+    } else {
+      card.classList.remove('checked');
+    }
+  }
+
+  function addVariationRow() {
+    const container = document.getElementById('variationsContainer');
+    const card = document.createElement('div');
+    card.className = 'variation-card';
+    card.innerHTML = `
+      <button class="remove-var-btn" onclick="this.closest('.variation-card').remove()"><i class="fa-solid fa-trash-can"></i></button>
+      <div class="input-group" style="margin-bottom:10px">
+        <label class="input-label" style="font-size:11px">Variation Label (e.g. 500g, 1kg, Grade A) *</label>
+        <input type="text" class="input var-label" placeholder="e.g. 500g">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="input-group" style="margin:0">
+          <label class="input-label" style="font-size:11px">Price (RM) *</label>
+          <input type="number" class="input var-price" placeholder="0.00" step="0.10">
+        </div>
+        <div class="input-group" style="margin:0">
+          <label class="input-label" style="font-size:11px">Stock *</label>
+          <input type="number" class="input var-stock" placeholder="e.g. 50">
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
   }
 
   function goStep(n) {
     if (n === 2) {
       if (!document.getElementById('prodName').value) {
-        showToast('Please enter a product name');
+        if (typeof showToast === 'function') showToast('Please enter a product name');
+        else alert('Please enter a product name');
         return;
       }
     }
     if (n === 3) {
-      if (!document.getElementById('prodPrice').value || !document.getElementById('prodStock').value) {
-        showToast('Please fill in price and stock');
+      const labels = document.querySelectorAll('.var-label');
+      const prices = document.querySelectorAll('.var-price');
+      const stocks = document.querySelectorAll('.var-stock');
+
+      let valid = true;
+      labels.forEach((l, idx) => {
+        if (!l.value || !prices[idx].value || !stocks[idx].value) {
+          valid = false;
+        }
+      });
+
+      if (!valid || labels.length === 0) {
+        if (typeof showToast === 'function') showToast('Please completely fill all variation fields');
+        else alert('Please completely fill all variation fields');
         return;
       }
     }
@@ -337,18 +354,65 @@
     });
   }
 
-  function updatePricePreview() {
-    const price = parseFloat(document.getElementById('prodPrice').value) || 0;
-    const commission = price * 0.05;
-    const net = price - commission;
-    document.getElementById('pp-price').textContent = `RM ${price.toFixed(2)}`;
-    document.getElementById('pp-commission').textContent = `- RM ${commission.toFixed(2)}`;
-    document.getElementById('pp-net').textContent = `RM ${net.toFixed(2)}`;
-  }
-
   function submitProduct() {
+    const delChecked = document.getElementById('f-delivery').checked;
+    const pickChecked = document.getElementById('f-pickup').checked;
+
+    // Validasi wajib: Petani tak boleh uncheck kedua-duanya sekali gus!
+    if (!delChecked && !pickChecked) {
+      if (typeof showToast === 'function') showToast('Please select at least one fulfillment option (Delivery or Pickup)');
+      else alert('Please select at least one fulfillment option (Delivery or Pickup)');
+      return;
+    }
+
     const btn = event.target;
     btn.textContent = 'Publishing...';
+
+    const labels = document.querySelectorAll('.var-label');
+    const prices = document.querySelectorAll('.var-price');
+    const stocks = document.querySelectorAll('.var-stock');
+
+    let pricingArray = [];
+    labels.forEach((l, idx) => {
+      pricingArray.push({
+        label: l.value,
+        price: parseFloat(prices[idx].value) || 0,
+        stock: parseInt(stocks[idx].value) || 0
+      });
+    });
+
+    const newProduct = {
+      id: Date.now(),
+      farmerId: 1,
+      name: document.getElementById('prodName').value,
+      category: selectedCat,
+      description: document.getElementById('prodDesc').value || '',
+      images: [demoImgSrc],
+      rating: 5.0,
+      reviews: 0,
+      organic: document.getElementById('isOrganic').checked,
+      active: true,
+      harvestDate: document.getElementById('prodHarvest').value,
+      pricing: pricingArray,
+      fulfillment: {
+        delivery: delChecked,
+        pickup: pickChecked
+      }
+    };
+
+    let currentFarmerProducts = JSON.parse(localStorage.getItem('myProductsData'));
+
+    if (!currentFarmerProducts || !Array.isArray(currentFarmerProducts)) {
+      if (typeof PRODUCTS !== 'undefined') {
+        currentFarmerProducts = PRODUCTS.filter(p => p.farmerId === 1);
+      } else {
+        currentFarmerProducts = [];
+      }
+    }
+
+    currentFarmerProducts.unshift(newProduct);
+    localStorage.setItem('myProductsData', JSON.stringify(currentFarmerProducts));
+
     setTimeout(() => {
       [1,2,3].forEach(i => document.getElementById('step' + i).style.display = 'none');
       document.getElementById('successState').style.display = 'block';
@@ -360,8 +424,9 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    AppState.init();
-    // Set default harvest date to today
+    if (typeof AppState !== 'undefined' && AppState.init) {
+      AppState.init();
+    }
     const today = new Date().toISOString().slice(0,10);
     document.getElementById('prodHarvest').value = today;
   });

@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="css/style1.css">
   <style>
     body { background: #e0ead8; }
+
+    /* Lock kedudukan elemen absolute di dalam frame telefon */
+    .phone-frame { position: relative !important; }
+
     .product-row { display: flex; gap: 12px; align-items: flex-start; padding: 14px; background: var(--surface); border-radius: var(--radius-sm); border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 10px; cursor: pointer; transition: all 0.2s; }
     .product-row:active { transform: scale(0.98); }
     .product-row img { width: 68px; height: 68px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
@@ -29,7 +33,7 @@
     .f-tab { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; white-space: nowrap; }
     .f-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
 
-    /* SEARCH BAR (BULAT & FILTER ICON) */
+    /* SEARCH BAR BULAT */
     .search-bar { display: flex; align-items: center; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 30px; padding: 10px 18px; gap: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
     .search-icon { color: #64748b; font-size: 16px; display: flex; align-items: center; }
     .search-bar input { border: none; background: none; outline: none; width: 100%; font-size: 14px; color: var(--text); }
@@ -47,11 +51,48 @@
 
     .edit-var-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; background: var(--gray-50); padding: 8px; border-radius: 8px; border: 1px solid var(--border); }
     .btn-remove-var { background: none; border: none; color: var(--red-500); cursor: pointer; font-size: 16px; padding: 4px 8px; }
-    .btn-add-var { background: var(--gray-100); border: 1px dashed var(--border); color: var(--text); padding: 8px; border-radius: 8px; width: 100%; font-weight: 700; font-size: 12px; cursor: pointer; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 6px; }
-    .btn-add-var:hover { background: var(--gray-200); }
 
-    /* POSITIONED RIGHT ABOVE THE BOTTOM NAVBAR */
-    .fab-add { position: absolute; right: 20px; bottom: 80px; width: 54px; height: 54px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); text-decoration: none; transition: transform 0.2s; z-index: 10; }
+    /* BUTTON ADD VARIATION BARU (Sama jenis font, rounded 12px, clean text) */
+    .btn-add-var {
+      font-family: inherit;
+      background: #f0f7ec;
+      border: 1px dashed var(--primary);
+      color: var(--primary);
+      padding: 10px 16px;
+      border-radius: 12px;
+      width: 100%;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-add-var:hover { background: #e2f0da; }
+    .btn-add-var i { font-size: 11px; }
+
+    /* BUTANG FLOATING + (Melekat ngam atas navbar pada ketinggian 76px) */
+    .fab-add {
+      position: absolute !important;
+      bottom: 96px;
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      text-decoration: none;
+      transition: transform 0.2s;
+      z-index: 999;
+    }
     .fab-add:active { transform: scale(0.92); }
   </style>
 </head>
@@ -62,6 +103,7 @@
     <div class="notch"></div>
     <div class="status-icons" style="display:flex; gap:6px;">
       <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
       <i class="fa-solid fa-battery-full"></i>
     </div>
   </div>
@@ -90,11 +132,7 @@
       </div>
     </div>
 
-    <div style="padding:12px 16px 80px" id="productList"></div>
-
-    <a href="add-product.html" class="fab-add" title="Add Product">
-      <i class="fa-solid fa-plus"></i>
-    </a>
+    <div style="padding:12px 16px 90px; height: calc(100% - 180px); overflow-y: auto;" id="productList"></div>
 
     <div class="modal-overlay" id="deleteModal" style="display:none">
       <div class="modal" style="text-align:center">
@@ -136,6 +174,10 @@
     </div>
   </div>
 
+  <a href="add-product.html" class="fab-add" title="Add Product">
+    <i class="fa-solid fa-plus"></i>
+  </a>
+
   <nav class="bottom-nav">
     <a href="farmer-dashboard.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
@@ -158,15 +200,27 @@
 <script src="data.js"></script>
 <script src="script.js"></script>
 <script>
-  let myProducts = PRODUCTS.filter(p => p.farmerId === 1).map((p, i) => ({
-    ...p,
-    active: i !== 2
-  }));
+  // INTEGRASI LOCALSTORAGE: Ambil data tersimpan, jika kosong baru tarik dari data.js
+  let myProducts = [];
+  if (localStorage.getItem('myProductsData')) {
+    myProducts = JSON.parse(localStorage.getItem('myProductsData'));
+  } else {
+    myProducts = PRODUCTS.filter(p => p.farmerId === 1).map((p, i) => ({
+      ...p,
+      active: i !== 2
+    }));
+    localStorage.setItem('myProductsData', JSON.stringify(myProducts));
+  }
 
   let currentFilter = 'all';
   let deleteTarget = null;
   let editTarget = null;
   let tempPricingList = [];
+
+  // Fungsi utiliti untuk kemas kini data di LocalStorage
+  function saveToLocalStorage() {
+    localStorage.setItem('myProductsData', JSON.stringify(myProducts));
+  }
 
   function updateTabs() {
     const total = myProducts.length;
@@ -207,9 +261,9 @@
       <img src="${p.images[0]}" alt="${p.name}">
       <div class="pr-info">
         <div class="pr-category">${p.category}</div>
+
         <div class="pr-name">
           ${p.name}
-          ${p.organic ? '<span class="badge badge-green" style="font-size:9px; padding:2px 6px;">Organic</span>' : ''}
         </div>
 
         <div class="pr-overview-meta">
@@ -250,6 +304,7 @@
   function toggleActive(id, val) {
     const p = myProducts.find(p => p.id === id);
     if (p) p.active = val;
+    saveToLocalStorage(); // Simpan perubahan status toggle
     renderProducts();
     if(typeof showToast === 'function') showToast(val ? '✅ Listed on App' : '⏸️ Hidden from App');
   }
@@ -262,6 +317,7 @@
   function confirmDelete() {
     myProducts = myProducts.filter(p => p.id !== deleteTarget);
     closeDelete();
+    saveToLocalStorage(); // Simpan senarai produk selepas dipadam
     renderProducts();
     if(typeof showToast === 'function') showToast('🗑️ Product removed');
   }
@@ -339,6 +395,8 @@
       p.name = document.getElementById('editName').value;
       p.description = document.getElementById('editDesc').value;
       p.pricing = validPricing;
+
+      saveToLocalStorage(); // Simpan maklumat produk yang baru diedit
     }
     closeEdit();
     renderProducts();

@@ -224,7 +224,7 @@
     <a href="order-details.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
     </a>
-    <a href="chat.html" class="nav-item">
+    <a href="consumer-chat.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
     </a>
     <a href="consumer-profile.html" class="nav-item">
@@ -290,7 +290,20 @@
   }
 
   function renderProducts() {
-    let filtered = [...PRODUCTS];
+    // INTEGRASI DATA LOCALSTORAGE DENGAN DATA ASAL
+    let allProducts = [];
+    if (typeof PRODUCTS !== 'undefined') {
+      if (localStorage.getItem('myProductsData')) {
+        const farmerProducts = JSON.parse(localStorage.getItem('myProductsData'));
+        const otherProducts = PRODUCTS.filter(p => p.farmerId !== 1);
+        allProducts = [...farmerProducts, ...otherProducts];
+      } else {
+        allProducts = PRODUCTS;
+      }
+    }
+
+    // Tapis produk supaya pembeli hanya nampak produk yang aktif (bukan active: false)
+    let filtered = allProducts.filter(p => p.active !== false);
 
     if (currentCat === 'organic') {
       filtered = filtered.filter(p => p.organic);
@@ -326,7 +339,6 @@
 
       const card = document.createElement('div');
       card.className = 'product-card fade-in';
-      // FARMER LOGIC COMPLETELY CLEANED BELOW (No farmer names printed)
       card.innerHTML = `
         <div class="img-container">
           <img src="${p.images[0]}" alt="${p.name}" style="width:100%; height:130px; object-fit:cover;" onerror="this.style.display='none';">
@@ -424,6 +436,23 @@
         c.classList.toggle('active', c.getAttribute('data-cat') === cat);
       });
     }
+
+    // Kemas kini counter cart jika terdapat fungsi global
+    document.querySelectorAll('.cart-nav-icon').forEach(el => {
+      if (typeof AppState !== 'undefined' && AppState.cart) {
+        const count = AppState.cart.reduce((s, i) => s + i.qty, 0);
+        // Padam lencana lama untuk mengelakkan pertindihan
+        const oldBadge = el.querySelector('.cart-count');
+        if (oldBadge) oldBadge.remove();
+
+        if (count > 0) {
+          const b = document.createElement('span');
+          b.className = 'cart-count';
+          b.textContent = count;
+          el.appendChild(b);
+        }
+      }
+    });
 
     renderProducts();
 
