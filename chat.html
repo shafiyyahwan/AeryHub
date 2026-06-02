@@ -5,133 +5,238 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeryHub - Chat</title>
   <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <style>
-    body { background: #e0ead8; }
-    .convo-item { display: flex; gap: 12px; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid var(--border); transition: background 0.15s; }
-    .convo-item:hover { background: var(--gray-50); }
-    .convo-avatar-wrap { position: relative; }
-    .convo-avatar { width: 52px; height: 52px; border-radius: 16px; object-fit: cover; }
-    .online-dot { position: absolute; bottom: 2px; right: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--green-500); border: 2px solid var(--surface); }
-    .convo-info { flex: 1; min-width: 0; }
-    .convo-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-    .convo-last { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .convo-right { text-align: right; flex-shrink: 0; }
-    .convo-time { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
-    .unread-badge { background: var(--primary); color: white; border-radius: 10px; padding: 2px 8px; font-size: 11px; font-weight: 800; }
+    body {
+      background: #e0ead8;
+    }
 
-    /* Chat screen */
-    .chat-screen { display: none; flex-direction: column; height: 100%; position: absolute; inset: 0; background: var(--bg); z-index: 20; }
-    .chat-header { padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-    .chat-header-info { flex: 1; }
-    .chat-header-name { font-size: 15px; font-weight: 800; color: var(--text); }
-    .chat-header-status { font-size: 12px; color: var(--green-600); font-weight: 600; }
-    .chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 4px; }
-    .chat-messages::-webkit-scrollbar { display: none; }
-    .msg-row { display: flex; }
-    .msg-row.sent { justify-content: flex-end; }
-    .msg-day-label { text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 600; margin: 8px 0; }
-    .chat-input-bar { padding: 12px 14px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
-    .chat-input { flex: 1; border: 1.5px solid var(--border); border-radius: 22px; padding: 10px 16px; font-size: 14px; font-family: var(--font); background: var(--bg); color: var(--text); outline: none; }
-    .send-btn { width: 42px; height: 42px; border-radius: 50%; background: var(--primary); border: none; color: white; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .quick-replies { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 8px 14px 0; }
+    /* CORE SCREEN INTERFACE CANVAS */
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      background: #fafafa;
+      position: relative;
+      scrollbar-width: none;
+      padding-bottom: 80px;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+
+    /* STICKY TOP PAGE APPBAR SYSTEM FROM MARKETPLACE */
+    .market-header {
+      padding: 16px 20px 12px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .market-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f4f5f7;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .icon-btn:active { background: #e5e7eb; }
+
+    /* PREMIUM APP SEARCH BAR DESIGN */
+    .search-container { padding: 12px 16px 4px; }
+    .search-wrapper { position: relative; display: flex; align-items: center; }
+    .search-wrapper i { position: absolute; left: 14px; color: var(--text-muted); font-size: 13px; }
+    .search-input { width: 100%; background: #f1f3f0; border: none; border-radius: 12px; padding: 10px 14px 10px 38px; font-size: 13px; font-weight: 500; outline: none; color: var(--text); }
+
+    /* CONVERSATION FEED ELEMENTS WITH FIXED AVATAR TRACKING */
+    .convo-item { display: flex; gap: 14px; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6; background: var(--surface); transition: background 0.15s; }
+    .convo-item:hover { background: var(--gray-50); }
+
+    .convo-avatar-wrap {
+      position: relative;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0; /* Mengelakkan saiz kotak kemek */
+    }
+    .convo-avatar {
+      width: 48px !important;
+      height: 48px !important;
+      min-width: 48px !important;
+      max-width: 48px !important;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid #eee;
+      display: block;
+      background: #ebeeeb; /* Placeholder warna kalau imej broken */
+    }
+    .online-dot { position: absolute; bottom: -1px; right: -1px; width: 11px; height: 11px; border-radius: 50%; background: #22c55e; border: 2px solid var(--surface); }
+
+    .convo-info { flex: 1; min-width: 0; }
+    .convo-name { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 3px; display: flex; align-items: center; justify-content: space-between; }
+    .convo-last { font-size: 12.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .convo-right { text-align: right; flex-shrink: 0; }
+    .convo-time { font-size: 11px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500; }
+    .unread-badge { background: var(--primary); color: white; border-radius: 10px; padding: 2px 7px; font-size: 10px; font-weight: 800; }
+
+    /* FLOATING CHIPS CHAT CONTEXT CONTROLS */
+    .quick-replies { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 12px 14px; background: #fafafa; border-top: 1px solid #f0f0f0; }
     .quick-replies::-webkit-scrollbar { display: none; }
-    .qr-chip { padding: 6px 14px; border-radius: 20px; background: var(--green-50); border: 1.5px solid var(--green-200); font-size: 12px; font-weight: 600; color: var(--green-700); cursor: pointer; white-space: nowrap; }
-    .product-preview-bubble { background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 10px; margin-bottom: 8px; max-width: 220px; }
-    .ppb-img { width: 100%; height: 80px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
-    .ppb-name { font-size: 13px; font-weight: 700; color: var(--text); }
-    .ppb-price { font-size: 13px; font-weight: 800; color: var(--primary); }
+    .qr-chip { padding: 8px 14px; border-radius: 20px; background: #fff; border: 1.5px solid #eaeaea; font-size: 11.5px; font-weight: 600; color: #4b5563; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+    .qr-chip:active { background: #e8f5e9; border-color: var(--primary); color: var(--primary); }
+
+    /* FULL-SCREEN OVERLAY WINDOW INTERFACE */
+    .chat-screen { display: none; flex-direction: column; height: 100%; position: absolute; inset: 0; background: #f4f5f7; z-index: 40; }
+    .chat-header { padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .chat-header-info { flex: 1; min-width: 0; }
+    .chat-header-name { font-size: 14.5px; font-weight: 700; color: var(--text); }
+    .chat-header-status { font-size: 11px; color: #16a34a; font-weight: 600; margin-top: 1px; display: flex; align-items: center; gap: 4px; }
+
+    /* INTERACTIVE CHAT WRAPPERS */
+    .chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: #fafafa; }
+    .chat-messages::-webkit-scrollbar { display: none; }
+    .msg-row { display: flex; width: 100%; }
+    .msg-row.sent { justify-content: flex-end; }
+    .msg-wrapper { max-width: 75%; display: flex; flex-direction: column; }
+    .msg-row.sent .msg-wrapper { align-items: flex-end; }
+
+    .message-bubble { padding: 10px 14px; font-size: 13px; line-height: 1.5; font-weight: 500; }
+    .message-bubble.received { background: #fff; color: var(--text); border-radius: 4px 16px 16px 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid #f0f0f0; }
+    .message-bubble.sent { background: var(--primary); color: #fff; border-radius: 16px 16px 4px 16px; box-shadow: 0 1px 3px rgba(22,163,74,0.15); }
+
+    .message-time { font-size: 10px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+    .msg-day-label { text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 600; margin: 4px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* CONTEXT DESIGN COMPONENT */
+    .product-preview-bubble { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 10px; max-width: 200px; box-shadow: var(--shadow); }
+    .ppb-img { width: 100%; height: 85px; object-fit: cover; border-radius: 8px; margin-bottom: 6px; }
+    .ppb-name { font-size: 12.5px; font-weight: 700; color: var(--text); }
+    .ppb-price { font-size: 12.5px; font-weight: 800; color: var(--primary); margin-top: 2px; }
+
+    /* CHAT DIALOG INPUT ENGINE BAR */
+    .chat-input-bar { padding: 12px 14px 20px; background: var(--surface); border-top: 1px solid var(--border); display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+    .chat-input { flex: 1; border: 1.5px solid var(--border); border-radius: 20px; padding: 10px 16px; font-size: 13px; background: #f9f9f9; color: var(--text); outline: none; font-weight: 500; }
+    .chat-input:focus { border-color: var(--primary); background: #fff; }
+    .send-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--primary); border: none; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(22,163,74,0.2); }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    /* SYSTEM DEEP TOAST ALERTS */
+    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
+
 <div class="phone-frame">
   <div class="status-bar">
     <span>9:41</span>
     <div class="notch"></div>
-    <div class="status-icons">📶 🔋</div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
   </div>
 
-  <!-- Conversation List -->
   <div class="screen" id="convoList">
-    <div class="page-header">
-      <div class="page-title">Messages</div>
-      <button class="icon-btn" onclick="showToast('New message feature coming soon!')">✏️</button>
-    </div>
-
-    <!-- Search -->
-    <div style="padding:12px 16px 0">
-      <div class="search-bar">
-        <span class="search-icon">🔍</span>
-        <input type="text" placeholder="Search conversations...">
+    <div class="market-header">
+      <div class="market-header-row">
+        <div style="font-size:20px; font-weight:800; color:var(--text)">
+          Messages
+        </div>
+        <button class="icon-btn" style="width:40px; height:40px; border-radius:12px; background:var(--gray-100); border:none; display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--text);" onclick="showToast('New message feature coming soon!')">
+          <i class="fa-regular fa-pen-to-square"></i>
+        </button>
       </div>
     </div>
 
-    <!-- Conversations -->
-    <div style="margin-top:12px" id="convoListItems"></div>
+    <div class="search-container">
+      <div class="search-wrapper">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" class="search-input" placeholder="Search conversations...">
+      </div>
+    </div>
+
+    <div style="margin-top:8px" id="convoListItems"></div>
   </div>
 
-  <!-- Chat Screen (opens over list) -->
   <div class="chat-screen" id="chatScreen">
     <div class="chat-header">
-      <button onclick="closeChat()" style="background:var(--gray-100);border:none;width:34px;height:34px;border-radius:10px;font-size:18px;cursor:pointer">←</button>
-      <img id="chatAvatar" src="" style="width:40px;height:40px;border-radius:12px;object-fit:cover">
+      <button onclick="closeChat()" class="icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
+      <img id="chatAvatar" src="" style="width:38px;height:38px;border-radius:12px;object-fit:cover" alt="">
       <div class="chat-header-info">
-        <div class="chat-header-name" id="chatName">Farmer</div>
-        <div class="chat-header-status">🟢 Online · usually replies instantly</div>
+        <div class="chat-header-name" id="chatName">Farm</div>
+        <div class="chat-header-status"><i class="fa-solid fa-circle" style="font-size:8px;"></i> Online &middot; replies instantly</div>
       </div>
-      <button onclick="showToast('Call feature coming soon!')" style="background:var(--green-100);border:none;width:36px;height:36px;border-radius:10px;font-size:18px;cursor:pointer">📞</button>
+      <button onclick="showToast('Call feature coming soon!')" class="icon-btn" style="background:#e8f5e9;color:var(--primary)"><i class="fa-solid fa-phone"></i></button>
     </div>
 
-    <!-- Product Preview (if opened from product) -->
-    <div id="productContext" style="display:none;padding:10px 14px 0">
+    <div id="productContext" style="display:none; padding:12px 14px 4px; background:#fafafa; border-bottom:1px solid #f0f0f0;">
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:600;"><i class="fa-solid fa-circle-info" style="margin-right:3px;"></i> Inquiring about product:</div>
       <div class="product-preview-bubble">
-        <img id="ppbImg" src="" class="ppb-img">
+        <img id="ppbImg" src="" class="ppb-img" alt="">
         <div class="ppb-name" id="ppbName"></div>
         <div class="ppb-price" id="ppbPrice"></div>
       </div>
-      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;padding-left:2px">Asking about this product</div>
     </div>
 
-    <!-- Quick Replies -->
+    <div class="chat-messages" id="chatMessages"></div>
+
     <div class="quick-replies" id="quickReplies">
       <div class="qr-chip" onclick="sendQuick('Is this still available?')">Is this available?</div>
       <div class="qr-chip" onclick="sendQuick('When is the next harvest?')">Next harvest?</div>
       <div class="qr-chip" onclick="sendQuick('Can I pick up from farm today?')">Farm pickup today?</div>
       <div class="qr-chip" onclick="sendQuick('Do you offer bulk discounts?')">Bulk discount?</div>
-      <div class="qr-chip" onclick="sendQuick('What certifications do you have?')">Certifications?</div>
     </div>
 
-    <div class="chat-messages" id="chatMessages"></div>
-
     <div class="chat-input-bar">
-      <button style="background:none;border:none;font-size:22px;cursor:pointer" onclick="showToast('Attach image coming soon!')">📎</button>
+      <button class="icon-btn" style="background:none;" onclick="showToast('Attach file coming soon!')"><i class="fa-solid fa-paperclip" style="font-size:16px;color:var(--text-muted)"></i></button>
       <input type="text" class="chat-input" id="messageInput" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendMessage()">
-      <button class="send-btn" onclick="sendMessage()">➤</button>
+      <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
     </div>
   </div>
 
   <nav class="bottom-nav">
     <a href="home.html" class="nav-item">
-      <span class="nav-icon">🏠</span>
-      Home
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
     <a href="marketplace.html" class="nav-item">
-      <span class="nav-icon">🛍️</span>
-      Shop
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
-    <a href="orders.html" class="nav-item">
-      <span class="nav-icon">📦</span>
-      Orders
+    <a href="order-details.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
     </a>
     <a href="chat.html" class="nav-item active">
-      <span class="nav-icon">💬</span>
-      Chat
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
     </a>
     <a href="consumer-profile.html" class="nav-item">
-      <span class="nav-icon">👤</span>
-      Profile
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
     </a>
   </nav>
 </div>
+
+<div class="toast" id="customToast"></div>
 
 <script src="data.js"></script>
 <script src="script.js"></script>
@@ -156,23 +261,32 @@
     { id: 3, farmerId: 9, farmerName: "Aisyah Mohd", lastMessage: "We have fresh pandan and lemongrass today!", time: "2d ago", unread: 0, messages: [
         { from: "consumer", text: "Do you have pandan leaves?", time: "2 days ago" },
         { from: "farmer", text: "We have fresh pandan and lemongrass today!", time: "2 days ago" },
-      ]},
+      ]}
   ];
 
   function renderConvos() {
     const list = document.getElementById('convoListItems');
+    if(!list) return;
+    list.innerHTML = '';
+
     EXTENDED_CONVOS.forEach(convo => {
       const farmer = FARMERS.find(f => f.id === convo.farmerId);
+      const farmNameDisplay = farmer?.farm || 'Independent Farm';
+
       const div = document.createElement('div');
       div.className = 'convo-item';
       div.onclick = () => openChat(convo.id);
+
+      // alt="" dikosongkan sengaja supaya browser tak heret alt text merosakkan layout flexbox
       div.innerHTML = `
       <div class="convo-avatar-wrap">
-        <img src="${farmer?.image}" class="convo-avatar" alt="${convo.farmerName}">
+        <img src="${farmer?.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'}" class="convo-avatar" alt="">
         ${convo.id === 1 ? '<div class="online-dot"></div>' : ''}
       </div>
       <div class="convo-info">
-        <div class="convo-name">${convo.farmerName} <span style="font-size:11px;font-weight:400;color:var(--text-muted)">${farmer?.farm || ''}</span></div>
+        <div class="convo-name">
+          <span>${farmNameDisplay}</span>
+        </div>
         <div class="convo-last">${convo.lastMessage}</div>
       </div>
       <div class="convo-right">
@@ -186,16 +300,18 @@
 
   function openChat(id) {
     currentConvo = EXTENDED_CONVOS.find(c => c.id === id);
+    if(!currentConvo) return;
+
     const farmer = FARMERS.find(f => f.id === currentConvo.farmerId);
+    const farmNameDisplay = farmer?.farm || 'Independent Farm';
 
-    document.getElementById('chatAvatar').src = farmer?.image || '';
-    document.getElementById('chatName').textContent = currentConvo.farmerName;
+    document.getElementById('chatAvatar').src = farmer?.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';
+    document.getElementById('chatName').textContent = farmNameDisplay;
 
-    // Check if opened from product
     const prodId = localStorage.getItem('chatFarmer');
     const prodCtx = document.getElementById('productContext');
     if (prodId) {
-      const prod = PRODUCTS.find(p => p.farmerId === parseInt(prodId));
+      const prod = PRODUCTS.find(p => p.farmerId === parseInt(prodId, 10));
       if (prod) {
         prodCtx.style.display = 'block';
         document.getElementById('ppbImg').src = prod.images[0];
@@ -218,6 +334,7 @@
 
   function renderMessages() {
     const container = document.getElementById('chatMessages');
+    if(!container) return;
     container.innerHTML = '<div class="msg-day-label">Today</div>';
     currentConvo.messages.forEach(msg => {
       appendMessage(msg.from, msg.text, msg.time, false);
@@ -226,12 +343,13 @@
 
   function appendMessage(from, text, time, animate = true) {
     const container = document.getElementById('chatMessages');
+    if(!container) return;
     const row = document.createElement('div');
     row.className = 'msg-row ' + (from === 'consumer' ? 'sent' : '');
     row.innerHTML = `
-    <div>
-      <div class="message-bubble ${from === 'consumer' ? 'sent' : 'received'}" ${animate ? 'style="animation:fadeInUp 0.3s ease"' : ''}>${text}</div>
-      <div class="message-time ${from === 'consumer' ? 'sent' : ''}">${time}</div>
+    <div class="msg-wrapper">
+      <div class="message-bubble ${from === 'consumer' ? 'sent' : 'received'}">${text}</div>
+      <div class="message-time">${time}</div>
     </div>
   `;
     container.appendChild(row);
@@ -247,7 +365,6 @@
     input.value = '';
     scrollToBottom();
 
-    // Auto reply
     setTimeout(() => {
       const reply = AUTO_REPLIES[replyIdx % AUTO_REPLIES.length];
       replyIdx++;
@@ -259,20 +376,27 @@
   function sendQuick(text) {
     document.getElementById('messageInput').value = text;
     sendMessage();
-    // Hide quick replies after first use
     document.getElementById('quickReplies').style.display = 'none';
   }
 
   function scrollToBottom() {
     const m = document.getElementById('chatMessages');
-    m.scrollTop = m.scrollHeight;
+    if(m) m.scrollTop = m.scrollHeight;
   }
 
+  window.showToast = function(msg) {
+    const t = document.getElementById('customToast');
+    if(t) {
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
-    AppState.init();
+    if(typeof AppState !== 'undefined' && AppState.init) AppState.init();
     renderConvos();
 
-    // If coming from product page
     const chatFarmer = localStorage.getItem('chatFarmer');
     if (chatFarmer) openChat(1);
   });

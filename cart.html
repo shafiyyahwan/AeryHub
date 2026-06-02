@@ -5,226 +5,773 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeryHub - Cart</title>
   <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <style>
-    body { background: #e0ead8; }
-    .cart-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    /* DESIGN SYSTEM ROOT ACCENTS */
+    :root {
+      --primary: #16a34a;
+      --primary-dark: #15803d;
+      --bg: #fafaf5;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --red-500: #ef4444;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #e8ede5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      margin: 0;
+    }
+
+    /* PREMIUM PHONE FRAME WRAPPER */
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      background: var(--bg);
+      border-radius: 48px;
+      box-shadow:
+        0 0 0 12px #1a1a1a,
+        0 0 0 14px #333,
+        0 30px 80px rgba(0,0,0,0.4),
+        inset 0 0 0 1px rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HARDWARE STATUS BAR WITH INTEGRATED NOTCH */
+    .status-bar {
+      height: 44px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 30;
+      border-bottom: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .status-bar .notch {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 120px; height: 28px;
+      background: #1a1a1a;
+      border-radius: 0 0 18px 18px;
+    }
+
+    .status-icons { display: flex; gap: 6px; align-items: center; }
+
+    /* LAYOUT SCREEN CONTAINER WITH FIXED FOOTER BUFFER */
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      background: #f4f5f7;
+      position: relative;
+      scrollbar-width: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+
+    /* FIXED STICKY TOP APP HEADER */
+    .page-header {
+      background: var(--surface);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 25;
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .cover-back {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f4f5f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .cover-back:active { background: #e5e7eb; }
+
+    /* FIXED STICKY GLOBAL UTILITY SELECT ROW */
+    #globalSelectRow {
+      padding: 12px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* CUSTOM ROUNDED CHECKBOX STYLING OVERRIDES */
+    .cart-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #cbd5e1;
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.2s;
+      background: var(--surface);
+      flex-shrink: 0;
+    }
+
+    .cart-checkbox:checked {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .cart-checkbox:checked::after {
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: #ffffff;
+      font-size: 11px;
+    }
+
+    /* CART SHOPEE-INSPIRED MERCHANT CARD BLOCKS */
+    .shop-group-block {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 16px;
+      margin: 12px 16px 4px 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+
+    .shop-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f3f4f6;
+      margin-bottom: 8px;
+    }
+
+    /* ITEM ENTRY STRIP LAYOUT */
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #f9fafb;
+    }
     .cart-item:last-child { border-bottom: none; }
-    .cart-item img { width: 72px; height: 72px; border-radius: 12px; object-fit: cover; flex-shrink: 0; }
-    .cart-item-info { flex: 1; }
-    .cart-item-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-    .cart-item-farmer { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-    .cart-item-footer { display: flex; align-items: center; justify-content: space-between; }
-    .cart-item-price { font-size: 15px; font-weight: 800; color: var(--primary); }
-    .remove-btn { background: none; border: none; font-size: 18px; cursor: pointer; padding: 4px; color: var(--red-500); }
-    .price-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; color: var(--text-muted); }
-    .price-row.total { font-size: 16px; font-weight: 800; color: var(--text); border-top: 1px solid var(--border); margin-top: 4px; padding-top: 14px; }
-    .commission-note { background: var(--green-50); border: 1px solid var(--green-200); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: var(--green-700); margin-bottom: 16px; }
-    .promo-input { display: flex; gap: 8px; margin-bottom: 16px; }
-    .promo-input input { flex: 1; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 14px; font-family: var(--font); background: var(--surface); color: var(--text); outline: none; }
-    .promo-input button { padding: 10px 16px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; }
-    .delivery-options { display: flex; gap: 10px; margin-bottom: 16px; }
-    .delivery-opt { flex: 1; padding: 10px; border: 2px solid var(--border); border-radius: 12px; text-align: center; cursor: pointer; }
-    .delivery-opt.selected { border-color: var(--primary); background: var(--green-50); }
-    .delivery-opt .d-icon { font-size: 24px; margin-bottom: 4px; }
-    .delivery-opt .d-name { font-size: 12px; font-weight: 700; color: var(--text); }
-    .delivery-opt .d-price { font-size: 11px; color: var(--text-muted); }
+
+    .cart-item img {
+      width: 68px;
+      height: 68px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #f4f5f7;
+    }
+
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cart-item-shop {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 11px;
+      background: #e8f5e9;
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .cart-item-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    /* NEW DEDICATED PRICE ROW DISPLAY POSITION */
+    .cart-item-price-row {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      padding-top: 2px;
+    }
+
+    .cart-item-price {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    /* DYNAMIC QUANTITY INPUT COMPONENT CONTROLLER */
+    .qty-control {
+      display: flex;
+      align-items: center;
+      background: #f4f4f5;
+      border-radius: 8px;
+      padding: 2px;
+      border: 1px solid #e4e4e7;
+    }
+
+    .qty-btn {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+      font-size: 12px;
+      color: #52525b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .qty-btn:active { background: #e4e4e7; }
+
+    .qty-input {
+      font-size: 13px;
+      font-weight: 700;
+      color: #18181b;
+      width: 32px;
+      border: none;
+      background: transparent;
+      text-align: center;
+      padding: 0;
+      outline: none;
+    }
+    .qty-input::-webkit-outer-spin-button,
+    .qty-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .qty-input[type=number] {
+      -moz-appearance: textfield;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 6px;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .remove-btn:hover { color: var(--red-500); }
+
+    /* FOOTER CONTROL PANELS */
+    .shopee-bottom-bar {
+      background: var(--surface);
+      padding: 16px 20px 24px;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .price-row .lbl {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .price-row .val {
+      color: var(--primary);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    /* SYSTEM ACTION UTILITY BUTTONS */
+    .btn-checkout {
+      width: 100%;
+      height: 48px;
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25);
+      transition: all 0.2s;
+    }
+    .btn-checkout:active { background: var(--primary-dark); }
+
+    /* EMPTY OVERLAY VIEWPORTS */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 32px;
+      text-align: center;
+    }
+    .empty-icon {
+      width: 80px;
+      height: 80px;
+      background: #e8f5e9;
+      color: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 16px;
+    }
+    .empty-state.empty-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .empty-text { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
+
+    .btn-browse {
+      padding: 12px 28px;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+    }
+
+    /* NOTIFICATION SYSTEM TOASTS */
+    .toast { position: fixed; bottom: 110px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
 <div class="phone-frame">
-  <div class="status-bar" style="position:absolute;top:0;left:0;right:0;z-index:20;background:transparent">
-    <span style="color:white">9:41</span>
+  <div class="status-bar">
+    <span>9:41</span>
     <div class="notch"></div>
-    <div class="status-icons" style="color:white">
-      <i class="fas fa-signal"></i>
-      <i class="fas fa-wifi"></i>
-      <i class="fas fa-battery-three-quarters"></i>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
     </div>
   </div>
 
   <div class="screen">
     <div class="page-header">
-      <a href="javascript:history.back()" class="cover-btn cover-back">
-        <i class="fas fa-chevron-left"></i>
+      <a href="marketplace.html" class="cover-back">
+        <i class="fa-solid fa-chevron-left"></i>
       </a>
-      <div class="page-title">My Cart</div>
-      <button onclick="clearCart()" style="background:none;border:none;font-size:13px;color:var(--red-500);font-weight:700;cursor:pointer">Clear</button>
+      <div class="page-title">Shopping Cart</div>
+      <button onclick="wipeEntireCart()" style="background:none; border:none; font-size:13px; color:var(--red-500); font-weight:700; cursor:pointer; padding:4px;">Clear All</button>
     </div>
 
-    <div id="cartEmpty" class="empty-state" style="display:none">
-      <div class="empty-icon">🛒</div>
+    <div id="globalSelectRow">
+      <input type="checkbox" id="selectAllCheckbox" class="cart-checkbox" onchange="toggleSelectAll(this)">
+      <label for="selectAllCheckbox" style="cursor:pointer; user-select: none;">Select All Items</label>
+    </div>
+
+    <div id="cartEmpty" class="empty-state" style="display:none;">
+      <div class="empty-icon">
+        <i class="fa-solid fa-cart-shopping"></i>
+      </div>
       <div class="empty-title">Your cart is empty</div>
-      <div class="empty-text">Add some fresh produce from local farmers!</div>
-      <a href="marketplace.html" class="btn btn-primary" style="margin-top:20px;display:inline-flex">Browse Products</a>
+      <div class="empty-text">Add some fresh organic produce from your local community farmers!</div>
+      <a href="marketplace.html" class="btn-browse">Browse Products</a>
     </div>
 
-    <div id="cartContent">
-      <div style="padding:0 20px">
-        <div id="cartItems"></div>
-      </div>
+    <div id="cartContent" style="display: flex; flex-direction: column; flex: 1;">
+      <div id="cartItems" style="flex: 1;"></div>
 
-      <div class="divider"></div>
-
-      <div style="padding:16px 20px">
-        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px">🚚 Delivery Method</div>
-        <div class="delivery-options">
-          <div class="delivery-opt selected" onclick="selectDelivery(this,'standard')">
-            <div class="d-icon">🚚</div>
-            <div class="d-name">Standard</div>
-            <div class="d-price">RM 5.00</div>
-          </div>
-          <div class="delivery-opt" onclick="selectDelivery(this,'express')">
-            <div class="d-icon">⚡</div>
-            <div class="d-name">Express</div>
-            <div class="d-price">RM 12.00</div>
-          </div>
-          <div class="delivery-opt" onclick="selectDelivery(this,'free')">
-            <div class="d-icon">🎁</div>
-            <div class="d-name">Free</div>
-            <div class="d-price">Min RM 30</div>
-          </div>
-        </div>
-
-        <div class="promo-input">
-          <input type="text" placeholder="Promo code (e.g. FRESH20)" id="promoInput">
-          <button onclick="applyPromo()">Apply</button>
-        </div>
-
-        <div class="commission-note">
-          💚 <strong>5% commission</strong> goes to AeryHub. Farmers keep 95% of every sale. You support local agriculture!
-        </div>
-
+      <div class="shopee-bottom-bar">
         <div class="price-row">
-          <span>Subtotal</span>
-          <span id="subtotalVal">RM 0.00</span>
+          <span class="lbl">Subtotal (<span id="checkedItemsCount">0</span> items)</span>
+          <span class="val" id="totalVal">RM 0.00</span>
         </div>
-        <div class="price-row">
-          <span>Delivery</span>
-          <span id="deliveryVal">RM 5.00</span>
-        </div>
-        <div class="price-row" id="discountRow" style="display:none;color:var(--primary)">
-          <span>Promo Discount</span>
-          <span id="discountVal">-RM 0.00</span>
-        </div>
-        <div class="price-row total">
-          <span>Total</span>
-          <span id="totalVal">RM 0.00</span>
-        </div>
-      </div>
 
-      <div style="padding:0 20px 24px">
-        <a href="checkout.html" class="btn btn-primary btn-full" id="checkoutBtn">Proceed to Checkout →</a>
-        <a href="marketplace.html" class="btn btn-ghost btn-full" style="margin-top:10px">Continue Shopping</a>
+        <button class="btn-checkout" id="checkoutBtn" onclick="proceedToCheckout()">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span>Checkout (<span id="checkoutBtnCount">0</span>)</span>
+        </button>
       </div>
     </div>
   </div>
 </div>
 
+<div class="toast" id="customToast"></div>
+
 <script src="data.js"></script>
 <script src="script.js"></script>
 <script>
-  let deliveryFee = 5;
-  let discount = 0;
+  let selectedItemsMap = {};
+  let localCartData = [];
+
+  function syncLocalData() {
+    const raw = localStorage.getItem('cart');
+    localCartData = raw ? JSON.parse(raw) : [];
+
+    if (!window.AppState) {
+      window.AppState = {};
+    }
+    window.AppState.cart = localCartData;
+  }
+
+  function saveLocalData() {
+    localStorage.setItem('cart', JSON.stringify(localCartData));
+    if (window.AppState) {
+      window.AppState.cart = localCartData;
+    }
+  }
 
   function renderCart() {
-    AppState.init();
+    syncLocalData();
 
-    if (AppState.cart.length === 0) {
+    const container = document.getElementById('cartItems');
+    if (container) container.innerHTML = '';
+
+    if (!localCartData || localCartData.length === 0) {
       document.getElementById('cartEmpty').style.display = 'flex';
-      document.getElementById('cartEmpty').style.flexDirection = 'column';
-      document.getElementById('cartEmpty').style.alignItems = 'center';
+      document.getElementById('globalSelectRow').style.display = 'none';
       document.getElementById('cartContent').style.display = 'none';
+      updateGlobalCheckboxState();
+      updateTotals();
       return;
     }
 
-    const container = document.getElementById('cartItems');
-    container.innerHTML = '';
+    document.getElementById('cartEmpty').style.display = 'none';
+    document.getElementById('globalSelectRow').style.display = 'flex';
+    document.getElementById('cartContent').style.display = 'flex';
 
-    AppState.cart.forEach(item => {
-      const p = PRODUCTS.find(p => p.id === item.productId);
-      const f = FARMERS.find(f => f.id === p?.farmerId);
-      if (!p) return;
+    const groupedCart = {};
+    localCartData.forEach((item) => {
+      const targetId = item.id || item.productId;
+      const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(prod => prod.id === targetId) : null;
+      const f = (typeof FARMERS !== 'undefined' && p) ? FARMERS.find(farm => farm.id === p.farmerId) : null;
 
-      const div = document.createElement('div');
-      div.className = 'cart-item';
-      div.innerHTML = `
-      <img src="${p.images[0]}" alt="${p.name}">
-      <div class="cart-item-info">
-        <div class="cart-item-name">${p.name}</div>
-        <div class="cart-item-farmer">by ${f?.name} · ${p.unit}</div>
-        <div class="cart-item-footer">
-          <div class="qty-control">
-            <button class="qty-btn" onclick="updateQty(${p.id}, ${item.qty - 1})">−</button>
-            <span class="qty-value">${item.qty}</span>
-            <button class="qty-btn" onclick="updateQty(${p.id}, ${item.qty + 1})">+</button>
-          </div>
-          <div class="cart-item-price">RM ${(p.price * item.qty).toFixed(2)}</div>
-          <button class="remove-btn" onclick="removeItem(${p.id})">🗑️</button>
-        </div>
-      </div>
-    `;
-      container.appendChild(div);
+      const currentShopName = f ? (f.farm || f.name) : 'Local Farm';
+      const farmerId = f ? f.id : 'unknown';
+
+      const displayUnit = item.variation || item.unit || (p ? p.unit : 'Standard');
+      const uniqueItemKey = `${targetId}-${displayUnit}`;
+
+      if (!groupedCart[farmerId]) {
+        groupedCart[farmerId] = { shopName: currentShopName, items: [] };
+      }
+
+      // FIX: Only initialize value to true if it hasn't been explicitly unchecked by the user
+      if (selectedItemsMap[uniqueItemKey] === undefined) {
+        selectedItemsMap[uniqueItemKey] = true;
+      }
+
+      groupedCart[farmerId].items.push({ data: item, product: p, itemKey: uniqueItemKey, shopName: currentShopName });
     });
 
+    for (const shopId in groupedCart) {
+      const shopGroup = groupedCart[shopId];
+      const shopBlock = document.createElement('div');
+      shopBlock.className = 'shop-group-block';
+
+      const shopHeader = document.createElement('div');
+      shopHeader.className = 'shop-header';
+
+      const allShopItemsChecked = shopGroup.items.every(item => selectedItemsMap[item.itemKey]);
+
+      shopHeader.innerHTML = `
+        <input type="checkbox" class="cart-checkbox shop-group-checkbox" ${allShopItemsChecked ? 'checked' : ''} onchange="toggleShopGroup('${shopId}', this)">
+        <i class="fa-solid fa-shop" style="color: var(--primary); margin-left: 4px;"></i>
+        <span>${shopGroup.shopName}</span>
+      `;
+      shopBlock.appendChild(shopHeader);
+
+      shopGroup.items.forEach(groupItem => {
+        const item = groupItem.data;
+        const p = groupItem.product;
+        const itemKey = groupItem.itemKey;
+
+        const displayImg = item.image || (p && p.images ? p.images[0] : 'css/placeholder.jpg');
+        const displayName = item.name || (p ? p.name : 'Unknown Product');
+        const displayUnit = item.variation || item.unit || (p ? p.unit : 'Standard');
+
+        // FIX: Clean up any currency strings to protect against numerical operations breaking
+        let rawPrice = item.price ?? (p ? p.price : 0);
+        if (typeof rawPrice === 'string') {
+          rawPrice = rawPrice.replace(/RM|\s|,/gi, '');
+        }
+        const displayPrice = Number(rawPrice) || 0;
+
+        let itemQty = parseInt(item.qty || item.quantity, 10);
+        if (isNaN(itemQty) || itemQty < 1) itemQty = 1;
+
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'cart-item';
+        itemDiv.dataset.shopId = shopId;
+        itemDiv.innerHTML = `
+          <input type="checkbox" class="cart-checkbox item-checkbox" ${selectedItemsMap[itemKey] ? 'checked' : ''} onchange="toggleItemCheckbox('${itemKey}', this)">
+          <img src="${displayImg}" alt="${displayName}" onerror="this.src='https://via.placeholder.com/72?text=Fresh'">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${displayName}</div>
+
+            <div class="cart-item-shop"><i class="fa-solid fa-tags" style="font-size:10px; margin-right:4px;"></i>Variation: ${displayUnit}</div>
+
+            <div class="cart-item-footer">
+              <div class="qty-control">
+                <button class="qty-btn" onclick="updateQtyByKey('${itemKey}', ${itemQty - 1})"><i class="fa-solid fa-minus"></i></button>
+                <input type="number" class="qty-input" value="${itemQty}" min="1" onchange="handleQtyInputChangeByKey('${itemKey}', this)" onkeydown="if(event.key==='Enter') this.blur()">
+                <button class="qty-btn" onclick="updateQtyByKey('${itemKey}', ${itemQty + 1})"><i class="fa-solid fa-plus"></i></button>
+              </div>
+              <button class="remove-btn" onclick="removeItemByKey('${itemKey}')"><i class="fa-regular fa-trash-can"></i></button>
+            </div>
+            <div class="cart-item-price-row">
+              <div class="cart-item-price">RM ${(displayPrice * itemQty).toFixed(2)}</div>
+            </div>
+          </div>
+        `;
+        shopBlock.appendChild(itemDiv);
+      });
+
+      container.appendChild(shopBlock);
+    }
+
+    updateGlobalCheckboxState();
     updateTotals();
   }
 
-  function updateQty(productId, qty) {
-    AppState.updateCartQty(productId, qty);
+  function handleQtyInputChangeByKey(itemKey, inputElement) {
+    let value = parseInt(inputElement.value, 10);
+    if (isNaN(value) || value < 1) value = 1;
+    updateQtyByKey(itemKey, value);
+  }
+
+  function toggleItemCheckbox(itemKey, checkbox) {
+    selectedItemsMap[itemKey] = checkbox.checked;
     renderCart();
   }
 
-  function removeItem(productId) {
-    AppState.removeFromCart(productId);
+  function toggleShopGroup(shopId, groupCheckbox) {
+    localCartData.forEach((item) => {
+      const targetId = item.id || item.productId;
+      const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(prod => prod.id === targetId) : null;
+      const fId = p ? p.farmerId : 'unknown';
+      if (fId == shopId) {
+        const displayUnit = item.variation || item.unit || (p ? p.unit : 'Standard');
+        selectedItemsMap[`${targetId}-${displayUnit}`] = groupCheckbox.checked;
+      }
+    });
     renderCart();
-    showToast('Item removed from cart');
   }
 
-  function clearCart() {
-    AppState.cart = [];
-    AppState.saveCart();
+  function toggleSelectAll(globalCheckbox) {
+    localCartData.forEach((item) => {
+      const targetId = item.id || item.productId;
+      const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(prod => prod.id === targetId) : null;
+      const displayUnit = item.variation || item.unit || (p ? p.unit : 'Standard');
+      selectedItemsMap[`${targetId}-${displayUnit}`] = globalCheckbox.checked;
+    });
     renderCart();
+  }
+
+  function updateGlobalCheckboxState() {
+    const totalItems = localCartData ? localCartData.length : 0;
+    const checkedCount = Object.keys(selectedItemsMap).filter(k => selectedItemsMap[k]).length;
+    const checkbox = document.getElementById('selectAllCheckbox');
+    if (checkbox) {
+      checkbox.checked = (totalItems === checkedCount && totalItems > 0);
+    }
+  }
+
+  function updateQtyByKey(itemKey, newQty) {
+    if (newQty < 1) {
+      removeItemByKey(itemKey);
+      return;
+    }
+
+    const dbIndex = localCartData.findIndex(item => {
+      const targetId = item.id || item.productId;
+      const displayUnit = item.variation || item.unit || 'Standard';
+      return `${targetId}-${displayUnit}` === itemKey;
+    });
+
+    if (dbIndex !== -1) {
+      localCartData[dbIndex].qty = newQty;
+      saveLocalData();
+      window.dispatchEvent(new Event('cartUpdated'));
+      renderCart();
+    }
+  }
+
+  function removeItemByKey(itemKey) {
+    const dbIndex = localCartData.findIndex(item => {
+      const targetId = item.id || item.productId;
+      const displayUnit = item.variation || item.unit || 'Standard';
+      return `${targetId}-${displayUnit}` === itemKey;
+    });
+
+    if (dbIndex !== -1) {
+      localCartData.splice(dbIndex, 1);
+      delete selectedItemsMap[itemKey];
+      saveLocalData();
+      window.dispatchEvent(new Event('cartUpdated'));
+      renderCart();
+      showToast('Item removed from cart');
+    }
+  }
+
+  function wipeEntireCart() {
+    localCartData = [];
+    selectedItemsMap = {};
+    saveLocalData();
+    localStorage.removeItem('currentProductQty');
+    window.dispatchEvent(new Event('cartUpdated'));
+    renderCart();
+    showToast('Cart completely cleared! 🛒');
+  }
+
+  function calculateCheckedSubtotal() {
+    let subtotal = 0;
+    if (!localCartData) return subtotal;
+
+    localCartData.forEach((item) => {
+      const targetId = item.id || item.productId;
+      const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(prod => prod.id === targetId) : null;
+      const displayUnit = item.variation || item.unit || (p ? p.unit : 'Standard');
+      const itemKey = `${targetId}-${displayUnit}`;
+
+      if (selectedItemsMap[itemKey]) {
+        let rawPrice = item.price ?? (p ? p.price : 0);
+        if (typeof rawPrice === 'string') {
+          rawPrice = rawPrice.replace(/RM|\s|,/gi, '');
+        }
+        const displayPrice = Number(rawPrice) || 0;
+
+        let itemQty = parseInt(item.qty || item.quantity, 10);
+        if (isNaN(itemQty) || itemQty < 1) itemQty = 1;
+        subtotal += (displayPrice * itemQty);
+      }
+    });
+    return subtotal;
   }
 
   function updateTotals() {
-    const subtotal = AppState.getCartTotal();
-    const total = subtotal + deliveryFee - discount;
-    document.getElementById('subtotalVal').textContent = `RM ${subtotal.toFixed(2)}`;
-    document.getElementById('deliveryVal').textContent = `RM ${deliveryFee.toFixed(2)}`;
-    document.getElementById('totalVal').textContent = `RM ${total.toFixed(2)}`;
+    const subtotal = calculateCheckedSubtotal();
+    let checkedCount = 0;
 
-    // Store total for checkout
-    localStorage.setItem('orderTotal', total.toFixed(2));
-  }
+    if (localCartData) {
+      localCartData.forEach(item => {
+        const targetId = item.id || item.productId;
+        const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(prod => prod.id === targetId) : null;
+        const displayUnit = item.variation || item.unit || (p ? p.unit : 'Standard');
+        if (selectedItemsMap[`${targetId}-${displayUnit}`]) {
+          checkedCount++;
+        }
+      });
+    }
 
-  function selectDelivery(el, type) {
-    document.querySelectorAll('.delivery-opt').forEach(d => d.classList.remove('selected'));
-    el.classList.add('selected');
-    const subtotal = AppState.getCartTotal();
-    if (type === 'standard') deliveryFee = 5;
-    else if (type === 'express') deliveryFee = 12;
-    else deliveryFee = subtotal >= 30 ? 0 : 5;
-    updateTotals();
-  }
+    const checkedItemsCountEl = document.getElementById('checkedItemsCount');
+    const checkoutBtnCountEl = document.getElementById('checkoutBtnCount');
+    const totalValEl = document.getElementById('totalVal');
+    const btn = document.getElementById('checkoutBtn');
 
-  function applyPromo() {
-    const code = document.getElementById('promoInput').value.toUpperCase();
-    if (code === 'FRESH20') {
-      discount = AppState.getCartTotal() * 0.2;
-      document.getElementById('discountRow').style.display = 'flex';
-      document.getElementById('discountVal').textContent = `-RM ${discount.toFixed(2)}`;
-      updateTotals();
-      showToast('🎉 Promo FRESH20 applied! 20% off!');
-    } else if (code === 'AERYHUB') {
-      discount = 5;
-      document.getElementById('discountRow').style.display = 'flex';
-      document.getElementById('discountVal').textContent = `-RM ${discount.toFixed(2)}`;
-      updateTotals();
-      showToast('🎉 Promo AERYHUB applied! RM5 off!');
-    } else {
-      showToast('❌ Invalid promo code. Try FRESH20 or AERYHUB');
+    if (checkedItemsCountEl) checkedItemsCountEl.textContent = checkedCount;
+    if (checkoutBtnCountEl) checkoutBtnCountEl.textContent = checkedCount;
+    if (totalValEl) totalValEl.textContent = `RM ${subtotal.toFixed(2)}`;
+
+    if (btn) {
+      btn.disabled = checkedCount === 0;
+      btn.style.opacity = checkedCount === 0 ? "0.5" : "1";
+      btn.style.cursor = checkedCount === 0 ? "not-allowed" : "pointer";
     }
   }
+
+  // FIX: Maps variations cleanly and keeps item.qty intact so checkout.html can read totals perfectly
+  function proceedToCheckout() {
+    const checkoutItems = localCartData.filter((item) => {
+      const targetId = item.id || item.productId;
+      const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(prod => prod.id === targetId) : null;
+      const displayUnit = item.variation || item.unit || (p ? p.unit : 'Standard');
+      return selectedItemsMap[`${targetId}-${displayUnit}`];
+    }).map(item => {
+      // Normalizing variations/units/quantities inside the object payload
+      const targetId = item.id || item.productId;
+      const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(prod => prod.id === targetId) : null;
+
+      return {
+        ...item,
+        id: targetId,
+        productId: targetId,
+        name: item.name || (p ? p.name : 'Fresh Produce'),
+        image: item.image || (p && p.images ? p.images[0] : ''),
+        variation: item.variation || item.unit || (p ? p.unit : 'Standard'),
+        unit: item.variation || item.unit || (p ? p.unit : 'Standard'),
+        qty: parseInt(item.qty || item.quantity, 10) || 1,
+        quantity: parseInt(item.qty || item.quantity, 10) || 1,
+        price: item.price ?? (p ? p.price : 0)
+      };
+    });
+
+    if (checkoutItems.length === 0) {
+      showToast('❌ Please select items to checkout.');
+      return;
+    }
+    localStorage.setItem('checkoutItems', JSON.stringify(checkoutItems));
+    window.location.href = 'checkout.html';
+  }
+
+  window.showToast = function(msg) {
+    const t = document.getElementById('customToast');
+    if(t) {
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  };
 
   document.addEventListener('DOMContentLoaded', renderCart);
 </script>

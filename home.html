@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <link rel="stylesheet" href="css/style1.css">
   <style>
     body { background: #e0ead8; }
@@ -79,6 +79,33 @@
       flex-wrap: wrap;
     }
     .nearby-farm-meta span { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 3px; }
+
+    /* MARKETPLACE STYLE BASE NAVBAR REFS */
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ee4d2d;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
+    }
   </style>
 </head>
 <body>
@@ -87,15 +114,14 @@
     <span>9:41</span>
     <div class="notch"></div>
     <div class="status-icons">
-      <i class="fas fa-signal"></i>
-      <i class="fas fa-wifi"></i>
-      <i class="fas fa-battery-three-quarters"></i>
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
     </div>
   </div>
 
   <div class="screen" id="mainScreen">
 
-    <!-- Header -->
     <div class="home-header">
       <div class="header-left">
         <div class="greeting">Good morning</div>
@@ -111,16 +137,14 @@
       </div>
     </div>
 
-    <!-- Hero Banner -->
     <div class="section" style="padding-bottom:0; margin-bottom:12px;">
       <div class="hero-banner fade-in">
         <div class="hero-greeting">Fresh today from local farms</div>
         <div class="hero-title">Eat Fresh,<br>Live Better</div>
-        <a href="marketplace.html" class="btn btn-sm" style="background:white;color:var(--green-700);width:auto;display:inline-flex">Shop Now →</a>
+        <a href="marketplace.html" class="btn btn-sm" style="background:white;color:var(--green-700);width:auto;display:inline-flex">Shop Now &rarr;</a>
       </div>
     </div>
 
-    <!-- Search -->
     <div class="section fade-in-delay">
       <div class="search-bar" onclick="window.location.href='marketplace.html'">
         <span class="search-icon"><i class="fas fa-magnifying-glass"></i></span>
@@ -131,50 +155,47 @@
       </div>
     </div>
 
-    <!-- Categories -->
     <div class="section" style="padding-top:0;padding-bottom:0">
       <div class="section-header">
         <div class="section-title">Categories</div>
-        <a href="marketplace.html" class="section-link">All →</a>
+        <a href="marketplace.html" class="section-link">All &rarr;</a>
       </div>
       <div class="categories">
         <div class="category-pill active">
-          <span class="cat-icon">🥬</span>
+          <span class="cat-icon"><i class="fa-solid fa-leaf" style="color: #22c55e;"></i></span>
           <span class="cat-name">Veggies</span>
         </div>
         <div class="category-pill">
-          <span class="cat-icon">🍎</span>
+          <span class="cat-icon"><i class="fa-solid fa-apple-whole" style="color: #ef4444;"></i></span>
           <span class="cat-name">Fruits</span>
         </div>
         <div class="category-pill">
-          <span class="cat-icon">🌿</span>
+          <span class="cat-icon"><i class="fa-solid fa-seedling" style="color: #10b981;"></i></span>
           <span class="cat-name">Herbs</span>
         </div>
         <div class="category-pill">
-          <span class="cat-icon">🌾</span>
+          <span class="cat-icon"><i class="fa-solid fa-wheat-awn" style="color: #eab308;"></i></span>
           <span class="cat-name">Rice</span>
         </div>
         <div class="category-pill">
-          <span class="cat-icon">🥛</span>
+          <span class="cat-icon"><i class="fa-solid fa-cow" style="color: #78350f;"></i></span>
           <span class="cat-name">Dairy</span>
         </div>
         <div class="category-pill">
-          <span class="cat-icon">🥚</span>
+          <span class="cat-icon"><i class="fa-solid fa-egg" style="color: #f97316;"></i></span>
           <span class="cat-name">Poultry</span>
         </div>
       </div>
     </div>
 
-    <!-- Featured Products -->
     <div class="section">
       <div class="section-header">
         <div class="section-title">Featured Products</div>
-        <a href="marketplace.html" class="section-link">See All →</a>
+        <a href="marketplace.html" class="section-link">See All &rarr;</a>
       </div>
       <div class="h-scroll" id="featuredProducts"></div>
     </div>
 
-    <!-- Today's Deals -->
     <div class="section" style="padding-top:0">
       <div class="tip-card fade-in">
         <div class="tip-icon-wrap">
@@ -182,34 +203,31 @@
         </div>
         <div>
           <div class="tip-label">Today's Deals</div>
-          <div class="tip-text">Up to 20% off selected vegetables — today only!</div>
+          <div class="tip-text">Up to 20% off selected vegetables &mdash; today only!</div>
         </div>
       </div>
     </div>
 
-    <!-- Seasonal Picks -->
     <div class="section" style="padding-top:0">
       <div class="section-header">
         <div class="section-title">Seasonal Picks</div>
-        <a href="marketplace.html" class="section-link">More →</a>
+        <a href="marketplace.html" class="section-link">More &rarr;</a>
       </div>
       <div class="h-scroll" id="seasonalProducts"></div>
     </div>
 
-    <!-- Nearby Farms -->
     <div class="section" style="padding-top:0">
       <div class="section-header">
         <div class="section-title">Nearby Farms</div>
-        <a href="marketplace.html" class="section-link">View All →</a>
+        <a href="marketplace.html" class="section-link">View All &rarr;</a>
       </div>
       <div class="card" style="padding:4px 16px" id="nearbyFarms"></div>
     </div>
 
-    <!-- Promo Banner -->
     <div class="section" style="padding-top:0;padding-bottom:24px">
       <div class="promo-banner">
         <div style="font-size:11px;font-weight:700;letter-spacing:1px;opacity:0.8;text-transform:uppercase;margin-bottom:6px">Limited Offer</div>
-        <div style="font-size:20px;font-weight:800;margin-bottom:8px;font-family:var(--font-display)">Free Delivery<br>This Weekend! 🚚</div>
+        <div style="font-size:20px;font-weight:800;margin-bottom:8px;font-family:var(--font-display)">Free Delivery<br>This Weekend! <i class="fa-solid fa-truck" style="font-size: 18px; margin-left: 4px;"></i></div>
         <div style="font-size:13px;opacity:0.85;margin-bottom:14px">On all orders above RM30.</div>
         <a href="marketplace.html" class="btn btn-sm" style="background:white;color:var(--green-700);display:inline-flex">Shop Now</a>
       </div>
@@ -218,11 +236,21 @@
   </div>
 
   <nav class="bottom-nav">
-    <a class="nav-item active" href="home.html"><div class="nav-icon"><i class="fas fa-home"></i></div><div class="nav-label">Home</div></a>
-    <a class="nav-item" href="marketplace.html"><div class="nav-icon"><i class="fas fa-store"></i></div><div class="nav-label">Market</div></a>
-    <a class="nav-item" href="farmer.html"><div class="nav-icon"><i class="fas fa-tractor"></i></div><div class="nav-label">Farmers</div></a>
-    <a class="nav-item" href="order-details.html"><div class="nav-icon"><i class="fas fa-box"></i></div><div class="nav-label">Orders</div></a>
-    <a class="nav-item" href="05-profile.html"><div class="nav-icon"><i class="fas fa-user"></i></div><div class="nav-label">Profile</div></a>
+    <a href="home.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
+    </a>
+    <a href="marketplace.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
+    </a>
+    <a href="order-details.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
+    </a>
+    <a href="chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
+    </a>
+    <a href="consumer-profile.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
+    </a>
   </nav>
 </div>
 
@@ -230,87 +258,127 @@
 <script src="script.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    AppState.init();
+    if (typeof AppState !== 'undefined' && AppState.init) {
+      AppState.init();
+    }
 
-    // Update cart icon
+    // Update cart icon counters menggunakan class (.cart-count) rujukan baru
     document.querySelectorAll('.cart-nav-icon').forEach(el => {
-      const count = AppState.cart.reduce((s, i) => s + i.qty, 0);
-      if (count > 0) {
-        const b = document.createElement('span');
-        b.className = 'cart-count';
-        b.textContent = count;
-        el.style.position = 'relative';
-        el.appendChild(b);
+      if (typeof AppState !== 'undefined' && AppState.cart) {
+        const count = AppState.cart.reduce((s, i) => s + i.qty, 0);
+        if (count > 0) {
+          const b = document.createElement('span');
+          b.className = 'cart-count';
+          b.textContent = count;
+          el.style.position = 'relative';
+          el.appendChild(b);
+        }
       }
     });
 
-    // Featured Products
-    const featured = PRODUCTS.slice(0, 6);
-    const fp = document.getElementById('featuredProducts');
-    featured.forEach(p => {
-      const f = FARMERS.find(f => f.id === p.farmerId);
-      const div = document.createElement('div');
-      div.className = 'product-mini';
-      div.style.cursor = 'pointer';
-      div.onclick = () => { localStorage.setItem('currentProduct', p.id); window.location.href = 'product-details.html'; };
-      div.innerHTML = `
-        <img src="${p.images[0]}" alt="${p.name}" style="border-radius:14px">
-        <div class="product-mini-info">
-          <div class="product-mini-name">${p.name}</div>
-          <div style="font-size:11px;color:var(--text-muted);margin:2px 0">${f?.name}</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px">
-            <div class="product-mini-price">RM ${p.price.toFixed(2)}</div>
-            <div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:3px">
-              <i class="fas fa-star" style="color:#f59e0b;font-size:10px"></i> ${p.rating}
+    const itemsAvailable = typeof PRODUCTS !== 'undefined' && PRODUCTS.length > 0;
+    const farmersAvailable = typeof FARMERS !== 'undefined' && FARMERS.length > 0;
+
+    // Helper to safely extract price logic from product dataset
+    function getProductPrice(product) {
+      if (product && product.pricing && product.pricing.length > 0) {
+        return product.pricing[0].price;
+      }
+      return product && typeof product.price === 'number' ? product.price : 0;
+    }
+
+    // 1. Featured Products Block
+    if (itemsAvailable) {
+      const featured = PRODUCTS.slice(0, 6);
+      const fp = document.getElementById('featuredProducts');
+      fp.innerHTML = '';
+      featured.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-mini';
+        div.style.cursor = 'pointer';
+        div.onclick = () => { localStorage.setItem('currentProduct', p.id); window.location.href = 'product-details.html'; };
+
+        const imgSrc = (p.images && p.images[0]) ? p.images[0] : 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=200';
+        const displayPrice = getProductPrice(p).toFixed(2);
+
+        div.innerHTML = `
+          <img src="${imgSrc}" alt="${p.name || 'Produce'}" style="border-radius:14px">
+          <div class="product-mini-info">
+            <div class="product-mini-name">${p.name || 'Fresh Produce'}</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">
+              <div class="product-mini-price">RM ${displayPrice}</div>
+              <div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:3px">
+                <i class="fas fa-star" style="color:#f59e0b;font-size:10px"></i> ${p.rating || '5.0'}
+              </div>
             </div>
           </div>
-        </div>
-      `;
-      fp.appendChild(div);
-    });
+        `;
+        fp.appendChild(div);
+      });
+    }
 
-    // Seasonal Picks
-    const seasonal = [PRODUCTS[7], PRODUCTS[5], PRODUCTS[6], PRODUCTS[8]];
-    const sp = document.getElementById('seasonalProducts');
-    seasonal.forEach(p => {
-      const div = document.createElement('div');
-      div.className = 'seasonal-card';
-      div.onclick = () => { localStorage.setItem('currentProduct', p.id); window.location.href = 'product-details.html'; };
-      div.innerHTML = `
-        <img src="${p.images[0]}" alt="${p.name}">
-        <div class="seasonal-card-info">
-          <div class="seasonal-name">${p.name}</div>
-          <div class="seasonal-price">RM ${p.price.toFixed(2)}</div>
-        </div>
-      `;
-      sp.appendChild(div);
-    });
+    // 2. Seasonal Picks Block (Expanded to show more items)
+    if (itemsAvailable) {
+      const sp = document.getElementById('seasonalProducts');
+      sp.innerHTML = '';
 
-    // Nearby Farms
-    const nf = document.getElementById('nearbyFarms');
-    FARMERS.slice(0, 4).forEach(f => {
-      const div = document.createElement('div');
-      div.className = 'nearby-farm';
-      div.onclick = () => { localStorage.setItem('currentFarmer', f.id); window.location.href = 'farmer-profile.html'; };
-      div.innerHTML = `
-        <img src="${f.farmImage}" class="nearby-farm-img" alt="${f.farm}">
-        <div class="nearby-farm-info">
-          <div class="nearby-farm-name">
-            ${f.farm}
-            ${f.certified ? '<i class="fas fa-circle-check" style="color:#16a34a;font-size:13px;vertical-align:-1px;margin-left:4px"></i>' : ''}
-          </div>
-          <div class="nearby-farm-meta" style="margin-top:3px">
-            <span><i class="fas fa-location-dot" style="color:#16a34a"></i> ${f.city}, ${f.state}</span>
-          </div>
-          <div class="nearby-farm-meta" style="margin-top:3px">
-            <span><i class="fas fa-seedling" style="color:#16a34a"></i> ${f.products} products</span>
-            <span><i class="fas fa-star" style="color:#f59e0b"></i> ${f.rating}</span>
-          </div>
-        </div>
-      `;
-      nf.appendChild(div);
-    });
+      // Grabs items tagged 'seasonal' or default matches to generate a broader list of choices
+      let seasonalItems = PRODUCTS.filter(p => p.tags && p.tags.includes('seasonal'));
+      if (seasonalItems.length === 0) {
+        // Safe fallbacks focusing primarily on fruits/melons from your array data
+        seasonalItems = [PRODUCTS[7], PRODUCTS[5], PRODUCTS[6], PRODUCTS[8], PRODUCTS[1], PRODUCTS[9]].filter(Boolean);
+      }
 
+      seasonalItems.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'seasonal-card';
+        div.onclick = () => { localStorage.setItem('currentProduct', p.id); window.location.href = 'product-details.html'; };
+
+        const imgSrc = (p.images && p.images[0]) ? p.images[0] : 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=200';
+        const displayPrice = getProductPrice(p).toFixed(2);
+
+        div.innerHTML = `
+          <img src="${imgSrc}" alt="${p.name || 'Produce'}">
+          <div class="seasonal-card-info">
+            <div class="seasonal-name">${p.name || 'Fresh Item'}</div>
+            <div class="seasonal-price">RM ${displayPrice}</div>
+          </div>
+        `;
+        sp.appendChild(div);
+      });
+    }
+
+    // 3. Nearby Farms Block
+    if (farmersAvailable) {
+      const nf = document.getElementById('nearbyFarms');
+      nf.innerHTML = '';
+
+      FARMERS.slice(0, 4).forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'nearby-farm';
+        div.onclick = () => { localStorage.setItem('currentFarmer', f.id); window.location.href = 'farmer-profile.html'; };
+
+        const farmImgSrc = f.farmImage || 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=200';
+
+        div.innerHTML = `
+          <img src="${farmImgSrc}" class="nearby-farm-img" alt="${f.farm || 'Farm'}">
+          <div class="nearby-farm-info">
+            <div class="nearby-farm-name">
+              ${f.farm || 'Greenwood Farm'}
+              ${f.certified ? '<i class="fas fa-circle-check" style="color:#16a34a;font-size:13px;vertical-align:-1px;margin-left:4px"></i>' : ''}
+            </div>
+            <div class="nearby-farm-meta" style="margin-top:3px">
+              <span><i class="fas fa-location-dot" style="color:#16a34a"></i> ${f.city || 'Kuala Lumpur'}, ${f.state || 'Selangor'}</span>
+            </div>
+            <div class="nearby-farm-meta" style="margin-top:3px">
+              <span><i class="fas fa-seedling" style="color:#16a34a"></i> ${f.products || '12'} products</span>
+              <span><i class="fas fa-star" style="color:#f59e0b"></i> ${f.rating || '4.9'}</span>
+            </div>
+          </div>
+        `;
+        nf.appendChild(div);
+      });
+    }
   });
 </script>
 </body>

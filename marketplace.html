@@ -6,7 +6,6 @@
   <title>AeryHub - Marketplace</title>
 
   <link rel="stylesheet" href="css/style1.css">
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
   <style>
@@ -68,26 +67,19 @@
       padding: 0 20px 20px;
     }
 
+    .product-card {
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .product-card:active {
+      transform: scale(0.98);
+    }
+
     .product-card-price-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-top: 8px;
-    }
-
-    .add-cart-mini {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      background: var(--primary);
-      border: none;
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
     }
 
     .product-card-rating {
@@ -135,13 +127,25 @@
       gap: 1px;
     }
 
-    /* Mengunci container gambar supaya jika link rosak, layout tetap maintain tinggi 130px */
     .img-container {
       position: relative;
       width: 100%;
       height: 130px;
-      background: #ebeeeb; /* Warna fallback background kelabu lembut */
+      background: #ebeeeb;
       overflow: hidden;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ee4d2d;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1;
     }
   </style>
 </head>
@@ -188,6 +192,8 @@
         <div class="filter-chip" onclick="filterCat('Fruits')" data-cat="Fruits">Fruits</div>
         <div class="filter-chip" onclick="filterCat('Herbs')" data-cat="Herbs">Herbs</div>
         <div class="filter-chip" onclick="filterCat('Aquaculture products')" data-cat="Aquaculture products">Aquaculture</div>
+        <div class="filter-chip" onclick="filterCat('Dairy')" data-cat="Dairy">Dairy</div>
+        <div class="filter-chip" onclick="filterCat('Poultry')" data-cat="Poultry">Poultry</div>
         <div class="filter-chip" onclick="filterCat('organic')" data-cat="organic">Organic</div>
       </div>
     </div>
@@ -215,7 +221,7 @@
     <a href="marketplace.html" class="nav-item active">
       <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
-    <a href="orders.html" class="nav-item">
+    <a href="order-details.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
     </a>
     <a href="chat.html" class="nav-item">
@@ -236,6 +242,23 @@
   let currentSearch = '';
   let currentSort = 'default';
 
+  if (typeof AppState === 'undefined') {
+    window.AppState = {
+      cart: JSON.parse(localStorage.getItem('cart')) || [],
+      wishlist: JSON.parse(localStorage.getItem('wishlist')) || [],
+      init: function() {
+        this.cart = JSON.parse(localStorage.getItem('cart')) || [];
+        this.wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+      },
+      toggleWishlist: function(id) {
+        let idx = this.wishlist.indexOf(id);
+        if (idx > -1) this.wishlist.splice(idx, 1);
+        else this.wishlist.push(id);
+        localStorage.setItem('wishlist', JSON.stringify(this.wishlist));
+      }
+    };
+  }
+
   function getLowestPrice(product) {
     if (!product.pricing || product.pricing.length === 0) return 0;
     return Math.min(...product.pricing.map(p => p.price));
@@ -248,24 +271,16 @@
 
   function generateStars(rating) {
     let starsHtml = '';
-
-    // Bundarkan rating kepada 0.5 terdekat (Contoh: 4.9 jadi 5.0, 4.4 jadi 4.5, 4.2 jadi 4.0)
     const roundedRating = Math.round(rating * 2) / 2;
-
     const fullStars = Math.floor(roundedRating);
-    const hasHalf = (roundedRating % 1 !== 0); // Jika ada baki .5, maksudnya ada bintang separuh
+    const hasHalf = (roundedRating % 1 !== 0);
 
-    // 1. Tambah bintang penuh
     for (let i = 0; i < fullStars; i++) {
       starsHtml += '<i class="fa-solid fa-star"></i>';
     }
-
-    // 2. Tambah bintang separuh jika ada
     if (hasHalf) {
       starsHtml += '<i class="fa-solid fa-star-half-stroke"></i>';
     }
-
-    // 3. Cukupkan baki dengan bintang kosong supaya total ada 5 ikon bintang
     const currentTotal = fullStars + (hasHalf ? 1 : 0);
     for (let i = currentTotal; i < 5; i++) {
       starsHtml += '<i class="fa-regular fa-star"></i>';
@@ -306,14 +321,12 @@
     filtered.forEach(p => {
       const f = (typeof FARMERS !== 'undefined') ? FARMERS.find(farmer => farmer.id === p.farmerId) : null;
       const displayPrice = getLowestPrice(p);
-      const displayUnit = getPriceLabel(p);
       const farmState = f && f.state ? f.state : "Selangor";
-
-      // Memastikan format rating dipaparkan satu angka perpuluhan (cth: 4.5, 5.0)
       const formattedRating = (p.rating || 0).toFixed(1);
 
       const card = document.createElement('div');
       card.className = 'product-card fade-in';
+      // FARMER LOGIC COMPLETELY CLEANED BELOW (No farmer names printed)
       card.innerHTML = `
         <div class="img-container">
           <img src="${p.images[0]}" alt="${p.name}" style="width:100%; height:130px; object-fit:cover;" onerror="this.style.display='none';">
@@ -327,17 +340,16 @@
         </div>
 
         <div class="product-card-body" style="padding:10px; background:#fff; display:flex; flex-direction:column; min-height:125px; height:auto;">
-
           <div style="display:flex; flex-direction:column; gap:2px;">
             <div class="product-card-name" style="font-weight:600; font-size:13px; color:#212121; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
               ${p.name}
             </div>
 
-            <div class="product-card-farmer" style="font-size:11px; color:#757575; display:flex; align-items:center; gap:4px;">
+            <div class="product-card-farmer" style="font-size:11px; color:#757575; display:flex; align-items:center; gap:4px; margin-top: 3px;">
               <i class="fa-solid fa-location-dot" style="font-size:10px; color:#9e9e9e;"></i> ${farmState}
             </div>
 
-            <div class="product-card-rating" style="display:flex; align-items:center; gap:4px; font-size:11px;">
+            <div class="product-card-rating" style="display:flex; align-items:center; gap:4px; font-size:11px; margin-top: 5px;">
               ${generateStars(p.rating)}
               <span style="color:#212121; font-weight:600; margin-left:2px;">${formattedRating}</span>
               <span style="color:#757575; font-size:10px;">(${p.reviews})</span>
@@ -346,13 +358,10 @@
 
           <div style="flex-grow: 1;"></div>
 
-          <div class="product-card-price-row" style="display:flex; align-items:center; justify-content:between; padding-top:4px;">
+          <div class="product-card-price-row" style="display:flex; align-items:center; justify-content:flex-start; padding-top:4px;">
             <div class="product-price" style="font-weight:700; color:#2e7d32; font-size:14px;">
               RM ${displayPrice.toFixed(2)}
             </div>
-            <button class="add-cart-mini" onclick="event.stopPropagation(); handleQuickAdd(${p.id}, '${displayUnit}', ${displayPrice})">
-              <i class="fa-solid fa-plus"></i>
-            </button>
           </div>
         </div>
       `;
@@ -374,30 +383,6 @@
         </div>
       `;
     }
-  }
-
-  function handleQuickAdd(productId, variantLabel, unitPrice) {
-    if (typeof AppState !== 'undefined' && AppState.addToCart) {
-      AppState.addToCart(productId, variantLabel, 1, unitPrice);
-      if (typeof showToast === 'function') showToast('Item added to cart');
-      updateCartBadge();
-    }
-  }
-
-  function updateCartBadge() {
-    if (typeof AppState === 'undefined' || !AppState.cart) return;
-    const count = AppState.cart.reduce((s, i) => s + i.qty, 0);
-    document.querySelectorAll('.cart-nav-icon').forEach(el => {
-      let badge = el.querySelector('.cart-count');
-      if (!badge) {
-        badge = document.createElement('span');
-        badge.className = 'cart-count';
-        badge.style = "position:absolute; top:-4px; right:-4px; background:#ee4d2d; color:white; border-radius:50%; padding:2px 6px; font-size:10px; font-weight:700;";
-        el.appendChild(badge);
-      }
-      badge.textContent = count;
-      badge.style.display = count > 0 ? 'block' : 'none';
-    });
   }
 
   function filterCat(cat) {
@@ -426,11 +411,9 @@
     if (typeof showToast === 'function') showToast(isWished ? 'Added to wishlist' : 'Removed from wishlist');
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
+  function initMarketpage() {
     if (typeof AppState !== 'undefined' && AppState.init) {
       AppState.init();
-    } else if (typeof AppState !== 'undefined' && AppState.loadCart) {
-      AppState.loadCart();
     }
 
     const cat = localStorage.getItem('filterCat') || '';
@@ -443,7 +426,16 @@
     }
 
     renderProducts();
-    updateCartBadge();
+
+    if (typeof updateNavCartBadge === 'function') {
+      updateNavCartBadge();
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initMarketpage);
+
+  window.addEventListener('pageshow', () => {
+    initMarketpage();
   });
 </script>
 

@@ -5,302 +5,529 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeryHub - Checkout</title>
   <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <style>
-    body { background: #e0ead8; }
-    .section-box { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 16px; margin-bottom: 12px; box-shadow: var(--shadow); }
-    .section-box-title { font-size: 13px; font-weight: 800; color: var(--text); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-    .address-card { display: flex; gap: 10px; align-items: flex-start; }
-    .address-icon { font-size: 24px; }
-    .address-info { flex: 1; }
-    .address-name { font-size: 14px; font-weight: 700; color: var(--text); }
-    .address-text { font-size: 13px; color: var(--text-muted); margin-top: 2px; line-height: 1.4; }
-    .change-link { font-size: 13px; color: var(--primary); font-weight: 700; }
-    .order-item { display: flex; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
-    .order-item:last-child { border-bottom: none; }
-    .order-item img { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; }
-    .order-item-name { font-size: 13px; font-weight: 700; color: var(--text); flex: 1; }
-    .order-item-price { font-size: 13px; font-weight: 700; color: var(--primary); }
-    .price-summary { }
-    .ps-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
-    .ps-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; color: var(--text); border-top: 1.5px solid var(--border); padding-top: 12px; margin-top: 4px; }
-    .pay-method { display: flex; align-items: center; gap: 12px; padding: 12px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; margin-bottom: 8px; transition: all 0.2s; }
-    .pay-method.selected { border-color: var(--primary); background: var(--green-50); }
-    .pay-icon-big { font-size: 28px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--gray-100); border-radius: 10px; }
-    .pay-info { flex: 1; }
-    .pay-name { font-size: 14px; font-weight: 700; color: var(--text); }
-    .pay-desc { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
-    .radio-circle { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; }
-    .pay-method.selected .radio-circle { border-color: var(--primary); background: var(--primary); }
-    .pay-method.selected .radio-circle::after { content: ''; width: 8px; height: 8px; border-radius: 50%; background: white; }
-    .fulfill-opt { border: 2px solid var(--border); border-radius: 14px; padding: 16px 12px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--surface); }
-    .fulfill-opt.selected { border-color: var(--primary); background: var(--green-50); }
-    .slot-chip { padding: 7px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; white-space: nowrap; transition: all 0.2s; }
-    .slot-chip.selected { background: var(--primary); border-color: var(--primary); color: white; }
-    /* Success Modal */
-    .success-modal { text-align: center; }
-    .success-icon { font-size: 64px; margin-bottom: 16px; animation: pulse 1s ease; }
-    .success-title { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-    .success-subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.5; }
-    .order-number-box { background: var(--green-50); border-radius: 12px; padding: 14px; margin-bottom: 24px; }
-    .order-number-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
-    .order-number { font-size: 18px; font-weight: 800; color: var(--primary); font-family: monospace; letter-spacing: 1px; }
+    /* INTEGRATED SYSTEM ACCENTS & STYLES FROM DETAILS PAGE */
+    :root {
+      --primary: #16a34a;
+      --primary-dark: #15803d;
+      --bg: #fafaf5;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #e8ede5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      margin: 0;
+    }
+
+    /* PREMIUM FRAME DEFINITION */
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      background: var(--bg);
+      border-radius: 48px;
+      box-shadow:
+        0 0 0 12px #1a1a1a,
+        0 0 0 14px #333,
+        0 30px 80px rgba(0,0,0,0.4),
+        inset 0 0 0 1px rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .status-bar {
+      height: 44px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 10;
+    }
+
+    .status-bar .notch {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 120px; height: 28px;
+      background: #1a1a1a;
+      border-radius: 0 0 18px 18px;
+    }
+
+    .status-icons { display: flex; gap: 6px; align-items: center; }
+
+    /* CORE SCREEN WITH #FAFAFA PRODUCT DETAILS CANVAS BASE */
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      background: #fafafa;
+      position: relative;
+      scrollbar-width: none;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+
+    /* STICKY TOP APP HEADER */
+    .page-header {
+      background: var(--surface);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 25;
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .back-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f4f5f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .back-btn:active { background: #e5e7eb; }
+
+    /* 6PX SOLID SEPARATOR CARDS FROM THE DETAILS VIEW */
+    .details-block-section {
+      background: #fff;
+      padding: 16px;
+      border-bottom: 6px solid #f5f5f5;
+    }
+
+    .block-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #888;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      display: block;
+    }
+
+    /* CHIP PATTERNS FROM PRODUCT OPTIONS SCREEN */
+    .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .fulfill-chip { padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1.5px solid #eee; background: #fff; color: #444; cursor: pointer; flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .fulfill-chip i { font-size: 16px; color: #888; }
+    .fulfill-chip.active { border-color: #16a34a; color: #16a34a; background: #e8f5e9; }
+    .fulfill-chip.active i { color: #16a34a; }
+
+    /* SLOT SELECTION CHIPS */
+    .slot-chip { padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 600; border: 1.5px solid #eee; background: #fff; color: #555; cursor: pointer; white-space: nowrap; }
+    .slot-chip.active { border-color: #16a34a; color: #16a34a; background: #e8f5e9; }
+
+    /* ADDRESS CONTAINER */
+    .address-box { display: flex; gap: 12px; align-items: flex-start; padding-top: 4px; }
+    .address-icon-cell { font-size: 16px; color: var(--text-muted); padding-top: 2px; }
+    .address-info-cell { flex: 1; }
+    .address-title-row { font-size: 14px; font-weight: 700; color: #222; display: flex; align-items: center; gap: 6px; }
+    .badge-green { background: #e8f5e9; color: var(--primary); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 10px; }
+    .address-desc-txt { font-size: 13px; color: #555; margin-top: 4px; line-height: 1.5; }
+    .change-action-link { font-size: 12px; color: var(--primary); font-weight: 600; cursor: pointer; }
+
+    /* SHOP ROW LOOK FOR PICKUP BLOCK */
+    .pickup-shop-box { border: 1px solid #f0f0f0; border-radius: 12px; padding: 12px; background: #fafafa; }
+    .shop-mini-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .shop-mini-av { width: 36px; height: 36px; border-radius: 10px; background: #e8f5e9; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #eaeaea; }
+    .shop-mini-av img { width: 100%; height: 100%; object-fit: cover; }
+    .shop-mini-name { font-size: 13px; font-weight: 700; color: #222; }
+    .shop-mini-distance { font-size: 11px; color: #27ae60; margin-top: 1px; font-weight: 500; }
+    .pickup-detail-line { font-size: 12px; color: #555; display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+    .pickup-detail-line i { width: 12px; text-align: center; color: var(--text-muted); font-size: 11px; }
+
+    /* ORDER ITEM STRIPS PATTERNED FROM REVIEWS LAYOUT */
+    .checkout-item-strip { padding: 12px 0; border-bottom: 1px solid #f5f5f5; display: flex; gap: 12px; align-items: center; }
+    .checkout-item-strip:last-child { border-bottom: none; }
+    .checkout-item-strip img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; }
+    .checkout-item-details { flex: 1; }
+    .checkout-item-title { font-size: 13px; font-weight: 700; color: #1f2937; }
+    .checkout-item-meta { font-size: 11px; color: #6b7280; font-weight: 500; margin-top: 2px; }
+    .checkout-item-price-tag { font-size: 13px; font-weight: 700; color: #111827; text-align: right; }
+
+    /* PAYMENT METHOD LAYOUT BUTTONS */
+    .payment-row-card { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1.5px solid #eee; border-radius: 12px; cursor: pointer; margin-bottom: 8px; background: #fff; transition: all 0.2s; }
+    .payment-row-card.active { border-color: var(--primary); background: #e8f5e9; }
+    .payment-row-icon { font-size: 15px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: #f4f4f5; border-radius: 10px; color: #52525b; }
+    .payment-row-card.active .payment-row-icon { color: var(--primary); background: #ffffff; }
+    .payment-row-info { flex: 1; }
+    .payment-row-name { font-size: 13px; font-weight: 700; color: #222; }
+    .payment-row-desc { font-size: 11px; color: #666; margin-top: 1px; }
+    .payment-radio-circle { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; margin-left: auto; background: #fff; }
+    .payment-row-card.active .payment-radio-circle { border-color: var(--primary); background: var(--primary); }
+    .payment-row-card.active .payment-radio-circle::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: white; }
+
+    /* PRICE BREAKDOWN SCHEME */
+    .bill-row { display: flex; justify-content: space-between; font-size: 13px; color: #555; margin-bottom: 10px; }
+    .bill-total-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; color: #111827; border-top: 1px dashed #e5e7eb; padding-top: 12px; margin-top: 6px; }
+
+    /* BOTTOM INTERACTION FOOTER BAR */
+    .bottom-bar {
+      background: #fff;
+      border-top: 1px solid #f3f4f6;
+      display: flex;
+      align-items: center;
+      padding: 14px 18px 20px;
+      z-index: 20;
+      position: relative;
+    }
+    .bb-add-style {
+      width: 100%;
+      height: 48px;
+      background: #16a34a;
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25);
+    }
+    .bb-add-style:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* MODAL AND TOAST SYSTEM GRAPHICS */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+    .modal { background: var(--surface); border-radius: 24px; padding: 24px; width: 100%; max-width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+    .success-icon { font-size: 52px; margin-bottom: 14px; color: var(--primary); }
+    .success-title { font-size: 18px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+    .success-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5; }
+    .order-number-box { background: #e8f5e9; border-radius: 12px; padding: 12px; margin-bottom: 18px; border: 1px solid var(--green-200); }
+    .order-number-label { font-size: 11px; color: var(--text-muted); margin-bottom: 2px; }
+    .order-number { font-size: 15px; font-weight: 800; color: var(--primary); font-family: monospace; letter-spacing: 0.5px; }
+
+    .btn-action-stack { display: flex; flex-direction: column; gap: 8px; }
+    .modal-btn { height: 44px; border-radius: 12px; font-size: 13px; font-weight: 700; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; width: 100%; }
+    .modal-btn-primary { background: var(--primary); color: white; }
+    .modal-btn-ghost { background: #f4f5f7; color: var(--text); }
+
+    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
+
 <div class="phone-frame">
   <div class="status-bar">
     <span>9:41</span>
     <div class="notch"></div>
-    <div class="status-icons">📶 🔋</div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
   </div>
 
   <div class="screen" id="mainScreen">
     <div class="page-header">
-      <a href="cart.html" class="back-btn">←</a>
+      <a href="cart.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
       <div class="page-title">Checkout</div>
     </div>
 
-    <div style="padding:16px 16px 100px">
-      <!-- Fulfillment Method -->
-      <div class="section-box">
-        <div class="section-box-title">🚚 Fulfillment Method</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
-          <div class="fulfill-opt selected" id="opt-delivery" onclick="setFulfill('delivery')">
-            <div style="font-size:28px;margin-bottom:6px">🚚</div>
-            <div style="font-size:13px;font-weight:800;color:var(--text)">Delivery</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">We deliver to your door</div>
-            <div style="font-size:12px;font-weight:700;color:var(--primary);margin-top:6px">+RM 5.00</div>
-          </div>
-          <div class="fulfill-opt" id="opt-pickup" onclick="setFulfill('pickup')">
-            <div style="font-size:28px;margin-bottom:6px">🧑‍🌾</div>
-            <div style="font-size:13px;font-weight:800;color:var(--text)">Farm Pickup</div>
-            <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Collect fresh at the farm</div>
-            <div style="font-size:12px;font-weight:700;color:var(--green-600);margin-top:6px">FREE</div>
-          </div>
+    <div class="details-block-section">
+      <div class="block-title">Fulfillment Method</div>
+      <div class="chip-row">
+        <div class="fulfill-chip active" id="opt-delivery" onclick="setFulfill('delivery')">
+          <i class="fa-solid fa-house-laptop"></i>
+          <span>Delivery</span>
+          <span style="font-size:10px;opacity:0.8;">+RM 5.00</span>
         </div>
-
-        <!-- Delivery section -->
-        <div id="delivery-section">
-          <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Delivery Address</div>
-          <div class="address-card">
-            <div class="address-icon">🏠</div>
-            <div class="address-info">
-              <div class="address-name">Sarah Lim <span class="badge badge-green" style="font-size:10px">Home</span></div>
-              <div class="address-text">No 12, Jalan Subang 3, Putra Heights,<br>47650 Subang Jaya, Selangor</div>
-            </div>
-            <span class="change-link" onclick="showToast('Address management coming soon!')">Change</span>
-          </div>
-          <div style="margin-top:12px">
-            <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Delivery Slot</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <div class="slot-chip selected" onclick="selectSlot(this,'Today 12–2 PM')">Today 12–2 PM</div>
-              <div class="slot-chip" onclick="selectSlot(this,'Today 3–5 PM')">Today 3–5 PM</div>
-              <div class="slot-chip" onclick="selectSlot(this,'Tomorrow 9–11 AM')">Tomorrow 9–11 AM</div>
-              <div class="slot-chip" onclick="selectSlot(this,'Tomorrow 2–4 PM')">Tomorrow 2–4 PM</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pickup section -->
-        <div id="pickup-section" style="display:none">
-          <div style="background:var(--green-50);border:1.5px solid var(--green-200);border-radius:14px;padding:14px">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=48&h=48&fit=crop&crop=face" style="width:40px;height:40px;border-radius:10px;object-fit:cover">
-              <div>
-                <div style="font-size:14px;font-weight:700;color:var(--text)">Ladang Hijau Selangor</div>
-                <div style="font-size:12px;color:var(--text-muted)">Ahmad Razif · 12 km away</div>
-              </div>
-            </div>
-            <div style="font-size:13px;color:var(--gray-600);display:flex;align-items:flex-start;gap:6px;margin-bottom:8px">
-              <span>📍</span><span>Lot 45, Jalan Ladang, Kuala Kubu Bharu, 44000 Selangor</span>
-            </div>
-            <div style="font-size:13px;color:var(--gray-600);display:flex;align-items:center;gap:6px;margin-bottom:12px">
-              <span>🕐</span><span>Pickup hours: Mon–Sat 7AM – 12PM</span>
-            </div>
-            <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Pick a Pickup Slot</div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <div class="slot-chip selected" onclick="selectSlot(this,'Today 8–10 AM')">Today 8–10 AM</div>
-              <div class="slot-chip" onclick="selectSlot(this,'Today 10–12 PM')">Today 10–12 PM</div>
-              <div class="slot-chip" onclick="selectSlot(this,'Tomorrow 7–9 AM')">Tomorrow 7–9 AM</div>
-            </div>
-            <button class="btn btn-sm btn-ghost" style="margin-top:12px;width:100%" onclick="showToast('Opening maps...')">🗺️ Get Directions</button>
-          </div>
-          <div style="background:var(--earth-100);border-radius:10px;padding:10px 12px;margin-top:10px;font-size:12px;color:var(--earth-500)">
-            🌿 <strong>Farm Pickup Perks:</strong> Meet your farmer in person, see the farm, and get ultra-fresh produce harvested minutes before pickup!
-          </div>
+        <div class="fulfill-chip" id="opt-pickup" onclick="setFulfill('pickup')">
+          <i class="fa-solid fa-shop"></i>
+          <span>Farm Pickup</span>
+          <span style="font-size:10px;opacity:0.8;">FREE</span>
         </div>
       </div>
 
-      <!-- Order Summary -->
-      <div class="section-box">
-        <div class="section-box-title">🛒 Order Summary</div>
-        <div id="checkoutItems"></div>
-      </div>
+      <div id="delivery-section">
+        <div class="block-title" style="margin-top:16px; margin-bottom:8px;">Delivery Address</div>
+        <div class="address-box">
+          <div class="address-icon-cell"><i class="fa-solid fa-location-dot"></i></div>
+          <div class="address-info-cell">
+            <div class="address-title-row">Sarah Lim <span class="badge-green">Home</span></div>
+            <div class="address-desc-txt">No 12, Jalan Subang 3, Putra Heights,<br>47650 Subang Jaya, Selangor</div>
+          </div>
+          <span class="change-action-link" onclick="showToast('Address updates coming soon!')">Change</span>
+        </div>
 
-      <!-- Payment -->
-      <div class="section-box">
-        <div class="section-box-title">💳 Payment Method</div>
-        <div class="pay-method selected" onclick="selectPay(this)" data-method="COD">
-          <div class="pay-icon-big">💵</div>
-          <div class="pay-info">
-            <div class="pay-name">Cash on Delivery</div>
-            <div class="pay-desc">Pay when your order arrives</div>
-          </div>
-          <div class="radio-circle"></div>
-        </div>
-        <div class="pay-method" onclick="selectPay(this)" data-method="FPX">
-          <div class="pay-icon-big">🏦</div>
-          <div class="pay-info">
-            <div class="pay-name">FPX Online Banking</div>
-            <div class="pay-desc">Maybank, CIMB, RHB & more</div>
-          </div>
-          <div class="radio-circle"></div>
-        </div>
-        <div class="pay-method" onclick="selectPay(this)" data-method="TNG">
-          <div class="pay-icon-big">💙</div>
-          <div class="pay-info">
-            <div class="pay-name">Touch 'n Go eWallet</div>
-            <div class="pay-desc">Scan or enter amount</div>
-          </div>
-          <div class="radio-circle"></div>
-        </div>
-        <div class="pay-method" onclick="selectPay(this)" data-method="GrabPay">
-          <div class="pay-icon-big">🟢</div>
-          <div class="pay-info">
-            <div class="pay-name">GrabPay</div>
-            <div class="pay-desc">Pay with Grab wallet</div>
-          </div>
-          <div class="radio-circle"></div>
+        <div class="block-title" style="margin-top:16px; margin-bottom:8px;">Select Delivery Slot</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <div class="slot-chip active" onclick="selectSlot(this,'Today 12–2 PM')">Today 12–2 PM</div>
+          <div class="slot-chip" onclick="selectSlot(this,'Today 3–5 PM')">Today 3–5 PM</div>
+          <div class="slot-chip" onclick="selectSlot(this,'Tomorrow 9–11 AM')">Tomorrow 9–11 AM</div>
         </div>
       </div>
 
-      <!-- Price Summary -->
-      <div class="section-box">
-        <div class="section-box-title">💰 Price Details</div>
-        <div class="price-summary">
-          <div class="ps-row"><span>Subtotal</span><span id="co-subtotal">RM 0.00</span></div>
-          <div class="ps-row"><span>Delivery</span><span id="co-delivery">RM 5.00</span></div>
-          <div class="ps-row" style="color:var(--primary)"><span>AeryHub Commission (5%)</span><span id="co-commission">RM 0.00</span></div>
-          <div class="ps-total"><span>Total</span><span id="co-total">RM 0.00</span></div>
+      <div id="pickup-section" style="display:none">
+        <div class="block-title" style="margin-top:16px; margin-bottom:8px;">Pickup Location</div>
+        <div class="pickup-shop-box">
+          <div class="shop-mini-row">
+            <div class="shop-mini-av">
+              <i class="fa-solid fa-shop" style="color:var(--primary)"></i>
+            </div>
+            <div>
+              <div class="shop-mini-name">Ladang Hijau Selangor</div>
+              <div class="shop-mini-distance">Ahmad Razif · 12 km away</div>
+            </div>
+          </div>
+          <div class="pickup-detail-line">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span>No.12, Jalan Kampung Baru, Kuala Kubu Bharu, Selangor</span>
+          </div>
+          <div class="pickup-detail-line">
+            <i class="fa-solid fa-clock"></i>
+            <span>Pickup hours: Mon–Sat 7AM – 12PM</span>
+          </div>
         </div>
-      </div>
 
-      <div class="commission-info">
-        💚 <strong>Supporting Local Farmers:</strong> AeryHub charges a 5% platform fee per transaction. Your farmer receives 95% of the product price. Thank you for supporting Malaysian agriculture!
+        <div class="block-title" style="margin-top:16px; margin-bottom:8px;">Select Pickup Slot</div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <div class="slot-chip" onclick="selectSlot(this,'Today 8–10 AM')">Today 8–10 AM</div>
+          <div class="slot-chip" onclick="selectSlot(this,'Today 10–12 PM')">Today 10–12 PM</div>
+          <div class="slot-chip" onclick="selectSlot(this,'Tomorrow 7–9 AM')">Tomorrow 7–9 AM</div>
+        </div>
       </div>
     </div>
 
-    <!-- Success Modal (hidden) -->
-    <div class="modal-overlay" id="successModal" style="display:none">
-      <div class="modal success-modal">
-        <div class="success-icon">✅</div>
-        <div class="success-title">Order Placed!</div>
-        <div class="success-subtitle" id="successSubtitle">Your fresh produce is being prepared. Estimated delivery: Today 3–5 PM</div>
-        <div class="order-number-box">
-          <div class="order-number-label">Order Number</div>
-          <div class="order-number" id="orderNumber">AH-20250601-XXX</div>
+    <div class="details-block-section">
+      <div class="block-title">Order Summary</div>
+      <div id="checkoutItems"></div>
+    </div>
+
+    <div class="details-block-section">
+      <div class="block-title">Payment Method</div>
+
+      <div class="payment-row-card active" onclick="selectPay(this)" data-method="COD">
+        <div class="payment-row-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+        <div class="payment-row-info">
+          <div class="payment-row-name">Cash on Delivery</div>
+          <div class="payment-row-desc">Pay when your order arrives</div>
         </div>
-        <a href="orders.html" class="btn btn-primary btn-full">Track My Order →</a>
-        <a href="home.html" class="btn btn-ghost btn-full" style="margin-top:10px">Back to Home</a>
+        <div class="payment-radio-circle"></div>
+      </div>
+
+      <div class="payment-row-card" onclick="selectPay(this)" data-method="FPX">
+        <div class="payment-row-icon"><i class="fa-solid fa-landmark"></i></div>
+        <div class="payment-row-info">
+          <div class="payment-row-name">FPX Online Banking</div>
+          <div class="payment-row-desc">Maybank, CIMB, RHB & more</div>
+        </div>
+        <div class="payment-radio-circle"></div>
+      </div>
+
+      <div class="payment-row-card" onclick="selectPay(this)" data-method="TNG">
+        <div class="payment-row-icon"><i class="fa-solid fa-wallet"></i></div>
+        <div class="payment-row-info">
+          <div class="payment-row-name">Touch 'n Go eWallet</div>
+          <div class="payment-row-desc">Instant secure verification</div>
+        </div>
+        <div class="payment-radio-circle"></div>
+      </div>
+    </div>
+
+    <div class="details-block-section">
+      <div class="block-title">Price Details</div>
+      <div class="bill-row"><span>Subtotal</span><span id="co-subtotal">RM 0.00</span></div>
+      <div class="bill-row"><span>Delivery Fee</span><span id="co-delivery">RM 5.00</span></div>
+      <div class="bill-total-row"><span>Total Payable</span><span id="co-total">RM 0.00</span></div>
+    </div>
+
+    <div class="modal-overlay" id="successModal" style="display:none">
+      <div class="modal">
+        <div class="success-icon"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="success-title">Order Placed!</div>
+        <div class="success-subtitle" id="successSubtitle">Your fresh produce is being prepared.</div>
+        <div class="order-number-box">
+          <div class="order-number-label">Order Reference ID</div>
+          <div class="order-number" id="orderNumber">AH-XXXXXXXX-XXX</div>
+        </div>
+        <div class="btn-action-stack">
+          <button class="modal-btn modal-btn-primary" onclick="window.location.href='order-details.html'">Track My Order →</button>
+          <button class="modal-btn modal-btn-ghost" onclick="window.location.href='marketplace.html'">Back to Store</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Place Order Button -->
-  <div style="padding:16px;background:var(--surface);border-top:1px solid var(--border)">
-    <button class="btn btn-primary btn-full" onclick="placeOrder()">
-      Place Order · <span id="btnTotal">RM 0.00</span>
+  <div class="bottom-bar">
+    <button class="bb-add-style" onclick="placeOrder()" id="mainPlaceOrderBtn">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <span>Place Order · <span id="btnTotal">RM 0.00</span></span>
     </button>
   </div>
 </div>
 
-<script src="data.js"></script>
-<script src="script.js"></script>
+<div class="toast" id="customToast"></div>
+
 <script>
   let selectedPayment = 'COD';
   let fulfillMethod = 'delivery';
   let selectedSlot = 'Today 12–2 PM';
+  let runningSubtotal = 0;
+  let targetCheckoutItems = [];
 
   function setFulfill(method) {
     fulfillMethod = method;
-    document.getElementById('opt-delivery').classList.toggle('selected', method === 'delivery');
-    document.getElementById('opt-pickup').classList.toggle('selected', method === 'pickup');
+    document.getElementById('opt-delivery').classList.toggle('active', method === 'delivery');
+    document.getElementById('opt-pickup').classList.toggle('active', method === 'pickup');
     document.getElementById('delivery-section').style.display = method === 'delivery' ? 'block' : 'none';
     document.getElementById('pickup-section').style.display = method === 'pickup' ? 'block' : 'none';
-    // Recalc
-    const subtotal = AppState.getCartTotal();
-    const delivery = method === 'delivery' ? 5 : 0;
-    const commission = subtotal * 0.05;
-    const total = subtotal + delivery;
-    document.getElementById('co-subtotal').textContent = `RM ${subtotal.toFixed(2)}`;
-    document.getElementById('co-delivery').textContent = method === 'delivery' ? 'RM 5.00' : 'FREE';
-    document.getElementById('co-commission').textContent = `RM ${commission.toFixed(2)}`;
-    document.getElementById('co-total').textContent = `RM ${total.toFixed(2)}`;
-    document.getElementById('btnTotal').textContent = `RM ${total.toFixed(2)}`;
+
+    if (method === 'delivery') {
+      const activeDeliverySlot = document.querySelector('#delivery-section .slot-chip.active');
+      selectedSlot = activeDeliverySlot ? activeDeliverySlot.textContent.trim() : 'Today 12–2 PM';
+    } else {
+      document.querySelectorAll('#pickup-section .slot-chip').forEach((c, idx) => {
+        c.classList.toggle('active', idx === 0);
+      });
+      const activePickupSlot = document.querySelector('#pickup-section .slot-chip.active');
+      selectedSlot = activePickupSlot ? activePickupSlot.textContent.trim() : 'Today 8–10 AM';
+    }
+    recalculateCheckoutBill();
   }
 
   function selectSlot(el, slot) {
     selectedSlot = slot;
-    document.querySelectorAll('.slot-chip').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
+    el.parentElement.querySelectorAll('.slot-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
   }
 
   function selectPay(el) {
-    document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
-    el.classList.add('selected');
+    document.querySelectorAll('.payment-row-card').forEach(m => m.classList.remove('active'));
+    el.classList.add('active');
     selectedPayment = el.dataset.method;
   }
 
+  function recalculateCheckoutBill() {
+    const shippingFee = (fulfillMethod === 'delivery') ? 5.00 : 0.00;
+    const directTotalPayable = runningSubtotal + shippingFee;
+
+    document.getElementById('co-subtotal').textContent = `RM ${runningSubtotal.toFixed(2)}`;
+    document.getElementById('co-delivery').textContent = (fulfillMethod === 'delivery') ? 'RM 5.00' : 'FREE';
+    document.getElementById('co-total').textContent = `RM ${directTotalPayable.toFixed(2)}`;
+    document.getElementById('btnTotal').textContent = `RM ${directTotalPayable.toFixed(2)}`;
+  }
+
   function placeOrder() {
-    const btn = document.querySelector('[onclick="placeOrder()"]');
-    btn.textContent = 'Processing...';
+    const btn = document.getElementById('mainPlaceOrderBtn');
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+    const btnSpan = btn.querySelector('span');
+    if(btnSpan) btnSpan.textContent = 'Processing Order...';
+
     setTimeout(() => {
       const orderNum = 'AH-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + Math.floor(Math.random()*900+100);
       document.getElementById('orderNumber').textContent = orderNum;
+
       const subtitle = fulfillMethod === 'pickup'
-        ? `Your order is confirmed! Head to the farm for pickup at: ${selectedSlot}. Bring this order number.`
-        : `Your fresh produce is being prepared. Estimated delivery: ${selectedSlot}`;
+        ? `Your order is confirmed! Please head to the farm location for collection during your slot: ${selectedSlot}.`
+        : `Your fresh produce is being harvested and packaged. Delivery slot estimated: ${selectedSlot}`;
+
       document.getElementById('successSubtitle').textContent = subtitle;
       document.getElementById('successModal').style.display = 'flex';
-      AppState.cart = []; AppState.saveCart();
+
+      const rawCart = localStorage.getItem('cart');
+      let generalCartItems = rawCart ? JSON.parse(rawCart) : [];
+
+      const filteredCart = generalCartItems.filter(cartItem => {
+        const cId = cartItem.id || cartItem.productId;
+        const cUnit = cartItem.variation || cartItem.unit || 'Standard';
+
+        return !targetCheckoutItems.some(checkedItem => {
+          const oId = checkedItem.id || checkedItem.productId;
+          const oUnit = checkedItem.variation || checkedItem.unit || 'Standard';
+          return cId === oId && cUnit === oUnit;
+        });
+      });
+
+      localStorage.setItem('cart', JSON.stringify(filteredCart));
+      localStorage.removeItem('checkoutItems');
+      window.dispatchEvent(new Event('cartUpdated'));
+
       localStorage.setItem('lastOrder', orderNum);
       localStorage.setItem('fulfillMethod', fulfillMethod);
-    }, 1500);
+    }, 1200);
   }
 
+  window.showToast = function(msg) {
+    const t = document.getElementById('customToast');
+    if(t) {
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
-    AppState.init();
+    const itemsContainer = document.getElementById('checkoutItems');
+    if (itemsContainer) itemsContainer.innerHTML = '';
 
-    const items = document.getElementById('checkoutItems');
-    let subtotal = 0;
+    const rawData = localStorage.getItem('checkoutItems');
+    targetCheckoutItems = rawData ? JSON.parse(rawData) : [];
 
-    AppState.cart.forEach(item => {
-      const p = PRODUCTS.find(p => p.id === item.productId);
-      if (!p) return;
-      const lineTotal = p.price * item.qty;
-      subtotal += lineTotal;
-      const div = document.createElement('div');
-      div.className = 'order-item';
-      div.innerHTML = `
-      <img src="${p.images[0]}" alt="${p.name}">
-      <div class="order-item-name">${p.name} × ${item.qty}</div>
-      <div class="order-item-price">RM ${lineTotal.toFixed(2)}</div>
-    `;
-      items.appendChild(div);
-    });
-
-    if (AppState.cart.length === 0) {
-      items.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-muted)">No items in cart</div>';
+    if (targetCheckoutItems.length === 0) {
+      itemsContainer.innerHTML = '<div style="text-align:center;padding:25px;color:var(--text-muted);font-weight:600;font-size:13px;">No items selected for checkout</div>';
+      document.getElementById('mainPlaceOrderBtn').disabled = true;
+      return;
     }
 
-    const delivery = 5;
-    const commission = subtotal * 0.05;
-    const total = subtotal + delivery;
+    runningSubtotal = 0;
 
-    document.getElementById('co-subtotal').textContent = `RM ${subtotal.toFixed(2)}`;
-    document.getElementById('co-commission').textContent = `RM ${commission.toFixed(2)}`;
-    document.getElementById('co-total').textContent = `RM ${total.toFixed(2)}`;
-    document.getElementById('btnTotal').textContent = `RM ${total.toFixed(2)}`;
+    targetCheckoutItems.forEach(item => {
+      const targetId = item.id || item.productId;
+      const displayName = item.name || 'Fresh Produce';
+      const displayImg = item.image || 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=100&auto=format&fit=crop&q=60';
+      const itemPrice = Number(item.price) || 0;
+      const qty = parseInt(item.qty, 10) || 1;
+      const unitLabel = item.variation || item.unit || 'Standard';
+
+      const currentItemCost = itemPrice * qty;
+      runningSubtotal += currentItemCost;
+
+      const div = document.createElement('div');
+      div.className = 'checkout-item-strip';
+      div.innerHTML = `
+        <img src="${displayImg}" alt="${displayName}" onerror="this.src='https://images.unsplash.com/photo-1610348725531-843dff563e2c?w=100&auto=format&fit=crop&q=60'">
+        <div class="checkout-item-details">
+          <div class="checkout-item-title">${displayName}</div>
+          <div class="checkout-item-meta">Option: ${unitLabel} &middot; Qty: ${qty}</div>
+        </div>
+        <div class="checkout-item-price-tag">RM ${currentItemCost.toFixed(2)}</div>
+      `;
+      itemsContainer.appendChild(div);
+    });
+
+    recalculateCheckoutBill();
   });
 </script>
 </body>

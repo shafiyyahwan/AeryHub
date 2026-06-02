@@ -4,182 +4,345 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeryHub - My Orders</title>
+
   <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
   <style>
-    body { background: #e0ead8; }
-    .order-tabs { display: flex; background: var(--gray-100); border-radius: 12px; padding: 4px; margin: 16px 20px; }
-    .order-tab { flex: 1; padding: 9px; text-align: center; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; color: var(--text-muted); }
-    .order-tab.active { background: white; color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .order-card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow); margin: 0 20px 12px; padding: 16px; cursor: pointer; transition: transform 0.2s; }
-    .order-card:active { transform: scale(0.98); }
-    .order-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .order-id { font-size: 13px; font-weight: 700; color: var(--text); font-family: monospace; }
-    .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .status-pending { background: #fef3c7; color: #92400e; }
+    body {
+      background: #e0ead8;
+    }
+
+    .market-header {
+      padding: 16px 20px 12px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .market-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
+    /* TABS LAYOUT */
+    .order-tabs {
+      display: flex;
+      background: var(--gray-100);
+      border-radius: 12px;
+      padding: 4px;
+      margin: 12px 20px 4px;
+    }
+
+    .order-tab {
+      flex: 1;
+      padding: 9px;
+      text-align: center;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .order-tab.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* ORDER CARDS */
+    .order-card {
+      background: var(--surface);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin: 12px 20px;
+      padding: 16px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .order-card:active {
+      transform: scale(0.98);
+    }
+
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .order-id {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: monospace;
+    }
+
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
     .status-confirmed { background: #dbeafe; color: #1e40af; }
-    .status-preparing { background: #fce7f3; color: #9d174d; }
     .status-out_for_delivery { background: #d1fae5; color: #065f46; }
-    .status-delivered { background: var(--green-100); color: var(--green-700); }
-    .order-items-preview { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
-    .order-items-preview img { width: 44px; height: 44px; border-radius: 10px; object-fit: cover; }
-    .more-items { width: 44px; height: 44px; border-radius: 10px; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--text-muted); }
-    .order-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 10px; }
-    .order-total { font-size: 15px; font-weight: 800; color: var(--primary); }
-    .order-date { font-size: 12px; color: var(--text-muted); }
-    .tracker-mini { display: flex; align-items: center; gap: 0; margin-bottom: 12px; }
-    .tracker-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .tracker-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gray-200); border: 2px solid var(--gray-300); }
-    .tracker-dot.done { background: var(--primary); border-color: var(--primary); }
-    .tracker-dot.active { background: white; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(22,163,74,0.2); }
-    .tracker-line { flex: 1; height: 2px; background: var(--gray-200); margin: 0 -1px; margin-top: -8px; }
-    .tracker-line.done { background: var(--primary); }
-    .tracker-label { font-size: 9px; color: var(--text-muted); font-weight: 600; text-align: center; }
+    .status-delivered { background: #e8f5e9; color: var(--primary); }
+
+    .order-items-preview {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .order-items-preview img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid #eee;
+    }
+
+    .more-items {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border: 1px solid #eee;
+    }
+
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #f5f5f5;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+
+    .order-total {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .order-date {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* TRACKER GRAPHICS */
+    .tracker-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gray-200);
+      border: 2px solid var(--gray-300);
+    }
+
+    .tracker-dot.done {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .tracker-dot.active {
+      background: white;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      transition: background 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: #fafafa;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .empty-state i {
+      font-size: 34px;
+      opacity: 0.6;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.85);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 12px;
+      z-index: 99;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
+
 <div class="phone-frame">
+
   <div class="status-bar">
     <span>9:41</span>
     <div class="notch"></div>
-    <div class="status-icons">📶 🔋</div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
   </div>
 
   <div class="screen">
-    <div class="page-header">
-      <div class="page-title">My Orders</div>
-      <a href="notifications.html" class="back-btn" style="background:var(--gray-100)">🔔</a>
+
+    <div class="market-header">
+      <div class="market-header-row">
+        <div style="font-size:20px;font-weight:800;color:var(--text)">
+          My Orders
+        </div>
+        <a href="notifications.html" class="icon-btn" style="text-decoration:none; width:40px; height:40px; border-radius:12px; background:var(--gray-100); border:none; display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--text);">
+          <i class="fa-solid fa-bell"></i>
+        </a>
+      </div>
     </div>
 
     <div class="order-tabs">
-      <div class="order-tab active" onclick="showTab('active',this)">Active (1)</div>
+      <div class="order-tab active" id="tab-active-btn" onclick="showTab('active',this)">Active (0)</div>
       <div class="order-tab" onclick="showTab('completed',this)">Completed (2)</div>
     </div>
 
     <div id="activeOrders">
-      <!-- Active Order -->
-      <div class="order-card" onclick="window.location.href='order-details.html'">
-        <div class="order-card-header">
-          <div class="order-id">AH-20250601-001</div>
-          <span class="status-badge status-out_for_delivery">🚚 Out for Delivery</span>
-        </div>
-
-        <!-- Mini tracker -->
-        <div style="display:flex;align-items:center;margin-bottom:12px">
-          <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
-            <div class="tracker-dot done"></div>
-            <div style="font-size:9px;color:var(--text-muted);font-weight:600">Ordered</div>
-          </div>
-          <div style="flex:1;height:2px;background:var(--primary);margin:0 2px;margin-top:-16px"></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
-            <div class="tracker-dot done"></div>
-            <div style="font-size:9px;color:var(--text-muted);font-weight:600">Confirmed</div>
-          </div>
-          <div style="flex:1;height:2px;background:var(--primary);margin:0 2px;margin-top:-16px"></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
-            <div class="tracker-dot done"></div>
-            <div style="font-size:9px;color:var(--text-muted);font-weight:600">Preparing</div>
-          </div>
-          <div style="flex:1;height:2px;background:var(--primary);margin:0 2px;margin-top:-16px"></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
-            <div class="tracker-dot active"></div>
-            <div style="font-size:9px;color:var(--primary);font-weight:700">On the Way</div>
-          </div>
-          <div style="flex:1;height:2px;background:var(--gray-200);margin:0 2px;margin-top:-16px"></div>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:3px">
-            <div class="tracker-dot"></div>
-            <div style="font-size:9px;color:var(--text-muted);font-weight:600">Delivered</div>
-          </div>
-        </div>
-
-        <div class="order-items-preview">
-          <img src="https://images.unsplash.com/photo-1546470427-e26264be0b11?w=100&h=100&fit=crop" alt="">
-          <img src="https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=100&h=100&fit=crop" alt="">
-          <div style="flex:1">
-            <div style="font-size:13px;font-weight:600;color:var(--text)">Ahmad Razif's Farm</div>
-            <div style="font-size:12px;color:var(--text-muted)">2 items · Est. 3–5 PM today</div>
-          </div>
-        </div>
-
-        <div class="order-footer">
-          <div class="order-date">📅 1 Jun 2025</div>
-          <div class="order-total">RM 17.00</div>
-        </div>
+      <div class="empty-state">
+        <i class="fa-solid fa-box-open"></i>
+        No active orders at the moment.
       </div>
     </div>
 
     <div id="completedOrders" style="display:none">
-      <!-- Completed Order 1 -->
       <div class="order-card" onclick="window.location.href='order-details.html'">
         <div class="order-card-header">
-          <div class="order-id">AH-20250530-008</div>
-          <span class="status-badge status-delivered">✅ Delivered</span>
+          <div class="order-id">AH-20260530-008</div>
+          <span class="status-badge status-delivered"><i class="fa-solid fa-circle-check"></i> Delivered</span>
         </div>
         <div class="order-items-preview">
           <img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=100&h=100&fit=crop" alt="">
           <div style="flex:1">
-            <div style="font-size:13px;font-weight:600;color:var(--text)">Rajesh Kumar's Farm</div>
-            <div style="font-size:12px;color:var(--text-muted)">1 item · Harumanis Mango</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">Sunshine Orchard</div>
+            <div style="font-size:12px;color:var(--text-muted)">1 item &middot; Harumanis Mango</div>
           </div>
         </div>
         <div class="order-footer">
-          <div class="order-date">📅 30 May 2025</div>
+          <div class="order-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> 30 May 2026</div>
           <div class="order-total">RM 15.00</div>
         </div>
-        <button class="btn btn-outline btn-sm" style="margin-top:12px;width:100%" onclick="event.stopPropagation();showToast('Review submitted! Thank you 😊')">⭐ Leave Review</button>
+        <button class="btn-outline" style="margin-top:12px;" onclick="event.stopPropagation();showToast('Review submitted! Thank you 😊')"><i class="fa-regular fa-star"></i> Leave Review</button>
       </div>
 
-      <!-- Completed Order 2 -->
       <div class="order-card" onclick="window.location.href='order-details.html'">
         <div class="order-card-header">
-          <div class="order-id">AH-20250528-022</div>
-          <span class="status-badge status-delivered">✅ Delivered</span>
+          <div class="order-id">AH-20260528-022</div>
+          <span class="status-badge status-delivered"><i class="fa-solid fa-circle-check"></i> Delivered</span>
         </div>
         <div class="order-items-preview">
           <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=100&fit=crop" alt="">
           <img src="https://images.unsplash.com/photo-1604499759580-39a8fb50a4b5?w=100&h=100&fit=crop" alt="">
           <div class="more-items">+1</div>
           <div style="flex:1">
-            <div style="font-size:13px;font-weight:600;color:var(--text)">Noraini's Farm</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text)">Padi Murni Kedah</div>
             <div style="font-size:12px;color:var(--text-muted)">3 items</div>
           </div>
         </div>
         <div class="order-footer">
-          <div class="order-date">📅 28 May 2025</div>
+          <div class="order-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> 28 May 2026</div>
           <div class="order-total">RM 54.50</div>
         </div>
-        <button class="btn btn-outline btn-sm" style="margin-top:12px;width:100%" onclick="event.stopPropagation();showToast('Already reviewed! Thank you 😊')">⭐ View Review</button>
+        <button class="btn-outline" style="margin-top:12px;" onclick="event.stopPropagation();showToast('Already reviewed! Thank you 😊')"><i class="fa-solid fa-star" style="color:#eab308"></i> View Review</button>
       </div>
     </div>
-
-    <div style="height:24px"></div>
   </div>
 
   <nav class="bottom-nav">
     <a href="home.html" class="nav-item">
-      <span class="nav-icon">🏠</span>
-      Home
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
     <a href="marketplace.html" class="nav-item">
-      <span class="nav-icon">🛍️</span>
-      Shop
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
-    <a href="orders.html" class="nav-item active">
-      <span class="nav-icon">📦</span>
-      Orders
+    <a href="order-details.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
     </a>
     <a href="chat.html" class="nav-item">
-      <span class="nav-icon">💬</span>
-      Chat
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
     </a>
     <a href="consumer-profile.html" class="nav-item">
-      <span class="nav-icon">👤</span>
-      Profile
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
     </a>
   </nav>
+
 </div>
 
+<div class="toast" id="customToast"></div>
+
 <script src="data.js"></script>
-<script src="script.js"></script>
 <script>
   function showTab(tab, el) {
     document.querySelectorAll('.order-tab').forEach(t => t.classList.remove('active'));
@@ -187,6 +350,94 @@
     document.getElementById('activeOrders').style.display = tab === 'active' ? 'block' : 'none';
     document.getElementById('completedOrders').style.display = tab === 'completed' ? 'block' : 'none';
   }
+
+  window.showToast = function(msg) {
+    const t = document.getElementById('customToast');
+    if(t) {
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const lastOrderId = localStorage.getItem('lastOrder');
+    const fulfillMethod = localStorage.getItem('fulfillMethod') || 'delivery';
+
+    if (lastOrderId) {
+      const activeContainer = document.getElementById('activeOrders');
+      document.getElementById('tab-active-btn').textContent = "Active (1)";
+
+      const methodLabel = fulfillMethod === 'pickup' ? 'Farm Pickup' : 'Delivery';
+      const badgeIcon = fulfillMethod === 'pickup' ? '<i class="fa-solid fa-store"></i> Ready for Pickup' : '<i class="fa-solid fa-truck-fast"></i> Out for Delivery';
+      const badgeClass = fulfillMethod === 'pickup' ? 'status-confirmed' : 'status-out_for_delivery';
+
+      let dynamicShopName = 'Ladang Hijau Selangor';
+      if (typeof FARMERS !== 'undefined' && localStorage.getItem('currentFarmerId')) {
+        const currentFarmerId = parseInt(localStorage.getItem('currentFarmerId'));
+        const f = FARMERS.find(farmer => farmer.id === currentFarmerId);
+        if (f && f.farm) {
+          dynamicShopName = f.farm;
+        }
+      }
+
+      activeContainer.innerHTML = `
+        <div class="order-card" onclick="window.location.href='order-details.html'">
+          <div class="order-card-header">
+            <div class="order-id">${lastOrderId}</div>
+            <span class="status-badge ${badgeClass}">${badgeIcon}</span>
+          </div>
+
+          <div style="display:flex; align-items:center; margin-bottom:16px; margin-top:4px;">
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+              <div class="tracker-dot done"></div>
+              <div style="font-size:9px; color:var(--text-muted); font-weight:600">Ordered</div>
+            </div>
+            <div style="flex:1; height:2px; background:var(--primary); margin:0 2px; margin-top:-14px"></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+              <div class="tracker-dot done"></div>
+              <div style="font-size:9px; color:var(--text-muted); font-weight:600">Confirmed</div>
+            </div>
+            <div style="flex:1; height:2px; background:var(--primary); margin:0 2px; margin-top:-14px"></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+              <div class="tracker-dot done"></div>
+              <div style="font-size:9px; color:var(--text-muted); font-weight:600">Preparing</div>
+            </div>
+            <div style="flex:1; height:2px; background:${fulfillMethod === 'delivery' ? 'var(--primary)' : 'var(--gray-200)'}; margin:0 2px; margin-top:-14px"></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+              <div class="tracker-dot ${fulfillMethod === 'delivery' ? 'active' : 'done'}"></div>
+              <div style="font-size:9px; color:${fulfillMethod === 'delivery' ? 'var(--primary)' : 'var(--text-muted)'}; font-weight:700">${fulfillMethod === 'delivery' ? 'On Way' : 'Ready'}</div>
+            </div>
+            <div style="flex:1; height:2px; background:var(--gray-200); margin:0 2px; margin-top:-14px"></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+              <div class="tracker-dot"></div>
+              <div style="font-size:9px; color:var(--text-muted); font-weight:600">Received</div>
+            </div>
+          </div>
+
+          <div class="order-items-preview">
+            <img src="https://images.unsplash.com/photo-1546470427-e26264be0b11?w=100&h=100&fit=crop" alt="Fresh Produce Package">
+            <div style="flex:1">
+              <div style="font-size:13px; font-weight:600; color:var(--text)">${dynamicShopName}</div>
+              <div style="font-size:12px; color:var(--text-muted)">Fresh Handpicked Batch &middot; ${methodLabel}</div>
+            </div>
+          </div>
+
+          <div class="order-footer">
+            <div class="order-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> Today, June 2026</div>
+            <div class="order-total" id="activeCardTotal">RM --.--</div>
+          </div>
+        </div>
+      `;
+
+      const checkoutTotalValue = document.getElementById('co-total');
+      if (checkoutTotalValue) {
+        document.getElementById('activeCardTotal').textContent = checkoutTotalValue.textContent;
+      } else {
+        document.getElementById('activeCardTotal').textContent = 'RM 22.00';
+      }
+    }
+  });
 </script>
 </body>
 </html>
