@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - My Profile</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap');
+
+    body {
+      background: #e0ead8;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── COVER pembeli (Premium Minimalist) ── */
+    .farm-cover {
+      height: 150px;
+      position: relative;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #16a34a 0%, #047857 100%);
+      overflow: visible;
+    }
+    .cover-btn {
+      position: absolute;
+      top: 54px;
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(6px);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; color: var(--text); font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .cover-back  { left: 16px; }
+
+    /* ── IDENTITY ── */
+    .farmer-identity {
+      background: var(--surface);
+      padding: 0 18px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .avatar-action-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-top: -40px;
+      margin-bottom: 12px;
+    }
+    .farmer-avatar {
+      width: 80px; height: 80px;
+      border-radius: 24px;
+      object-fit: cover;
+      border: 3px solid white;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+      background: #e5e7eb;
+      flex-shrink: 0;
+    }
+    .profile-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+    .edit-btn {
+      padding: 7px 16px;
+      border-radius: 20px;
+      background: #f3f4f6;
+      color: #374151;
+      font-size: 12px; font-weight: 700;
+      border: 1px solid #e5e7eb; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .edit-btn:hover {
+      background: #e5e7eb;
+    }
+
+    .name-row {
+      display: flex; align-items: center; gap: 7px;
+      margin-bottom: 5px;
+    }
+    .shop-name {
+      font-size: 20px; font-weight: 800;
+      color: var(--text); line-height: 1.2;
+    }
+    .buyer-badge {
+      font-size: 10px; padding: 3px 8px; background: #dbeafe; color: #1e40af;
+      border-radius: 20px; font-weight: 700;
+    }
+
+    .farm-location-line {
+      font-size: 13px; color: var(--text-muted);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .farm-location-line i { color: var(--primary); font-size: 11px; }
+
+    /* ── BUYER STATS ── */
+    .farmer-stats-row {
+      display: flex;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .fstat {
+      flex: 1; padding: 13px 6px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .fstat:last-child { border-right: none; }
+    .fstat-val { font-size: 16px; font-weight: 800; color: var(--text); }
+    .fstat-label { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+
+    /* ── USER INFO FORM / CARDS ── */
+    .sec-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #71717a;
+      margin-bottom: 8px;
+      margin-top: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .info-icon {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: #f4f6f3; color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; flex-shrink: 0;
+    }
+    .info-content {
+      flex: 1;
+    }
+    .info-title {
+      font-size: 11px; color: var(--text-muted); font-weight: 500;
+    }
+    .info-value {
+      font-size: 13.5px; color: var(--text); font-weight: 600;
+      margin-top: 1px;
+    }
+
+    /* ── APP SETTINGS / QUICK LINKS ── */
+    .menu-list {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--text);
+      font-size: 13.5px;
+      font-weight: 600;
+      background: var(--surface);
+      cursor: pointer;
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item i.chevron { color: var(--gray-400); font-size: 12px; }
+    .menu-item-left { display: flex; align-items: center; gap: 12px; }
+    .menu-item-left i { width: 16px; color: #4b5563; }
+
+    /* Toast Message */
+    .toast {
+      position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px;
+      border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0;
+      transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar" style="position:absolute;top:0;left:0;right:0;z-index:20;background:transparent">
+    <span style="color:white">9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons" style="color:white">
+      <i class="fas fa-signal"></i>
+      <i class="fas fa-wifi"></i>
+      <i class="fas fa-battery-three-quarters"></i>
+    </div>
+  </div>
+
+  <div class="screen">
+
+    <!-- COVERS (Warna Hijau Gradasi untuk Konsep Organik) -->
+    <div class="farm-cover">
+      <div class="cover-btn cover-back" onclick="window.location.href='home.html'">
+        <i class="fas fa-chevron-left"></i>
+      </div>
+    </div>
+
+    <!-- BUYER IDENTITY -->
+    <div class="farmer-identity">
+      <div class="avatar-action-row">
+        <!-- Gambar pembeli raw asal -->
+        <img id="buyerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop" class="farmer-avatar">
+        <div class="profile-controls">
+          <button class="edit-btn" onclick="editProfile()">
+            <i class="fas fa-pen" style="font-size:10px; margin-right:4px;"></i> Edit Profile
+          </button>
+        </div>
+      </div>
+
+      <!-- Nama Pembeli -->
+      <div class="name-row">
+        <div class="shop-name" id="buyerName">Ailya Maisarah</div>
+        <span class="buyer-badge"><i class="fa-solid fa-seedling"></i> Consumer</span>
+      </div>
+
+      <!-- Negeri & Negara -->
+      <div class="farm-location-line">
+        <i class="fas fa-location-dot"></i>
+        <span id="buyerCityState">Cheras, Selangor</span>
+      </div>
+    </div>
+
+    <!-- BUYER STATS (Jumlah Tempahan, Review, dll.) -->
+    <div class="farmer-stats-row">
+      <div class="fstat" onclick="window.location.href='order.html'">
+        <div class="fstat-val" id="totalOrdersCount">3</div>
+        <div class="fstat-label">Total Orders</div>
+      </div>
+      <div class="fstat">
+        <div class="fstat-val">2</div>
+        <div class="fstat-label">Reviews Left</div>
+      </div>
+      <div class="fstat">
+        <div class="fstat-val" id="savedFarmsCount">5</div>
+        <div class="fstat-label">Farms Followed</div>
+      </div>
+    </div>
+
+    <!-- MAKLUMAT PENGGUNA -->
+    <div style="padding: 0 18px 30px;">
+
+      <div class="sec-label">Personal Details</div>
+      <div class="info-card">
+        <!-- Item Emel -->
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div class="info-content">
+            <div class="info-title">Email Address</div>
+            <div class="info-value" id="buyerEmail">ailya.maisarah@email.com</div>
+          </div>
+        </div>
+        <!-- Item Telefon -->
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="info-content">
+            <div class="info-title">Phone Number</div>
+            <div class="info-value" id="buyerPhone">+60 13-456 7890</div>
+          </div>
+        </div>
+        <!-- Item Alamat -->
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-house-user"></i></div>
+          <div class="info-content">
+            <div class="info-title">Default Delivery Address</div>
+            <div class="info-value" id="buyerAddress">No. 24, Jalan Sunway 4/2, Bandar Sunway</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACCOUNT SETTINGS -->
+      <div class="sec-label">Account Settings</div>
+      <div class="menu-list">
+        <a href="order.html" class="menu-item">
+          <div class="menu-item-left">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Order History</span>
+          </div>
+          <i class="fa-solid fa-chevron-right chevron"></i>
+        </a>
+        <div class="menu-item" onclick="showToast('Payment Methods updated!')">
+          <div class="menu-item-left">
+            <i class="fa-solid fa-credit-card"></i>
+            <span>Saved Cards / Payment</span>
+          </div>
+          <i class="fa-solid fa-chevron-right chevron"></i>
+        </div>
+        <div class="menu-item" onclick="showToast('Language changed to Bahasa Melayu')">
+          <div class="menu-item-left">
+            <i class="fa-solid fa-globe"></i>
+            <span>Language</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); font-weight:500">English</div>
+        </div>
+      </div>
+
+      <!-- LOGOUT BUTANG -->
+      <button class="btn btn-sm" style="margin-top:24px; width:100%; background:#ef4444; border-color:#ef4444; color:white; border-radius:12px; padding:11px; font-weight:700;" onclick="logoutUser()">
+        <i class="fa-solid fa-right-from-bracket" style="margin-right:6px"></i> Log Out
+      </button>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION BAR (Sama seperti halaman utama) -->
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
+    </a>
+    <a href="marketplace.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
+    </a>
+    <a href="order.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
+    </a>
+    <a href="consumer-chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
+    </a>
+    <a href="consumer-profile.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
+    </a>
+  </nav>
+
+</div>
+
+<div class="toast" id="customToast"></div>
+
+<script>
+  // Toast Notification Engine
+  function showToast(msg) {
+    const t = document.getElementById('customToast');
+    if(t) {
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  }
+
+  // Fungsi Sunting Profil Ringkas (Guna Prompt Browser untuk mudahkan mock up)
+  function editProfile() {
+    const newName = prompt("Enter your full name:", document.getElementById('buyerName').textContent);
+    if (newName && newName.trim() !== "") {
+      localStorage.setItem('buyer_name', newName);
+      document.getElementById('buyerName').textContent = newName;
+    }
+
+    const newPhone = prompt("Enter your phone number:", document.getElementById('buyerPhone').textContent);
+    if (newPhone && newPhone.trim() !== "") {
+      localStorage.setItem('buyer_phone', newPhone);
+      document.getElementById('buyerPhone').textContent = newPhone;
+    }
+
+    const newAddress = prompt("Enter delivery address:", document.getElementById('buyerAddress').textContent);
+    if (newAddress && newAddress.trim() !== "") {
+      localStorage.setItem('buyer_address', newAddress);
+      document.getElementById('buyerAddress').textContent = newAddress;
+    }
+
+    showToast('Profile updated successfully! ✨');
+  }
+
+  function logoutUser() {
+    if(confirm("Are you sure you want to log out?")) {
+      showToast("Logging out...");
+      setTimeout(() => {
+        window.location.href = "home.html";
+      }, 1000);
+    }
+  }
+
+  // Load Data daripada LocalStorage sewaktu skrin dimuatkan
+  document.addEventListener('DOMContentLoaded', () => {
+    if(localStorage.getItem('buyer_name')) {
+      document.getElementById('buyerName').textContent = localStorage.getItem('buyer_name');
+    }
+    if(localStorage.getItem('buyer_phone')) {
+      document.getElementById('buyerPhone').textContent = localStorage.getItem('buyer_phone');
+    }
+    if(localStorage.getItem('buyer_address')) {
+      document.getElementById('buyerAddress').textContent = localStorage.getItem('buyer_address');
+
+      // Ambil bandar/negeri daripada string alamat secara ringkas untuk diletakkan di sub-header
+      const addr = localStorage.getItem('buyer_address');
+      const parts = addr.split(',');
+      if(parts.length > 1) {
+        document.getElementById('buyerCityState').textContent = parts[parts.length - 1].trim();
+      }
+    }
+
+    // Sambungkan logik tempahan aktif sekiranya ada dari mockup tempahan lepas
+    if (localStorage.getItem('lastOrder')) {
+      document.getElementById('totalOrdersCount').textContent = "3"; // Mengambil kira tempahan sedia ada + baharu
+    }
+  });
+</script>
+</body>
+</html>

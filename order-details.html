@@ -9,8 +9,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
   <style>
+    /* Menggunakan font bulat premium secara seragam */
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@100..900&display=swap');
+
     body {
       background: #e0ead8;
+      font-family: 'DM Sans', 'Inter', sans-serif;
     }
 
     .market-header {
@@ -236,11 +240,141 @@
     .toast.show {
       opacity: 1;
     }
+
+    /* --- GAYA REKABENTUK MODAL POPUP REVIEW (BARU) --- */
+    .review-modal-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .review-modal {
+      background: #ffffff;
+      width: 100%;
+      max-width: 320px;
+      border-radius: 24px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      text-align: center;
+      animation: popupSlide 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popupSlide {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1f2937;
+      margin-bottom: 6px;
+    }
+
+    .modal-subtitle {
+      font-size: 12px;
+      color: #6b7280;
+      margin-bottom: 16px;
+    }
+
+    .star-rating-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .star-rating-container i {
+      font-size: 28px;
+      color: #d1d5db;
+      cursor: pointer;
+      transition: transform 0.1s, color 0.1s;
+    }
+
+    .star-rating-container i.selected {
+      color: #eab308;
+      transform: scale(1.1);
+    }
+
+    .review-textarea {
+      width: 100%;
+      height: 75px;
+      background: #f4f6f3;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 12.5px;
+      font-family: inherit;
+      outline: none;
+      resize: none;
+      margin-bottom: 16px;
+      box-sizing: border-box;
+      color: #1f2937;
+    }
+
+    .review-textarea:focus {
+      border-color: var(--primary);
+      background: #ffffff;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-modal {
+      flex: 1;
+      padding: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+
+    .btn-modal.cancel {
+      background: #f3f4f6;
+      color: #4b5563;
+    }
+
+    .btn-modal.submit {
+      background: var(--primary);
+      color: #ffffff;
+    }
   </style>
 </head>
 <body>
 
 <div class="phone-frame">
+
+  <!-- POPUP REVIEW MODAL -->
+  <div class="review-modal-overlay" id="reviewModalOverlay">
+    <div class="review-modal">
+      <div class="modal-title" id="modalShopName">Leave a Review</div>
+      <div class="modal-subtitle">How was your fresh farm product?</div>
+
+      <div class="star-rating-container" id="starRatingWrap">
+        <i class="fa-solid fa-star" data-value="1"></i>
+        <i class="fa-solid fa-star" data-value="2"></i>
+        <i class="fa-solid fa-star" data-value="3"></i>
+        <i class="fa-solid fa-star" data-value="4"></i>
+        <i class="fa-solid fa-star" data-value="5"></i>
+      </div>
+
+      <textarea class="review-textarea" id="reviewComment" placeholder="Write your experience here (optional)..."></textarea>
+
+      <div class="modal-actions">
+        <button class="btn-modal cancel" onclick="closeReviewModal()">Cancel</button>
+        <button class="btn-modal submit" onclick="submitReviewData()">Submit</button>
+      </div>
+    </div>
+  </div>
 
   <div class="status-bar">
     <span>9:41</span>
@@ -267,7 +401,7 @@
 
     <div class="order-tabs">
       <div class="order-tab active" id="tab-active-btn" onclick="showTab('active',this)">Active (0)</div>
-      <div class="order-tab" onclick="showTab('completed',this)">Completed (2)</div>
+      <div class="order-tab" id="tab-completed-btn" onclick="showTab('completed',this)">Completed (2)</div>
     </div>
 
     <div id="activeOrders">
@@ -278,6 +412,8 @@
     </div>
 
     <div id="completedOrders" style="display:none">
+
+      <!-- KAD ORDER 1: HARUMANIS MANGO -->
       <div class="order-card" onclick="window.location.href='order-details.html'">
         <div class="order-card-header">
           <div class="order-id">AH-20260530-008</div>
@@ -294,9 +430,12 @@
           <div class="order-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> 30 May 2026</div>
           <div class="order-total">RM 15.00</div>
         </div>
-        <button class="btn-outline" style="margin-top:12px;" onclick="event.stopPropagation();showToast('Review submitted! Thank you 😊')"><i class="fa-regular fa-star"></i> Leave Review</button>
+        <div id="review-action-container-008">
+          <!-- Butang dikawal dinamik oleh JS LocalStorage -->
+        </div>
       </div>
 
+      <!-- KAD ORDER 2: PADI MURNI KEDAH -->
       <div class="order-card" onclick="window.location.href='order-details.html'">
         <div class="order-card-header">
           <div class="order-id">AH-20260528-022</div>
@@ -315,8 +454,11 @@
           <div class="order-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> 28 May 2026</div>
           <div class="order-total">RM 54.50</div>
         </div>
-        <button class="btn-outline" style="margin-top:12px;" onclick="event.stopPropagation();showToast('Already reviewed! Thank you 😊')"><i class="fa-solid fa-star" style="color:#eab308"></i> View Review</button>
+        <div id="review-action-container-022">
+          <!-- Butang dikawal dinamik oleh JS LocalStorage -->
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -344,6 +486,9 @@
 
 <script src="data.js"></script>
 <script>
+  let selectedStars = 5;
+  let activeReviewOrderId = '';
+
   function showTab(tab, el) {
     document.querySelectorAll('.order-tab').forEach(t => t.classList.remove('active'));
     el.classList.add('active');
@@ -360,7 +505,98 @@
     }
   };
 
+  /* --- SISTEM LOGIK POPUP REVIEW LOCAL STORAGE --- */
+  function initStarsEngine() {
+    const stars = document.querySelectorAll('#starRatingWrap i');
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        selectedStars = parseInt(this.getAttribute('data-value'));
+        updateStarDisplay(selectedStars);
+      });
+    });
+  }
+
+  function updateStarDisplay(rating) {
+    const stars = document.querySelectorAll('#starRatingWrap i');
+    stars.forEach(star => {
+      const val = parseInt(star.getAttribute('data-value'));
+      if(val <= rating) {
+        star.classList.add('selected');
+      } else {
+        star.classList.remove('selected');
+      }
+    });
+  }
+
+  function openReviewModal(orderId, shopName) {
+    activeReviewOrderId = orderId;
+    document.getElementById('modalShopName').textContent = "Review: " + shopName;
+    document.getElementById('reviewComment').value = '';
+    selectedStars = 5; // Reset default bintang kepada 5
+    updateStarDisplay(5);
+    document.getElementById('reviewModalOverlay').style.display = 'flex';
+  }
+
+  function closeReviewModal() {
+    document.getElementById('reviewModalOverlay').style.display = 'none';
+  }
+
+  function submitReviewData() {
+    const comment = document.getElementById('reviewComment').value.trim();
+
+    // Simpan objek ulasan ke dalam local storage berpandukan Order ID
+    const reviewPayload = {
+      stars: selectedStars,
+      comment: comment || "Great fresh products!",
+      date: new Date().toLocaleDateString()
+    };
+
+    localStorage.setItem(`review_${activeReviewOrderId}`, JSON.stringify(reviewPayload));
+
+    closeReviewModal();
+    showToast('Review submitted! Thank you 😊');
+
+    // Segarkan paparan butang kad serta-merta tanpa perlu refresh
+    renderReviewButtons();
+  }
+
+  function viewSavedReview(orderId) {
+    const savedData = localStorage.getItem(`review_${orderId}`);
+    if(savedData) {
+      const review = JSON.parse(savedData);
+      showToast(`Your Review: ${"⭐".repeat(review.stars)} "${review.comment}"`);
+    } else {
+      showToast('Already reviewed! Thank you 😊');
+    }
+  }
+
+  function renderReviewButtons() {
+    // Semak Order 1 (AH-20260530-008)
+    const container1 = document.getElementById('review-action-container-008');
+    if(container1) {
+      if(localStorage.getItem('review_AH-20260530-008')) {
+        container1.innerHTML = `<button class="btn-outline" style="margin-top:12px;" onclick="event.stopPropagation(); viewSavedReview('AH-20260530-008')"><i class="fa-solid fa-star" style="color:#eab308"></i> View Review</button>`;
+      } else {
+        container1.innerHTML = `<button class="btn-outline" style="margin-top:12px;" onclick="event.stopPropagation(); openReviewModal('AH-20260530-008', 'Sunshine Orchard')"><i class="fa-regular fa-star"></i> Leave Review</button>`;
+      }
+    }
+
+    // Semak Order 2 (AH-20260528-022)
+    const container2 = document.getElementById('review-action-container-022');
+    if(container2) {
+      if(localStorage.getItem('review_AH-20260528-022')) {
+        container2.innerHTML = `<button class="btn-outline" style="margin-top:12px;" onclick="event.stopPropagation(); viewSavedReview('AH-20260528-022')"><i class="fa-solid fa-star" style="color:#eab308"></i> View Review</button>`;
+      } else {
+        container2.innerHTML = `<button class="btn-outline" style="margin-top:12px;" onclick="event.stopPropagation(); openReviewModal('AH-20260528-022', 'Padi Murni Kedah')"><i class="fa-regular fa-star"></i> Leave Review</button>`;
+      }
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    initStarsEngine();
+    renderReviewButtons();
+
+    // MENYEGARKAN LOGIK ORDER AKTIF ASAL ANDA
     const lastOrderId = localStorage.getItem('lastOrder');
     const fulfillMethod = localStorage.getItem('fulfillMethod') || 'delivery';
 

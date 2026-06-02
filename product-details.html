@@ -81,10 +81,15 @@
     }
     .screen::-webkit-scrollbar { display: none; }
 
+    /* LOADING SPINNER */
+    .loading { display: flex; justify-content: center; align-items: center; height: 100%; min-height: 400px; }
+    .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     .img-wrap { position: relative; background: #f0f0f0; height: 280px; overflow: hidden; }
     .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: none; }
 
-    .img-placeholder { width: 100%; height: 100%; background: #edf4ed; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; }
+    .img-placeholder { width: 100%; height: 100%; background: #edf4ed; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; position: absolute; top:0; left:0; }
     .img-placeholder i { font-size: 48px; color: #2e7d32; opacity: 0.3; }
 
     .gallery-back {
@@ -154,7 +159,7 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.05);
       transition: all 0.2s;
     }
-    .prod-like-btn i.active { color: #d11a2a; }
+    .prod-like-btn.active i { color: #d11a2a; }
 
     .prod-price { font-size: 26px; font-weight: 800; color: #16a34a; line-height: 1.1; margin-top: 4px; }
     .price-sub { font-size: 11px; color: #666; margin-top: 2px; font-weight: 500; }
@@ -218,11 +223,98 @@
     .shop-row { display: flex; align-items: center; gap: 12px; cursor: pointer; }
     .shop-av { width: 44px; height: 44px; border-radius: 12px; background: #e8f5e9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 1px solid #eaeaea; }
     .shop-av img { width: 100%; height: 100%; object-fit: cover; }
-    .shop-info { flex: 1; }
-    .shop-name { font-size: 14px; font-weight: 700; color: #222; }
-    .shop-status { font-size: 11px; color: #27ae60; margin-top: 2px; display: flex; align-items: center; gap: 4px; font-weight: 500; }
+
+    .shop-info { flex: 1; min-width: 0; }
+
+    /* GABUNGAN ICON SEBARIS */
+    .shop-name-wrapper { display: flex; align-items: center; gap: 6px; }
+    .shop-name { font-size: 15px; font-weight: 700; color: #111827; line-height: 1.2; }
+
+    /* 1. Verified Rait Hijau */
+    .verified-circle-icon {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #16a34a;
+      color: #ffffff;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* 2. Badge Sijil Ber-Hover */
+    .cert-tooltip-container {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cert-circle-trigger {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid #bae6fd;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .cert-circle-trigger:hover {
+      background: #0369a1;
+      color: #fff;
+    }
+
+    .cert-tooltip-box {
+      position: absolute;
+      bottom: 140%;
+      left: 50%;
+      transform: translateX(-50%) translateY(5px);
+      background: #1e293b;
+      color: #ffffff;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 500;
+      width: 160px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.15s ease;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .cert-tooltip-box::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 4px;
+      border-style: solid;
+      border-color: #1e293b transparent transparent transparent;
+    }
+
+    .cert-tooltip-container:hover .cert-tooltip-box {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .shop-status-row { display: flex; align-items: center; gap: 6px; margin-top: 3px; }
+    .shop-status { font-size: 11px; color: #27ae60; display: flex; align-items: center; gap: 4px; font-weight: 500; }
     .shop-status::before { content:''; width: 5px; height: 5px; border-radius: 50%; background: #27ae60; }
-    .shop-state { font-size: 11px; color: #777; margin-top: 1px; }
+
+    .shop-state { font-size: 11px; color: #777; margin-top: 3px; }
 
     .shop-stats { display: flex; margin-top: 12px; border: 1px solid #f0f0f0; border-radius: 10px; overflow: hidden; background: #fafafa; }
     .stat-item { flex: 1; text-align: center; padding: 8px 4px; border-right: 1px solid #f0f0f0; }
@@ -262,7 +354,6 @@
       padding: 14px 18px 20px;
       gap: 12px;
       z-index: 20;
-      position: relative;
     }
 
     .bb-chat-style {
@@ -297,14 +388,10 @@
       gap: 8px;
       box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25);
     }
-    .bb-add-style:active { background: #15803d; }
 
-    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
-    .toast.show { opacity: 1; }
-
-    .loading { display: flex; align-items: center; justify-content: center; height: 200px; }
-    .spinner { width: 32px; height: 32px; border: 3px solid #e8f5e9; border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* TOAST STYLE */
+    .toast { position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: rgba(0,0,0,0.85); color: #fff; padding: 10px 20px; border-radius: 30px; font-size: 13px; z-index: 999; opacity: 0; pointer-events: none; transition: all 0.2s ease; font-weight: 500; white-space: nowrap; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
@@ -328,7 +415,7 @@
       <div class="img-wrap">
         <div class="img-placeholder" id="fallbackWrap">
           <i class="fa-solid fa-image"></i>
-          <span>Loading Image...</span>
+          <span style="font-size:11px; margin-top:4px;">No Image Available</span>
         </div>
         <img id="mainImg" src="" alt="" onerror="document.getElementById('fallbackWrap').style.display='flex'; this.style.display='none';">
 
@@ -340,40 +427,33 @@
           <button class="gallery-btn-square" onclick="showToast('Shared successfully! 🔗')">
             <i class="fa-solid fa-share-nodes"></i>
           </button>
-
           <a href="cart.html" class="gallery-btn-square icon-btn cart-nav-icon" style="text-decoration:none;">
             <i class="fa-solid fa-cart-shopping"></i>
           </a>
         </div>
-
         <div class="img-dots" id="galleryDots"></div>
       </div>
 
       <div class="price-block">
         <div class="prod-name-row">
           <div class="prod-name" id="prodName">...</div>
-          <button class="prod-like-btn" id="wishBtnRow">
-            <i class="fa-solid fa-heart" id="wishIconRow"></i>
-          </button>
+          <button class="prod-like-btn" id="wishBtnRow"><i class="fa-solid fa-heart" id="wishIconRow"></i></button>
         </div>
-
         <div class="prod-price" id="prodPrice">RM 0.00</div>
         <div class="price-sub" id="prodUnit"></div>
-
         <div class="rating-row">
           <div id="prodStarsSlot"></div>
           <span class="rating-num" id="prodRatingText">0.0</span>
           <span class="sep">|</span>
           <span class="sold-txt" id="prodReviewsCount">0 reviews</span>
           <span class="sep">|</span>
-          <span class="sold-txt"><i class="fa-solid fa-map-marker-alt" style="color: #6b7280; margin-right: 2px;"></i> <span id="distVal" style="display:inline;">...</span></span>
+          <span class="sold-txt"><i class="fa-solid fa-map-marker-alt" style="color:#6b7280;margin-right:2px;"></i> <span id="distVal">...</span></span>
         </div>
       </div>
 
       <div class="var-block">
         <div class="var-label">Select Option: <b id="varSelected">...</b></div>
         <div class="chip-row" id="variationContainer"></div>
-
         <div class="inline-qty-section">
           <div class="inline-qty-label">Quantity</div>
           <div class="inline-qty-container">
@@ -389,33 +469,29 @@
         <div class="desc-txt" id="prodDesc">...</div>
       </div>
 
+      <!-- SHOP BLOCK -->
       <div class="shop-block">
         <div class="block-title">Shop Information</div>
         <div class="shop-row" id="shopPreview">
-          <div class="shop-av" id="shopAvSlot">
-            <i class="fa-solid fa-shop"></i>
-          </div>
+          <div class="shop-av" id="shopAvSlot"><i class="fa-solid fa-shop"></i></div>
           <div class="shop-info">
-            <div class="shop-name" id="shopName">...</div>
-            <div class="shop-status">Active recently</div>
-            <div class="shop-state"><i class="fa-solid fa-map-marker-alt" style="font-size:10px; margin-right:2px;"></i> <span id="shopLocation">...</span></div>
+
+            <div class="shop-name-wrapper">
+              <div class="shop-name" id="shopName">...</div>
+              <div id="verifiedIconSlot"></div>  <!-- 1. Bulatan Rait Hijau -->
+              <div id="badgeHoverSlot"></div>   <!-- 2. Bulatan Sijil + Tooltip -->
+            </div>
+
+            <div class="shop-status-row"><div class="shop-status">Active recently</div></div>
+            <div class="shop-state"><i class="fa-solid fa-map-marker-alt" style="font-size:10px;margin-right:2px;"></i> <span id="shopLocation">...</span></div>
           </div>
           <div style="font-size:14px;color:#aaa"><i class="fa-solid fa-chevron-right"></i></div>
         </div>
 
         <div class="shop-stats">
-          <div class="stat-item">
-            <div class="stat-num" id="statRating">0.0 <span style="color:#ffc107;font-size:11px">★</span></div>
-            <div class="stat-lbl">Shop Rating</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num" id="statProducts">48</div>
-            <div class="stat-lbl">Products</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-num" style="color:#27ae60">98%</div>
-            <div class="stat-lbl">Response Rate</div>
-          </div>
+          <div class="stat-item"><div class="stat-num" id="statRating">0.0 ★</div><div class="stat-lbl">Shop Rating</div></div>
+          <div class="stat-item"><div class="stat-num" id="statProducts">48</div><div class="stat-lbl">Products</div></div>
+          <div class="stat-item"><div class="stat-num" style="color:#27ae60">98%</div><div class="stat-lbl">Response Rate</div></div>
         </div>
       </div>
 
@@ -424,11 +500,10 @@
           <span class="block-title" style="margin-bottom:0">Reviews</span>
           <span class="see-all" onclick="showToast('Full reviews engine coming soon!')">See all →</span>
         </div>
-
         <div class="rv-summary">
-          <div style="text-align:center; padding-right:8px;">
+          <div style="text-align:center;padding-right:8px;">
             <div class="rv-big" id="summaryBigRating">0.0</div>
-            <div class="stars-container" style="font-size:10px; margin-top:2px;">★★★★★</div>
+            <div class="stars-container" style="font-size:10px;margin-top:2px;">★★★★★</div>
           </div>
           <div class="rv-bars">
             <div class="bar-row"><span class="bar-lbl">5</span><div class="bar-track"><div class="bar-fill" style="width:85%"></div></div></div>
@@ -438,7 +513,6 @@
             <div class="bar-row"><span class="bar-lbl">1</span><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div>
           </div>
         </div>
-
         <div id="reviewsContainer"></div>
       </div>
 
@@ -446,30 +520,12 @@
   </div>
 
   <div class="bottom-bar">
-    <button class="bb-chat-style" onclick="chatFarmer()">
-      <i class="fa-solid fa-comment-dots"></i>
-      <span>Chat</span>
-    </button>
-
-    <button class="bb-add-style" onclick="addProductToCart()">
-      <i class="fa-solid fa-bag-shopping"></i>
-      <span>Add to Cart</span>
-    </button>
+    <button class="bb-chat-style" onclick="chatFarmer()"><i class="fa-solid fa-comment-dots"></i> <span>Chat</span></button>
+    <button class="bb-add-style" onclick="addProductToCart()"><i class="fa-solid fa-bag-shopping"></i> <span>Add to Cart</span></button>
   </div>
 </div>
 
 <div class="toast" id="customToast"></div>
-
-<script>
-  window.showToast = function(msg) {
-    const t = document.getElementById('customToast');
-    if(t) {
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2000);
-    }
-  };
-</script>
 
 <script src="data.js"></script>
 <script src="script.js"></script>
@@ -480,9 +536,8 @@
   let selectedUnitLabel = '';
 
   const REVIEWS = [
-    { name: "Amir Hamzah", rating: 5, date: "28 May 2025", text: "Super fresh! Tomato tiba hari yang sama dipetik. Akan order lagi minggu depan." },
-    { name: "Nurul Ain", rating: 4, date: "25 May 2025", text: "Kualiti bagus, pembungkusan cantik. Harap bahagian lebih besar sikit." },
-    { name: "Jason Tan", rating: 4.5, date: "20 May 2025", text: "Best organic produce from any online marketplace. Highly recommended!" },
+    { name: "Amir Hamzah", rating: 5, date: "28 May 2025", text: "Super fresh! Tomato tiba hari yang sama dipetik." },
+    { name: "Nurul Ain", rating: 4, date: "25 May 2025", text: "Kualiti bagus, pembungkusan cantik." }
   ];
 
   function renderStarsHtml(rating) {
@@ -490,22 +545,18 @@
     const rounded = Math.round(rating * 2) / 2;
     const full = Math.floor(rounded);
     const half = (rounded % 1 !== 0);
-
     for (let i = 0; i < full; i++) starsHtml += '<i class="fa-solid fa-star"></i>';
     if (half) starsHtml += '<i class="fa-solid fa-star-half-stroke"></i>';
-    const total = full + (half ? 1 : 0);
-    for (let i = total; i < 5; i++) starsHtml += '<i class="fa-regular fa-star"></i>';
+    for (let i = full + (half ? 1 : 0); i < 5; i++) starsHtml += '<i class="fa-regular fa-star"></i>';
     return `<div class="stars-container">${starsHtml}</div>`;
   }
 
   function selectVariation(label, price, element) {
     selectedPrice = Number(price);
     selectedUnitLabel = label;
-
     document.getElementById('prodPrice').textContent = 'RM ' + selectedPrice.toFixed(2);
     document.getElementById('prodUnit').textContent = 'per ' + label;
     document.getElementById('varSelected').textContent = label;
-
     document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
     element.classList.add('active');
   }
@@ -513,29 +564,21 @@
   function updateCartBadge() {
     let currentCart = JSON.parse(localStorage.getItem('cart')) || [];
     const count = currentCart.reduce((sum, item) => sum + (Number(item.qty) || 1), 0);
-
     document.querySelectorAll('.cart-nav-icon').forEach(el => {
       let badge = el.querySelector('.cart-count');
       if (!badge) {
-        badge = document.createElement('span');
-        badge.className = 'cart-count';
-        badge.style = "position:absolute; top:-4px; right:-4px; background:#ee4d2d; color:white; border-radius:50%; padding:2px 6px; font-size:10px; font-weight:700; border:2px solid white; min-width:12px; text-align:center;";
+        badge = document.createElement('span'); badge.className = 'cart-count';
+        badge.style = "position:absolute;top:-4px;right:-4px;background:#ee4d2d;color:white;border-radius:50%;padding:2px 6px;font-size:10px;font-weight:700;border:2px solid white;min-width:12px;text-align:center;";
         el.appendChild(badge);
       }
-      badge.textContent = count;
-      badge.style.display = count > 0 ? 'block' : 'none';
+      badge.textContent = count; badge.style.display = count > 0 ? 'block' : 'none';
     });
   }
 
   function loadProductDetails() {
-    if (typeof AppState !== 'undefined' && AppState.init) {
-      AppState.init();
-    }
-
-    // Force resetting state down to pristine conditions
+    if (typeof AppState !== 'undefined' && AppState.init) AppState.init();
     currentQty = 1;
-    const qtyDisp = document.getElementById('qtyDisplay');
-    if (qtyDisp) qtyDisp.textContent = '1';
+    if (document.getElementById('qtyDisplay')) document.getElementById('qtyDisplay').textContent = '1';
 
     const pid = parseInt(localStorage.getItem('currentProduct') || '1');
     currentProduct = PRODUCTS.find(p => p.id === pid) || PRODUCTS[0];
@@ -545,17 +588,16 @@
       document.getElementById('loadingState').style.display = 'none';
       document.getElementById('productContent').style.display = 'block';
 
+      // Gambar & Fallback handler
       if (currentProduct.images && currentProduct.images.length > 0) {
         const mainImg = document.getElementById('mainImg');
-        const fallback = document.getElementById('fallbackWrap');
-        mainImg.src = currentProduct.images[0];
-        mainImg.style.display = 'block';
-        if(fallback) fallback.style.display = 'none';
+        mainImg.src = currentProduct.images[0]; mainImg.style.display = 'block';
+        if(document.getElementById('fallbackWrap')) document.getElementById('fallbackWrap').style.display = 'none';
       }
 
+      // Variation Chips handler
       const varContainer = document.getElementById('variationContainer');
       varContainer.innerHTML = '';
-
       if (currentProduct.pricing && currentProduct.pricing.length > 0) {
         currentProduct.pricing.forEach((item, idx) => {
           const chip = document.createElement('div');
@@ -563,11 +605,7 @@
           chip.textContent = item.label;
           chip.onclick = function() { selectVariation(item.label, item.price, this); };
           varContainer.appendChild(chip);
-
-          if (idx === 0) {
-            selectedPrice = Number(item.price);
-            selectedUnitLabel = item.label;
-          }
+          if (idx === 0) { selectedPrice = Number(item.price); selectedUnitLabel = item.label; }
         });
       } else {
         selectedPrice = Number(currentProduct.price || 0);
@@ -578,52 +616,83 @@
         varContainer.appendChild(chip);
       }
 
+      // Set Harga Utama & Unit Info
       document.getElementById('prodPrice').textContent = 'RM ' + selectedPrice.toFixed(2);
       document.getElementById('prodUnit').textContent = 'per ' + selectedUnitLabel;
       document.getElementById('varSelected').textContent = selectedUnitLabel;
 
+      // Dots Gallery Generator (Sebab terpadam tadi)
       const dots = document.getElementById('galleryDots');
-      dots.innerHTML = '';
-      if (currentProduct.images) {
-        currentProduct.images.forEach((_, i) => {
-          const d = document.createElement('div');
-          d.className = 'dot' + (i === 0 ? ' active' : '');
-          dots.appendChild(d);
-        });
+      if (dots) {
+        dots.innerHTML = '';
+        if (currentProduct.images) {
+          currentProduct.images.forEach((_, i) => {
+            const d = document.createElement('div');
+            d.className = 'dot' + (i === 0 ? ' active' : '');
+            dots.appendChild(d);
+          });
+        }
       }
 
+      // Wishlist Handler
       const wishBtnRow = document.getElementById('wishBtnRow');
       const wishIconRow = document.getElementById('wishIconRow');
       let isWished = false;
+      if (wishBtnRow && wishIconRow) {
+        wishBtnRow.onclick = () => {
+          isWished = !isWished;
+          if(isWished) {
+            wishBtnRow.classList.add('active');
+            showToast('❤️ Added to wishlist!');
+          } else {
+            wishBtnRow.classList.remove('active');
+            showToast('Removed from wishlist');
+          }
+        };
+      }
 
-      wishBtnRow.onclick = () => {
-        isWished = !isWished;
-        if(isWished) {
-          wishIconRow.classList.add('active');
-          showToast('❤️ Added to wishlist!');
-        } else {
-          wishIconRow.classList.remove('active');
-          showToast('Removed from wishlist');
-        }
-      };
-
+      // Info Produk
       document.getElementById('prodName').textContent = currentProduct.name;
       document.getElementById('prodStarsSlot').innerHTML = renderStarsHtml(currentProduct.rating || 0);
       document.getElementById('prodRatingText').textContent = (currentProduct.rating || 0).toFixed(1);
       document.getElementById('summaryBigRating').textContent = (currentProduct.rating || 0).toFixed(1);
       document.getElementById('prodReviewsCount').textContent = `${currentProduct.reviews || 0} reviews`;
+      document.getElementById('prodDesc').textContent = currentProduct.description || 'Tiada penerangan.';
+      document.getElementById('distVal').textContent = farmer && farmer.state ? farmer.state : "Selangor";
 
-      const farmState = farmer && farmer.state ? farmer.state : "Selangor";
-      document.getElementById('distVal').textContent = farmState;
-      document.getElementById('prodDesc').textContent = currentProduct.description || 'Tiada penerangan lanjut.';
-
+      // Info Kedai & Dua Sijil
       if (farmer) {
-        if (farmer.image) {
-          document.getElementById('shopAvSlot').innerHTML = `<img src="${farmer.image}" alt="">`;
-        }
+        if (farmer.image) document.getElementById('shopAvSlot').innerHTML = `<img src="${farmer.image}">`;
         document.getElementById('shopName').textContent = farmer.shopName || farmer.farm || (farmer.name + ' Organic Store');
-        document.getElementById('shopLocation').textContent = `${farmer.city || 'Kuala Kubu Bharu'}, ${farmState}`;
+        document.getElementById('shopLocation').textContent = `${farmer.city || 'Kuala Kubu Bharu'}, ${farmer.state || 'Selangor'}`;
         document.getElementById('statRating').innerHTML = `${(farmer.rating || 0).toFixed(1)} <span style="color:#ffc107;font-size:11px">★</span>`;
+
+        const iconSlot = document.getElementById('verifiedIconSlot');
+        const hoverSlot = document.getElementById('badgeHoverSlot');
+
+        // 1. Bulatan Rait Hijau
+        iconSlot.innerHTML = `
+          <div class="verified-circle-icon">
+            <i class="fa-solid fa-check"></i>
+          </div>
+        `;
+
+        // 2. Bulatan Badge Sijil + Fungsi Hover Tooltip
+        const certListString = (farmer.certifications && farmer.certifications.length > 0)
+          ? farmer.certifications.join(', ')
+          : "myGAP, Organik Malaysia";
+
+        hoverSlot.innerHTML = `
+          <div class="cert-tooltip-container">
+            <div class="cert-circle-trigger">
+              <i class="fa-solid fa-certificate"></i>
+            </div>
+            <div class="cert-tooltip-box">
+              <strong style="color:#38bdf8; display:block; margin-bottom:2px;">Sijil Rasmi:</strong>
+              ${certListString}
+            </div>
+          </div>
+        `;
 
         document.getElementById('shopPreview').onclick = () => {
           localStorage.setItem('currentFarmer', farmer.id);
@@ -631,89 +700,69 @@
         };
       }
 
+      // Render Senarai Komen Pembeli
       const rc = document.getElementById('reviewsContainer');
-      rc.innerHTML = '';
-      REVIEWS.forEach(r => {
-        const div = document.createElement('div');
-        div.className = 'rv-card';
-        div.innerHTML = `
-          <div class="rv-avatar">
-            <i class="fa-solid fa-circle-user"></i>
-          </div>
-          <div class="rv-content">
-            <div class="rv-buyer-name">${r.name}</div>
-            <div class="rv-stars-row">
-              ${renderStarsHtml(r.rating)}
-              <span class="rv-date-inline">(${r.date})</span>
+      if (rc) {
+        rc.innerHTML = '';
+        REVIEWS.forEach(r => {
+          const div = document.createElement('div');
+          div.className = 'rv-card';
+          div.innerHTML = `
+            <div class="rv-avatar"><i class="fa-solid fa-circle-user"></i></div>
+            <div class="rv-content">
+              <div class="rv-buyer-name">${r.name}</div>
+              <div class="rv-stars-row">
+                ${renderStarsHtml(r.rating)}
+                <span class="rv-date-inline">(${r.date})</span>
+              </div>
+              <div class="rv-variant-row">Variation: ${selectedUnitLabel}</div>
+              <div class="rv-txt-comment">${r.text}</div>
             </div>
-            <div class="rv-variant-row">Variation: ${selectedUnitLabel}</div>
-            <div class="rv-txt-comment">${r.text}</div>
-          </div>
-        `;
-        rc.appendChild(div);
-      });
+          `;
+          rc.appendChild(div);
+        });
+      }
 
       updateCartBadge();
-      if(typeof updateNavCartBadge === 'function') updateNavCartBadge();
     }, 400);
   }
 
   document.addEventListener('DOMContentLoaded', loadProductDetails);
 
-  // CRITICAL RESET FOR HISTORY BACKWARDS FLOW: Wipes cache memory instantly on backward reveal
-  window.addEventListener('pageshow', () => {
-    loadProductDetails();
-  });
-
   function changeQty(delta) {
-    currentQty = Math.max(1, Math.min(99, currentQty + delta));
+    currentQty = Math.max(1, currentQty + delta);
     document.getElementById('qtyDisplay').textContent = currentQty;
   }
 
+  window.showToast = function(msg) {
+    const t = document.getElementById('customToast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+  };
+
   function addProductToCart() {
-    if (!currentProduct) return;
-
+    if(!currentProduct) return;
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    const cartItem = {
-      id: currentProduct.id,
-      productId: currentProduct.id,
-      name: currentProduct.name,
-      price: Number(selectedPrice),
-      variation: selectedUnitLabel,
-      unit: selectedUnitLabel,
-      qty: Number(currentQty),
-      image: (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : ''
-    };
-
-    const existingItemIndex = cart.findIndex(item =>
-      (item.id === cartItem.id || item.productId === cartItem.productId) &&
-      (item.variation === cartItem.variation || item.unit === cartItem.unit)
-    );
-
-    if (existingItemIndex > -1) {
-      cart[existingItemIndex].qty = Number(cart[existingItemIndex].qty) + Number(currentQty);
+    let existing = cart.find(item => item.id === currentProduct.id && item.variant === selectedUnitLabel);
+    if(existing) {
+      existing.qty = Number(existing.qty) + currentQty;
     } else {
-      cart.push(cartItem);
+      cart.push({
+        id: currentProduct.id,
+        name: currentProduct.name,
+        price: selectedPrice,
+        variant: selectedUnitLabel,
+        qty: currentQty,
+        image: (currentProduct.images && currentProduct.images.length > 0) ? currentProduct.images[0] : ''
+      });
     }
-
     localStorage.setItem('cart', JSON.stringify(cart));
-
-    if (typeof AppState !== 'undefined') {
-      AppState.cart = cart;
-      if (typeof AppState.saveCart === 'function') AppState.saveCart();
-    }
-
     updateCartBadge();
-    if(typeof updateNavCartBadge === 'function') updateNavCartBadge();
-    showToast(`Added ${currentQty}x ${currentProduct.name} to cart! 🛒`);
+    showToast('🛒 Added to cart successfully!');
   }
 
   function chatFarmer() {
-    if (currentProduct) {
-      localStorage.setItem('chatFarmer', currentProduct.farmerId || 1);
-      window.location.href = 'chat.html';
-    }
+    showToast('Opening chat room...');
   }
 </script>
 </body>
