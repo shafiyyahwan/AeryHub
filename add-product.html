@@ -31,10 +31,12 @@
 
     /* Fulfillment Flex Options */
     .fulfill-row { display: flex; gap: 10px; }
-    .fulfill-check { flex: 1; display: flex; align-items: center; gap: 10px; padding: 14px 12px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; background: var(--surface); transition: all 0.2s ease; }
+    .fulfill-check { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 16px 12px; border: 2px solid var(--border); border-radius: 12px; cursor: pointer; background: var(--surface); transition: all 0.2s ease; text-align: center; }
     .fulfill-check.checked { border-color: var(--primary); background: var(--green-50); }
-    .fulfill-check input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
-    .fulfill-check label { font-size: 14px; font-weight: 700; color: var(--text); cursor: pointer; }
+    .fulfill-check .fulfill-icon { font-size: 24px; color: var(--text-muted); transition: color 0.2s; }
+    .fulfill-check.checked .fulfill-icon { color: var(--primary); }
+    .fulfill-check label { font-size: 14px; font-weight: 700; color: var(--text-muted); cursor: pointer; margin: 0; }
+    .fulfill-check.checked label { color: var(--text); }
 
     .status-icons {
       display: flex;
@@ -94,7 +96,7 @@
           <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="previewImage(this)">
           <div style="display:flex;gap:6px;overflow-x:auto;padding:4px 0;scrollbar-width:none">
             <div style="font-size:11px;color:var(--text-muted);font-weight:600;white-space:nowrap;align-self:center">Quick pick:</div>
-            <img src="https://images.unsplash.com/photo-1546470427-e26264be0b11?w=60&h=60&fit=crop" style="width:40px;height:40px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="setDemoImg(this.src)" title="Tomato">
+            <img src="/img/durian.jpg" style="width:40px;height:40px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="setDemoImg(this.src)" title="Durian">
             <img src="https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=60&h=60&fit=crop" style="width:40px;height:40px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="setDemoImg(this.src)" title="Lettuce">
             <img src="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=60&h=60&fit=crop" style="width:40px;height:40px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="setDemoImg(this.src)" title="Mango">
             <img src="https://images.unsplash.com/photo-1563114773-84221bd62daa?w=60&h=60&fit=crop" style="width:40px;height:40px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid transparent;flex-shrink:0" onclick="setDemoImg(this.src)" title="Watermelon">
@@ -110,27 +112,27 @@
         <div style="margin-bottom:16px">
           <label class="input-label">Category *</label>
           <div class="category-grid">
-            <div class="cat-option selected" onclick="selectCat(this,'Vegetables')">
+            <div class="cat-option" id="cat-Vegetables" onclick="selectCat(this,'Vegetables')">
               <div class="co-icon" style="color: #22c55e;"><i class="fa-solid fa-leaf"></i></div>
               <div class="co-name">Vegetables</div>
             </div>
-            <div class="cat-option" onclick="selectCat(this,'Fruits')">
+            <div class="cat-option" id="cat-Fruits" onclick="selectCat(this,'Fruits')">
               <div class="co-icon" style="color: #ef4444;"><i class="fa-solid fa-apple-whole"></i></div>
               <div class="co-name">Fruits</div>
             </div>
-            <div class="cat-option" onclick="selectCat(this,'Herbs')">
+            <div class="cat-option" id="cat-Herbs" onclick="selectCat(this,'Herbs')">
               <div class="co-icon" style="color: #10b981;"><i class="fa-solid fa-seedling"></i></div>
               <div class="co-name">Herbs</div>
             </div>
-            <div class="cat-option" onclick="selectCat(this,'Aquaculture products')">
+            <div class="cat-option" id="cat-Aquaculture" onclick="selectCat(this,'Aquaculture products')">
               <div class="co-icon" style="color: #eab308;"><i class="fa-solid fa-fish"></i></div>
               <div class="co-name">Aquaculture</div>
             </div>
-            <div class="cat-option" onclick="selectCat(this,'Dairy')">
+            <div class="cat-option" id="cat-Dairy" onclick="selectCat(this,'Dairy')">
               <div class="co-icon" style="color: #78350f;"><i class="fa-solid fa-cow"></i></div>
               <div class="co-name">Dairy</div>
             </div>
-            <div class="cat-option" onclick="selectCat(this,'Poultry')">
+            <div class="cat-option" id="cat-Poultry" onclick="selectCat(this,'Poultry')">
               <div class="co-icon" style="color: #f97316;"><i class="fa-solid fa-egg"></i></div>
               <div class="co-name">Poultry</div>
             </div>
@@ -142,7 +144,7 @@
           <textarea class="input" id="prodDesc" rows="3" placeholder="Describe your product — growing method, freshness, taste..." style="resize:none"></textarea>
         </div>
 
-        <button class="btn btn-primary btn-full" onclick="goStep(2)">Next: Pricing & Variations →</button>
+        <button class="btn btn-primary btn-full" onclick="goStep(2)">Next: Pricing & Variations</button>
       </div>
 
       <div id="step2" style="display:none">
@@ -153,16 +155,16 @@
           <div class="variation-card">
             <div class="input-group" style="margin-bottom:10px">
               <label class="input-label" style="font-size:11px">Variation Label (e.g. 500g, 1kg, Grade A) *</label>
-              <input type="text" class="input var-label" placeholder="e.g. 1 kg" value="1 kg">
+              <input type="text" class="input var-label" placeholder="e.g. 1 kg" id="varLabel1">
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
               <div class="input-group" style="margin:0">
                 <label class="input-label" style="font-size:11px">Price (RM) *</label>
-                <input type="number" class="input var-price" placeholder="0.00" step="0.10">
+                <input type="number" class="input var-price" placeholder="0.00" step="0.10" id="varPrice1">
               </div>
               <div class="input-group" style="margin:0">
                 <label class="input-label" style="font-size:11px">Stock *</label>
-                <input type="number" class="input var-stock" placeholder="e.g. 50">
+                <input type="number" class="input var-stock" placeholder="e.g. 50" id="varStock1">
               </div>
             </div>
           </div>
@@ -183,8 +185,8 @@
         </div>
 
         <div style="display:flex;gap:10px">
-          <button class="btn btn-ghost" style="flex:1" onclick="goStep(1)">← Back</button>
-          <button class="btn btn-primary" style="flex:2" onclick="goStep(3)">Next: Fulfillment →</button>
+          <button class="btn btn-ghost" style="flex:1" onclick="goStep(1)">Back</button>
+          <button class="btn btn-primary" style="flex:2" onclick="goStep(3)">Next: Fulfillment</button>
         </div>
       </div>
 
@@ -194,27 +196,22 @@
 
         <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">Fulfillment Options *</div>
         <div class="fulfill-row" style="margin-bottom:24px">
-          <div class="fulfill-check checked" id="fc-delivery" onclick="toggleFulfill('delivery')">
-            <input type="checkbox" id="f-delivery" checked onclick="event.stopPropagation(); toggleFulfill('delivery')">
-            <div style="display: flex; flex-direction: column; gap: 2px;">
-              <span style="font-size:18px; color:var(--primary)"><i class="fa-solid fa-truck"></i></span>
-              <label for="f-delivery" style="margin:0;">Delivery</label>
-              <span style="font-size:11px;color:var(--text-muted)">Available</span>
-            </div>
+          <!-- Modifikasi: Sistem Klik Kad Terus (Tiada Checkbox) + Ikon Font Awesome -->
+          <div class="fulfill-check checked" id="fc-delivery" onclick="toggleFulfillCard('delivery')">
+            <span class="fulfill-icon"><i class="fa-solid fa-truck"></i></span>
+            <label>Delivery</label>
+            <span style="font-size:11px;color:var(--text-muted)">Available</span>
           </div>
-          <div class="fulfill-check checked" id="fc-pickup" onclick="toggleFulfill('pickup')">
-            <input type="checkbox" id="f-pickup" checked onclick="event.stopPropagation(); toggleFulfill('pickup')">
-            <div style="display: flex; flex-direction: column; gap: 2px;">
-              <span style="font-size:18px; color:var(--primary)"><i class="fa-solid fa-house-chimney"></i></span>
-              <label for="f-pickup" style="margin:0;">Farm Pickup</label>
-              <span style="font-size:11px;color:var(--text-muted)">Available</span>
-            </div>
+          <div class="fulfill-check checked" id="fc-pickup" onclick="toggleFulfillCard('pickup')">
+            <span class="fulfill-icon"><i class="fa-solid fa-house-chimney"></i></span>
+            <label>Farm Pickup</label>
+            <span style="font-size:11px;color:var(--text-muted)">Available</span>
           </div>
         </div>
 
         <div style="display:flex;gap:10px">
-          <button class="btn btn-ghost" style="flex:1" onclick="goStep(2)">← Back</button>
-          <button class="btn btn-primary" style="flex:2" onclick="submitProduct()">🌱 Publish Product</button>
+          <button class="btn btn-ghost" style="flex:1" onclick="goStep(2)">Back</button>
+          <button class="btn btn-primary" style="flex:2" onclick="submitProduct()">Publish Product</button>
         </div>
       </div>
 
@@ -222,7 +219,7 @@
         <div style="font-size:72px;margin-bottom:16px;color:var(--primary);"><i class="fa-solid fa-circle-check"></i></div>
         <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px">Product Published!</div>
         <div style="font-size:14px;color:var(--text-muted);line-height:1.6;margin-bottom:28px">Your product is now live on the AeryHub marketplace. Buyers can find and order it right away.</div>
-        <a href="manage-products.html" class="btn btn-primary btn-full">View My Products →</a>
+        <a href="manage-products.html" class="btn btn-primary btn-full">View My Products</a>
         <button class="btn btn-ghost btn-full" style="margin-top:10px" onclick="resetForm()">+ Add Another Product</button>
       </div>
     </div>
@@ -250,8 +247,14 @@
 <script src="data.js"></script>
 <script src="script.js"></script>
 <script>
-  let selectedCat = 'Vegetables';
-  let demoImgSrc = 'https://images.unsplash.com/photo-1546470427-e26264be0b11?w=400&h=300&fit=crop';
+  let selectedCat = 'Fruits';
+  let demoImgSrc = 'https://images.unsplash.com/photo-1695624479590-349f802773c6?w=400&h=300&fit=crop';
+
+  // State tracking untuk fulfillment kad (dua-dua aktif secara lalai)
+  let fulfillmentState = {
+    delivery: true,
+    pickup: true
+  };
 
   function triggerUpload() { document.getElementById('fileInput').click(); }
 
@@ -280,18 +283,12 @@
     el.classList.add('selected');
   }
 
-  // Fungsi Toggle yang menyokong konsep bebas "Delivery Only" atau "Pickup Only"
-  function toggleFulfill(type) {
+  // Modifikasi: Logik baru untuk tukar status pilihan kad tanpa mengganggu checkbox
+  function toggleFulfillCard(type) {
     const card = document.getElementById('fc-' + type);
-    const cb = document.getElementById('f-' + type);
+    fulfillmentState[type] = !fulfillmentState[type];
 
-    // Tukar status checkbox (jika fungsi dipanggil dari klik kad)
-    if (event.target.tagName !== 'INPUT') {
-      cb.checked = !cb.checked;
-    }
-
-    // Kemas kini gaya visual border dan latar belakang kad
-    if (cb.checked) {
+    if (fulfillmentState[type]) {
       card.classList.add('checked');
     } else {
       card.classList.remove('checked');
@@ -355,11 +352,8 @@
   }
 
   function submitProduct() {
-    const delChecked = document.getElementById('f-delivery').checked;
-    const pickChecked = document.getElementById('f-pickup').checked;
-
-    // Validasi wajib: Petani tak boleh uncheck kedua-duanya sekali gus!
-    if (!delChecked && !pickChecked) {
+    // Validasi menggunakan state objek fulfillmentState baru
+    if (!fulfillmentState.delivery && !fulfillmentState.pickup) {
       if (typeof showToast === 'function') showToast('Please select at least one fulfillment option (Delivery or Pickup)');
       else alert('Please select at least one fulfillment option (Delivery or Pickup)');
       return;
@@ -395,8 +389,8 @@
       harvestDate: document.getElementById('prodHarvest').value,
       pricing: pricingArray,
       fulfillment: {
-        delivery: delChecked,
-        pickup: pickChecked
+        delivery: fulfillmentState.delivery,
+        pickup: fulfillmentState.pickup
       }
     };
 
@@ -429,6 +423,20 @@
     }
     const today = new Date().toISOString().slice(0,10);
     document.getElementById('prodHarvest').value = today;
+
+    setDemoImg(demoImgSrc);
+
+    document.getElementById('prodName').value = 'Premium Musang King Durian';
+    document.getElementById('prodDesc').value = 'Gred A Musang King directly from Raub orchard. Rich, creamy, yellowish flesh with bittersweet notes.';
+
+    document.getElementById('cat-Vegetables').classList.remove('selected');
+    document.getElementById('cat-Fruits').classList.add('selected');
+
+    document.getElementById('varLabel1').value = '1 kg (Whole Fruit)';
+    document.getElementById('varPrice1').value = '68.00';
+    document.getElementById('varStock1').value = '30';
+
+    document.getElementById('isOrganic').checked = true;
   });
 </script>
 </body>
