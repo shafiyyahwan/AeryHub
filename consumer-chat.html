@@ -7,15 +7,13 @@
   <link rel="stylesheet" href="css/style1.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <style>
-    /* EKSTRA: Memasukkan font Plus Jakarta Sans secara rasmi */
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
     body {
       background: #e0ead8;
-      font-family: 'Plus Jakarta Sans', sans-serif; /* Seragamkan seluruh aplikasi */
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
 
-    /* CORE SCREEN INTERFACE CANVAS */
     .screen {
       flex: 1;
       overflow-y: auto;
@@ -26,7 +24,6 @@
     }
     .screen::-webkit-scrollbar { display: none; }
 
-    /* STICKY TOP PAGE APPBAR SYSTEM FROM MARKETPLACE */
     .market-header {
       padding: 16px 20px 12px;
       background: var(--surface);
@@ -55,13 +52,11 @@
     }
     .icon-btn:active { background: #e5e7eb; }
 
-    /* PREMIUM APP SEARCH BAR DESIGN */
     .search-container { padding: 12px 16px 4px; }
     .search-wrapper { position: relative; display: flex; align-items: center; }
     .search-wrapper i { position: absolute; left: 14px; color: var(--text-muted); font-size: 13px; }
     .search-input { width: 100%; background: #f1f3f0; border: none; border-radius: 12px; padding: 10px 14px 10px 38px; font-size: 13px; font-weight: 500; outline: none; color: var(--text); font-family: inherit; }
 
-    /* CONVERSATION FEED ELEMENTS WITH FIXED AVATAR TRACKING */
     .convo-item { display: flex; gap: 14px; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6; background: var(--surface); transition: background 0.15s; }
     .convo-item:hover { background: var(--gray-50); }
 
@@ -92,11 +87,10 @@
     .convo-time { font-size: 11px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500; }
     .unread-badge { background: #16a34a; color: white; border-radius: 10px; padding: 2px 7px; font-size: 10px; font-weight: 800; }
 
-    /* --- HIASAN GAYA UNTUK SPECIFIC DM SCREEN (DIBAIKI MENGIKUT GAMBAR) --- */
     .chat-screen {
       display: none;
       flex-direction: column;
-      height: calc(100% - 44px); /* Duduk di bawah status bar dengan sempurna */
+      height: calc(100% - 44px);
       position: absolute;
       bottom: 0; left: 0; right: 0;
       background: #f4f6f3;
@@ -114,8 +108,8 @@
     }
 
     .chat-header-info { flex: 1; min-width: 0; }
-    .chat-header-name { font-size: 14.5px; font-weight: 700; color: #1f2937; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .chat-header-status { font-size: 11.5px; color: #16a34a; font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 4px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .chat-header-name { font-size: 14.5px; font-weight: 700; color: #1f2937; }
+    .chat-header-status { font-size: 11.5px; color: #16a34a; font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
 
     .chat-messages {
       flex: 1;
@@ -124,7 +118,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      background: #f4f6f3; /* Menggunakan tona warna lembut */
+      background: #f4f6f3;
       scrollbar-width: none;
     }
     .chat-messages::-webkit-scrollbar { display: none; }
@@ -134,13 +128,11 @@
     .msg-wrapper { max-width: 78%; display: flex; flex-direction: column; }
     .msg-row.sent .msg-wrapper { align-items: flex-end; }
 
-    /* Bubble Chat Digubah Menjadi Sangat Premium */
     .message-bubble {
       padding: 11px 15px;
       font-size: 13px;
       line-height: 1.5;
       font-weight: 600;
-      font-family: 'Plus Jakarta Sans', sans-serif;
       box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
     .message-bubble.received {
@@ -150,34 +142,55 @@
       border: 1px solid #eef0ed;
     }
     .message-bubble.sent {
-      background: #16a34a; /* Menggunakan Hijau Emerald AeryHub */
+      background: #16a34a;
       color: #ffffff;
       border-radius: 16px 16px 4px 16px;
     }
 
-    .message-time { font-size: 10px; color: #9ca3af; margin-top: 4px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .msg-day-label { text-align: center; font-size: 11px; color: #9ca3af; font-weight: 700; margin: 8px 0; letter-spacing: 0.5px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .message-time { font-size: 10px; color: #9ca3af; margin-top: 4px; font-weight: 600; }
+    .msg-day-label { text-align: center; font-size: 11px; color: #9ca3af; font-weight: 700; margin: 8px 0; letter-spacing: 0.5px; }
 
-    /* Preview Produk Berkenaan */
-    .product-preview-bubble {
-      background: #ffffff;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 10px;
-      max-width: 210px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    /* DIBAIKI: Latar belakang putih sepenuhnya untuk menutupi chat belakang */
+    #productContext {
+      display: none;
+      padding: 10px 16px 10px;
+      background: #ffffff !important;
+      border-bottom: 1px solid #eef0ed;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      z-index: 45;
     }
-    .ppb-img { width: 100%; height: 90px; object-fit: cover; border-radius: 10px; margin-bottom: 6px; }
-    .ppb-name { font-size: 12.5px; font-weight: 700; color: #1f2937; font-family: 'Plus Jakarta Sans', sans-serif; }
-    .ppb-price { font-size: 13px; font-weight: 800; color: #16a34a; margin-top: 2px; font-family: 'Plus Jakarta Sans', sans-serif; }
 
-    /* Quick Reply Chips */
-    .quick-replies { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 12px 14px; background: #f4f6f3; border-top: none; }
-    .qr-chip { padding: 8px 14px; border-radius: 20px; background: #ffffff; border: 1px solid #e5e7eb; font-size: 11.5px; font-weight: 700; color: #4b5563; cursor: pointer; white-space: nowrap; font-family: 'Plus Jakarta Sans', sans-serif; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    /* DIBAIKI: Rupa fizikal kad dikecilkan dan disusun secara melintang (flex) */
+    .product-preview-bubble {
+      background: #f8faf8;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 8px;
+      max-width: 260px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .ppb-img {
+      width: 55px !important;
+      height: 55px !important;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .ppb-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .ppb-name { font-size: 12px; font-weight: 700; color: #1f2937; line-height: 1.2; }
+    .ppb-price { font-size: 12px; font-weight: 800; color: #16a34a; margin-top: 0px; }
 
-    /* Ruang Input Sembang Diperkemas */
+    .quick-replies { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 12px 14px; background: #f4f6f3; }
+    .qr-chip { padding: 8px 14px; border-radius: 20px; background: #ffffff; border: 1px solid #e5e7eb; font-size: 11.5px; font-weight: 700; color: #4b5563; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+
     .chat-input-bar { padding: 12px 14px 24px; background: #ffffff; border-top: 1px solid #eef0ed; display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
-    .chat-input { flex: 1; border: 1px solid #e5e7eb; border-radius: 14px; padding: 11px 16px; font-size: 13px; background: #f4f4f5; color: #1f2937; outline: none; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .chat-input { flex: 1; border: 1px solid #e5e7eb; border-radius: 14px; padding: 11px 16px; font-size: 13px; background: #f4f4f5; color: #1f2937; outline: none; font-weight: 600; }
     .chat-input:focus { border-color: #16a34a; background: #ffffff; }
     .send-btn { width: 42px; height: 42px; border-radius: 12px; background: #16a34a; border: none; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
@@ -190,7 +203,6 @@
 <body>
 
 <div class="phone-frame">
-  <!-- STATUS BAR KEKAL SELAMAT DI ATAS FRAME TELEFON -->
   <div class="status-bar">
     <span>9:41</span>
     <div class="notch"></div>
@@ -201,14 +213,13 @@
     </div>
   </div>
 
-  <!-- SPREAD FEED MESSAGES UTAMA (IKUT SEBIJI SEPERTI DALAM GAMBAR ANDA) -->
   <div class="screen" id="convoList">
     <div class="market-header">
       <div class="market-header-row">
         <div style="font-size:20px; font-weight:800; color:var(--text)">
           Messages
         </div>
-        <button class="icon-btn" style="width:40px; height:40px; border-radius:12px; background:var(--gray-100); border:none; display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--text);" onclick="showToast('New message feature coming soon!')">
+        <button class="icon-btn" style="width:40px; height:40px; border-radius:12px;" onclick="showToast('New message feature coming soon!')">
           <i class="fa-regular fa-pen-to-square"></i>
         </button>
       </div>
@@ -224,7 +235,6 @@
     <div style="margin-top:8px" id="convoListItems"></div>
   </div>
 
-  <!-- OVERLAY DM YANG DAH DICANTIKKAN DAN DIKEMASKINI FONT -->
   <div class="chat-screen" id="chatScreen">
     <div class="chat-header">
       <button onclick="closeChat()" class="icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
@@ -236,13 +246,16 @@
       <button onclick="showToast('Call feature coming soon!')" class="icon-btn" style="background:#e8f5e9;color:#16a34a"><i class="fa-solid fa-phone"></i></button>
     </div>
 
-    <!-- KONTEKS PRODUK MAKLUMAT JIKA CHAT DARI PRODUCT DETAILS -->
-    <div id="productContext" style="display:none; padding:12px 14px 4px; background:#f4f6f3; border-bottom:1px solid #eef0ed;">
-      <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:700;font-family:'Plus Jakarta Sans';"><i class="fa-solid fa-circle-info" style="margin-right:3px;"></i> Inquiring about product:</div>
+    <div id="productContext">
+      <div style="font-size:10.5px; color:#6b7280; margin-bottom:6px; font-weight:700;">
+        <i class="fa-solid fa-circle-info" style="margin-right:3px;"></i> Inquiring about product:
+      </div>
       <div class="product-preview-bubble">
         <img id="ppbImg" src="" class="ppb-img" alt="">
-        <div class="ppb-name" id="ppbName"></div>
-        <div class="ppb-price" id="ppbPrice"></div>
+        <div class="ppb-info">
+          <div class="ppb-name" id="ppbName"></div>
+          <div class="ppb-price" id="ppbPrice"></div>
+        </div>
       </div>
     </div>
 
@@ -261,7 +274,6 @@
     </div>
   </div>
 
-  <!-- NAVIGATION BOTTOM BAR -->
   <nav class="bottom-nav">
     <a href="home.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
@@ -296,7 +308,7 @@
   ];
   let replyIdx = 0;
 
-  const EXTENDED_CONVOS = [
+  let EXTENDED_CONVOS = [
     ...CHAT_CONVERSATIONS,
     { id: 3, farmerId: 9, farmerName: "Aisyah Mohd", lastMessage: "We have fresh pandan and lemongrass today!", time: "2d ago", unread: 0, messages: [
         { from: "consumer", text: "Do you have pandan leaves?", time: "2 days ago" },
@@ -311,7 +323,7 @@
 
     EXTENDED_CONVOS.forEach(convo => {
       const farmer = FARMERS.find(f => f.id === convo.farmerId);
-      const farmNameDisplay = farmer?.farm || 'Independent Farm';
+      const farmNameDisplay = farmer?.shopName || farmer?.farm || 'Independent Farm';
 
       const div = document.createElement('div');
       div.className = 'convo-item';
@@ -337,29 +349,38 @@
     });
   }
 
-  // DIBAIKI: Fungsi membuka chat bertindak lancar jika dipanggil terus dari Product Details
   function openChat(id) {
     currentConvo = EXTENDED_CONVOS.find(c => c.id === id);
     if(!currentConvo) return;
 
     const farmer = FARMERS.find(f => f.id === currentConvo.farmerId);
-    const farmNameDisplay = farmer?.farm || 'Independent Farm';
+    const farmNameDisplay = farmer?.shopName || farmer?.farm || 'Independent Farm';
 
     document.getElementById('chatAvatar').src = farmer?.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100';
     document.getElementById('chatName').textContent = farmNameDisplay;
 
-    // Sistem semak data dari Product Details
-    const prodId = localStorage.getItem('chatFarmer');
+    const currentProdId = localStorage.getItem('currentProduct');
     const prodCtx = document.getElementById('productContext');
-    if (prodId) {
-      const prod = PRODUCTS.find(p => p.farmerId === parseInt(prodId, 10));
-      if (prod) {
+
+    if (currentProdId) {
+      const prod = PRODUCTS.find(p => p.id === parseInt(currentProdId, 10));
+      if (prod && prod.farmerId === currentConvo.farmerId) {
         prodCtx.style.display = 'block';
-        document.getElementById('ppbImg').src = prod.images[0];
+        document.getElementById('ppbImg').src = (prod.images && prod.images.length > 0) ? prod.images[0] : '';
         document.getElementById('ppbName').textContent = prod.name;
-        document.getElementById('ppbPrice').textContent = `RM ${prod.price.toFixed(2)} / ${prod.unit}`;
+
+        let displayPrice = prod.price ? prod.price.toFixed(2) : "0.00";
+        let displayUnit = prod.unit || 'unit';
+        if(prod.pricing && prod.pricing.length > 0) {
+          displayPrice = Number(prod.pricing[0].price).toFixed(2);
+          displayUnit = prod.pricing[0].label;
+        }
+        document.getElementById('ppbPrice').textContent = `RM ${displayPrice} / ${displayUnit}`;
+      } else {
+        prodCtx.style.display = 'none';
       }
-      localStorage.removeItem('chatFarmer');
+    } else {
+      prodCtx.style.display = 'none';
     }
 
     renderMessages();
@@ -436,16 +457,30 @@
   document.addEventListener('DOMContentLoaded', () => {
     renderConvos();
 
-    // Mengesan jika ada rujukan chat terus dari halaman butang klik "Chat Farmer"
-    const chatFarmer = localStorage.getItem('chatFarmer');
-    if (chatFarmer) {
-      // Cari jika id sepadan dengan senarai perbualan yang ada
-      const matchedConvo = EXTENDED_CONVOS.find(c => c.farmerId === parseInt(chatFarmer, 10));
-      if (matchedConvo) {
-        openChat(matchedConvo.id);
-      } else {
-        openChat(1); // Default fall-back open first chat
+    const directFarmerIdStr = localStorage.getItem('directChatFarmerId');
+
+    if (directFarmerIdStr) {
+      const targetFarmerId = parseInt(directFarmerIdStr, 10);
+      let matchedConvo = EXTENDED_CONVOS.find(c => c.farmerId === targetFarmerId);
+
+      if (!matchedConvo) {
+        const farmerData = FARMERS.find(f => f.id === targetFarmerId);
+        const newId = EXTENDED_CONVOS.length + 1;
+        matchedConvo = {
+          id: newId,
+          farmerId: targetFarmerId,
+          farmerName: farmerData ? (farmerData.shopName || farmerData.farm) : "Farmer Store",
+          lastMessage: "Tap to view query details",
+          time: "Now",
+          unread: 0,
+          messages: []
+        };
+        EXTENDED_CONVOS.push(matchedConvo);
+        renderConvos();
       }
+
+      localStorage.removeItem('directChatFarmerId');
+      openChat(matchedConvo.id);
     }
   });
 </script>

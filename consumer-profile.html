@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AeryHub - My Profile</title>
+  <title>AeryHub - Profile</title>
   <link rel="stylesheet" href="css/style1.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -11,73 +11,99 @@
 
     body {
       background: #e0ead8;
-      font-family: 'DM Sans', sans-serif;
     }
 
-    /* ── COVER pembeli (Premium Minimalist) ── */
+    /* ── STATUS BAR (IKUT FARMER-PROFILE: ABSOLUTE & LUTSINAR) ── */
+    .status-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 20;
+      background: transparent;
+    }
+    .status-bar span, .status-icons {
+      color: white !important;
+    }
+
+    /* ── COVER HIJAU (IKUT TINGGI & STRUKTUR FARMER-PROFILE) ── */
     .farm-cover {
-      height: 150px;
+      height: 180px;
       position: relative;
       flex-shrink: 0;
       background: linear-gradient(135deg, #16a34a 0%, #047857 100%);
       overflow: visible;
     }
+
+    /* BUTANG BACK (IKUT KETINGGIAN 54px FARMER-PROFILE) */
     .cover-btn {
       position: absolute;
       top: 54px;
       width: 36px; height: 36px;
       border-radius: 12px;
-      background: rgba(255,255,255,0.88);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(6px);
       border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       text-decoration: none; color: var(--text); font-size: 14px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.18);
     }
-    .cover-back  { left: 16px; }
+    .cover-back { left: 16px; }
 
-    /* ── IDENTITY ── */
+    /* ── KAWASAN KANDUNGAN PUTHIH ── */
     .farmer-identity {
+      position: relative;
       background: var(--surface);
-      padding: 0 18px 16px;
+      padding: 16px 18px 16px;
       border-bottom: 1px solid var(--border);
+      z-index: 10;
     }
 
+    /* ── DIUBAHSUAI: SUSUNAN ROW PFP & BUTTON SAMA SEBIJI MACAM FARMER PROFILE ── */
     .avatar-action-row {
       display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-top: -40px;
-      margin-bottom: 12px;
+      justify-content: space-between; /* PFP ke kiri, butang ke kanan */
+      align-items: flex-end; /* Bawah butang sejajar dengan bawah PFP */
+      margin-top: -56px; /* Tolak naik ke atas melangkaui cover hijau */
+      margin-bottom: 16px;
+      position: relative;
+      z-index: 30;
     }
+
+    /* Reka bentuk PFP kekal statik mengikut speks farmer-profile */
     .farmer-avatar {
-      width: 80px; height: 80px;
-      border-radius: 24px;
+      width: 84px;
+      height: 84px;
+      border-radius: 20px;
       object-fit: cover;
-      border: 3px solid white;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
-      background: #e5e7eb;
+      border: 4px solid #fff;
+      background: #fff;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.18);
       flex-shrink: 0;
     }
+
+    /* Controls container ditolak rapat ke kanan menggunakan margin-left: auto */
     .profile-controls {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 2px;
+      margin-left: auto;
+      margin-bottom: 4px;
     }
+
     .edit-btn {
-      padding: 7px 16px;
+      padding: 7px 18px;
       border-radius: 20px;
       background: #f3f4f6;
       color: #374151;
       font-size: 12px; font-weight: 700;
       border: 1px solid #e5e7eb; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
       transition: all 0.2s;
     }
     .edit-btn:hover {
       background: #e5e7eb;
     }
 
+    /* Nama row asal awak */
     .name-row {
       display: flex; align-items: center; gap: 7px;
       margin-bottom: 5px;
@@ -149,11 +175,11 @@
       flex: 1;
     }
     .info-title {
-      font-size: 11px; color: var(--text-muted); font-weight: 500;
+      font-size: 12px; color: var(--text-muted); font-weight: 600;
     }
     .info-value {
-      font-size: 13.5px; color: var(--text); font-weight: 600;
-      margin-top: 1px;
+      font-size: 13px; color: var(--text); font-weight: 400;
+      margin-top: 5px; margin-bottom: 5px;
     }
 
     /* ── APP SETTINGS / QUICK LINKS ── */
@@ -194,11 +220,11 @@
 <body>
 <div class="phone-frame">
 
-  <!-- Status Bar -->
-  <div class="status-bar" style="position:absolute;top:0;left:0;right:0;z-index:20;background:transparent">
-    <span style="color:white">9:41</span>
+  <!-- Status Bar (Ikut Farmer-Profile) -->
+  <div class="status-bar">
+    <span>9:41</span>
     <div class="notch"></div>
-    <div class="status-icons" style="color:white">
+    <div class="status-icons">
       <i class="fas fa-signal"></i>
       <i class="fas fa-wifi"></i>
       <i class="fas fa-battery-three-quarters"></i>
@@ -207,41 +233,42 @@
 
   <div class="screen">
 
-    <!-- COVERS (Warna Hijau Gradasi untuk Konsep Organik) -->
+    <!-- COVER HIJAU -->
     <div class="farm-cover">
-      <div class="cover-btn cover-back" onclick="window.location.href='home.html'">
+      <a href="home.html" class="cover-btn cover-back">
         <i class="fas fa-chevron-left"></i>
-      </div>
+      </a>
     </div>
 
-    <!-- BUYER IDENTITY -->
+    <!-- IDENTITY (KAWASAN PUTIH) -->
     <div class="farmer-identity">
+
+      <!-- ROW SEJAJAR: Dah diselaraskan kelas CSS & fungsinya -->
       <div class="avatar-action-row">
-        <!-- Gambar pembeli raw asal -->
-        <img id="buyerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop" class="farmer-avatar">
+        <img id="buyerAvatar" src="img/sarahLim.jpg" class="farmer-avatar">
         <div class="profile-controls">
           <button class="edit-btn" onclick="editProfile()">
-            <i class="fas fa-pen" style="font-size:10px; margin-right:4px;"></i> Edit Profile
+            <i class="fas fa-edit"></i> Edit Profile
           </button>
         </div>
       </div>
 
       <!-- Nama Pembeli -->
       <div class="name-row">
-        <div class="shop-name" id="buyerName">Ailya Maisarah</div>
+        <div class="shop-name" id="buyerName">Sarah Lim</div>
         <span class="buyer-badge"><i class="fa-solid fa-seedling"></i> Consumer</span>
       </div>
 
       <!-- Negeri & Negara -->
       <div class="farm-location-line">
         <i class="fas fa-location-dot"></i>
-        <span id="buyerCityState">Cheras, Selangor</span>
+        <span id="buyerCityState">Subang Jaya, Selangor</span>
       </div>
     </div>
 
-    <!-- BUYER STATS (Jumlah Tempahan, Review, dll.) -->
+    <!-- BUYER STATS -->
     <div class="farmer-stats-row">
-      <div class="fstat" onclick="window.location.href='order.html'">
+      <div class="fstat" onclick="window.location.href='order-details.html'">
         <div class="fstat-val" id="totalOrdersCount">3</div>
         <div class="fstat-label">Total Orders</div>
       </div>
@@ -260,15 +287,13 @@
 
       <div class="sec-label">Personal Details</div>
       <div class="info-card">
-        <!-- Item Emel -->
         <div class="info-item">
           <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
           <div class="info-content">
             <div class="info-title">Email Address</div>
-            <div class="info-value" id="buyerEmail">ailya.maisarah@email.com</div>
+            <div class="info-value" id="buyerEmail">sarah.lim@email.com</div>
           </div>
         </div>
-        <!-- Item Telefon -->
         <div class="info-item">
           <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
           <div class="info-content">
@@ -276,12 +301,11 @@
             <div class="info-value" id="buyerPhone">+60 13-456 7890</div>
           </div>
         </div>
-        <!-- Item Alamat -->
         <div class="info-item">
           <div class="info-icon"><i class="fa-solid fa-house-user"></i></div>
           <div class="info-content">
             <div class="info-title">Default Delivery Address</div>
-            <div class="info-value" id="buyerAddress">No. 24, Jalan Sunway 4/2, Bandar Sunway</div>
+            <div class="info-value" id="buyerAddress">No 12, Jalan Subang 3, Putra Heights, 47650 Subang Jaya, Selangor</div>
           </div>
         </div>
       </div>
@@ -320,7 +344,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION BAR (Sama seperti halaman utama) -->
+  <!-- BOTTOM NAVIGATION BAR -->
   <nav class="bottom-nav">
     <a href="home.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
@@ -344,7 +368,6 @@
 <div class="toast" id="customToast"></div>
 
 <script>
-  // Toast Notification Engine
   function showToast(msg) {
     const t = document.getElementById('customToast');
     if(t) {
@@ -354,7 +377,6 @@
     }
   }
 
-  // Fungsi Sunting Profil Ringkas (Guna Prompt Browser untuk mudahkan mock up)
   function editProfile() {
     const newName = prompt("Enter your full name:", document.getElementById('buyerName').textContent);
     if (newName && newName.trim() !== "") {
@@ -386,7 +408,6 @@
     }
   }
 
-  // Load Data daripada LocalStorage sewaktu skrin dimuatkan
   document.addEventListener('DOMContentLoaded', () => {
     if(localStorage.getItem('buyer_name')) {
       document.getElementById('buyerName').textContent = localStorage.getItem('buyer_name');
@@ -397,7 +418,6 @@
     if(localStorage.getItem('buyer_address')) {
       document.getElementById('buyerAddress').textContent = localStorage.getItem('buyer_address');
 
-      // Ambil bandar/negeri daripada string alamat secara ringkas untuk diletakkan di sub-header
       const addr = localStorage.getItem('buyer_address');
       const parts = addr.split(',');
       if(parts.length > 1) {
@@ -405,9 +425,8 @@
       }
     }
 
-    // Sambungkan logik tempahan aktif sekiranya ada dari mockup tempahan lepas
     if (localStorage.getItem('lastOrder')) {
-      document.getElementById('totalOrdersCount').textContent = "3"; // Mengambil kira tempahan sedia ada + baharu
+      document.getElementById('totalOrdersCount').textContent = "3";
     }
   });
 </script>

@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="css/style1.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
+    body { background: #e0ead8; }
+
     /* ── COVER ── */
     .farm-cover {
       height: 180px;
@@ -74,19 +76,27 @@
       margin-bottom: 4px;
     }
 
-    /* Butang Edit Profile Style */
-    .edit-profile-btn {
-      padding: 7px 16px;
+    .follow-btn {
+      padding: 7px 18px;
       border-radius: 20px;
-      background: #f3f4f6;
-      color: #374151;
+      background: var(--green-600);
+      color: white;
       font-size: 12px; font-weight: 700;
-      border: 1px solid #d1d5db; cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
+      border: none; cursor: pointer;
       transition: background 0.2s;
     }
-    .edit-profile-btn:hover {
-      background: #e5e7eb;
+    .chat-icon-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--green-50);
+      color: var(--green-600);
+      border: 1px solid var(--green-200);
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; font-size: 14px;
+      transition: background 0.2s;
+    }
+    .chat-icon-btn:hover {
+      background: var(--green-100);
     }
 
     /* ── GRID & PRODUCT CARD STYLE ── */
@@ -326,7 +336,7 @@
       margin-right: 7px; margin-bottom: 7px;
     }
 
-    /* ── REVIEWS ── */
+    /* ── REVIEWS (SAMA MACAM MOCKUP) ── */
     .review-item {
       padding: 16px 0;
       border-bottom: 1px solid #f3f4f6;
@@ -348,7 +358,7 @@
       overflow: hidden;
       aspect-ratio: 1 / 1;
       box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      background: #f3f4f6;
+      background: #eaeaea;
     }
     .gallery-item img {
       width: 100%;
@@ -389,14 +399,16 @@
       </button>
     </div>
 
-    <!-- IDENTITY (FARMER POV) -->
+    <!-- IDENTITY -->
     <div class="farmer-identity">
       <div class="avatar-action-row">
         <img id="farmerAvatarEl" src="" class="farmer-avatar">
-
-        <div class="profile-controls">
-          <button class="edit-profile-btn" onclick="alert('Navigating to Edit Profile page… 📝')">
-            <i class="fas fa-edit"></i> Edit Profile
+        <div class="profile-controls" id="profileControlsContainer">
+          <a href="consumer-chat.html" class="chat-icon-btn" id="topChatBtn" title="Chat with Farmer">
+            <i class="fas fa-comment-dots"></i>
+          </a>
+          <button class="follow-btn" id="followBtn" onclick="toggleFollow(this)">
+            <i class="fas fa-plus"></i> Follow
           </button>
         </div>
       </div>
@@ -504,6 +516,7 @@
           <div style="display:flex;align-items:center;gap:7px"><span style="font-size:11px;color:var(--text-muted);width:14px">1</span><div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:1px;background:#ef4444"></div></div><span style="font-size:10px;color:var(--text-muted)">1%</span></div>
         </div>
       </div>
+      <!-- LIST REVIEW DARI MOCKUP GAMBAR -->
       <div id="reviewsList"></div>
     </div>
 
@@ -531,6 +544,7 @@
 <script src="data.js"></script>
 <script src="script.js"></script>
 <script>
+  // Hardcoded Reviews berdasarkan fail imej "image_1f5001.png"
   const FARMER_REVIEWS = [
     {
       name: "Amir Hamzah",
@@ -583,7 +597,22 @@
     });
   }
 
+  function toggleFollow(btn) {
+    const following = btn.dataset.following === '1';
+    if (following) {
+      btn.innerHTML = '<i class="fas fa-plus"></i> Follow';
+      btn.style.background = 'var(--green-600)';
+      btn.dataset.following = '0';
+    } else {
+      btn.innerHTML = '<i class="fas fa-check"></i> Following';
+      btn.style.background = 'var(--gray-400)';
+      btn.dataset.following = '1';
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    if (typeof AppState !== 'undefined' && AppState.init) AppState.init();
+
     const fid = parseInt(localStorage.getItem('currentFarmer') || '1');
     const farmer = (typeof FARMERS !== 'undefined') ? (FARMERS.find(f => f.id === fid) || FARMERS[0]) : null;
 
@@ -622,7 +651,7 @@
       document.getElementById('avgRating').textContent = farmer.rating;
       document.getElementById('reviewCountEl').textContent = farmer.reviews + ' reviews';
 
-      // AMBIL PRODUK ASAL BALIK
+      // AMBIL DARI DATA.JS
       if (typeof PRODUCTS !== 'undefined') {
         const grid = document.getElementById('farmerProductGrid');
         grid.innerHTML = '';
@@ -647,7 +676,7 @@
 
     buildPickupSchedule();
 
-    // REVIEWS DISPLAY
+    // HARDCODED REVIEWS DISPLAY (Ikut bayangan default pfp dan susunan image_1f5001.png)
     const rl = document.getElementById('reviewsList');
     rl.innerHTML = '';
 
@@ -665,16 +694,21 @@
       div.className = 'review-item';
       div.innerHTML = `
       <div class="reviewer-row">
+        <!-- Default Gray PFP Icon -->
         <i class="fas fa-user-circle" style="font-size: 42px; color: #cbd5e1; line-height: 1;"></i>
+
         <div style="flex: 1;">
           <div class="reviewer-name">${r.name}</div>
+
           <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
             <div style="font-size: 14px; display: flex; align-items: center;">${starsHtml}</div>
             <span style="font-size: 13px; color: #9ca3af;">(${r.date})</span>
           </div>
+
           <div style="font-size: 13px; color: #6b7280; margin-bottom: 6px;">
             Variation: <span style="color: #4b5563;">${r.variation}</span>
           </div>
+
           <div class="review-text">${r.text}</div>
         </div>
       </div>`;
