@@ -4,10 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeryHub - Farm Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <link rel="stylesheet" href="css/style1.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    /* ── COVER ── */
+    /* ── PERBAIKAN: NAVBAR DAH IKUT KOD ASAL DASHBOARD & STYLE1.CSS ── */
+    .status-icons { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+    .nav-icon { font-size: 18px; margin-bottom: 4px; }
+
+    /* ── PROFILE COVER & AVATAR ── */
     .farm-cover {
       height: 180px;
       position: relative;
@@ -45,7 +52,7 @@
       z-index: 10;
     }
 
-    /* ── Row sejajar PFP & Butang Kanan ── */
+    /* Row sejajar PFP & Butang Kanan */
     .avatar-action-row {
       display: flex;
       justify-content: space-between;
@@ -200,7 +207,7 @@
       opacity: 1;
     }
 
-    /* city, state — single muted line */
+    /* city, state */
     .farm-location-line {
       font-size: 13px; color: var(--text-muted);
       display: flex; align-items: center; gap: 5px;
@@ -360,6 +367,28 @@
     .gallery-item:hover img {
       transform: scale(1.06);
     }
+
+    /* ── CSS KHUSUS UNTUK POPUP BORANG TAMBAH SIJIL SAHAJA ── */
+    .add-cert-dashed-btn {
+      width: 100%; padding: 10px; border: 2px dashed #cbd5e1; border-radius: 10px;
+      background: transparent; color: #64748b; font-size: 12px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 8px; transition: all 0.2s;
+    }
+    .add-cert-dashed-btn:hover { border-color: var(--primary); color: var(--primary); background: #f0fdf4; }
+    .cert-modal {
+      display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.5);
+      z-index: 9999; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-content {
+      background: white; width: 100%; max-width: 300px; border-radius: 16px; padding: 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .modal-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 12px; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
+    .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; box-sizing: border-box; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
   </style>
 </head>
 <body>
@@ -369,9 +398,9 @@
     <span style="color:white">9:41</span>
     <div class="notch"></div>
     <div class="status-icons" style="color:white">
-      <i class="fas fa-signal"></i>
-      <i class="fas fa-wifi"></i>
-      <i class="fas fa-battery-three-quarters"></i>
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
     </div>
   </div>
 
@@ -479,8 +508,12 @@
         <div class="pickup-schedule" id="pickupSchedule"></div>
       </div>
 
+      <!-- BAHAGIAN CERTIFICATIONS ASAL (DITAMBAH BUTANG ADD CERT) -->
       <div class="sec-label">Certifications</div>
       <div id="certsEl"></div>
+      <button class="add-cert-dashed-btn" onclick="openCertModal()">
+        <i class="fa-solid fa-circle-plus"></i> Add Certification
+      </button>
     </div>
 
     <!-- PRODUCTS TAB -->
@@ -522,8 +555,60 @@
       </div>
     </div>
 
+  </div> <!-- TAMAT .screen -->
+
+  <!-- NAVBAR SEBIJI MACAM DASHBOARD -->
+  <nav class="bottom-nav">
+    <a href="farmer-dashboard.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
+    </a>
+    <a href="manage-products.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Products
+    </a>
+    <a href="manage-orders.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
+    </a>
+    <a href="farmer-chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
+    </a>
+    <a href="farmer-profile.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
+    </a>
+  </nav>
+
+  <!-- MODAL BORANG VERIFIKASI (POPUP SCREEN) -->
+  <div class="cert-modal" id="certModal">
+    <div class="modal-content">
+      <div class="modal-title">Apply Certification</div>
+      <form id="certForm" onsubmit="handleCertSubmit(event)">
+        <div class="form-group">
+          <label>Certification Name</label>
+          <select id="modalCertName" required>
+            <option value="myGAP (Malaysian Good Agricultural Practices)">myGAP</option>
+            <option value="Organic Malaysia Certified">Organic Malaysia</option>
+            <option value="HALAL Certificate Jakim">HALAL JAKIM</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Certificate / License Number</label>
+          <input type="text" placeholder="e.g. GAP-2026-9912" required>
+        </div>
+        <div class="form-group">
+          <label>Upload Document Evidence</label>
+          <input type="file" accept="image/*,.pdf" required>
+        </div>
+        <div style="font-size:11px; color:#ef4444; font-weight:500; line-height:1.3;">
+          *Submissions are reviewed by AeryHub Admins before the verified badge is issued.
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-sm btn-ghost" onclick="closeCertModal()">Cancel</button>
+          <button type="submit" class="btn btn-sm" style="background:var(--primary);color:white;">Submit For Verification</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
+
+</div> <!-- TAMAT .phone-frame -->
 
 <script src="data.js"></script>
 <script src="script.js"></script>
@@ -580,6 +665,20 @@
     });
   }
 
+  /* FUNGSI MODAL DIALOG POPUP */
+  function openCertModal() { document.getElementById('certModal').style.display = 'flex'; }
+  function closeCertModal() { document.getElementById('certModal').style.display = 'none'; }
+  document.getElementById('certModal').addEventListener('click', function(e) {
+    if(e.target === this) closeCertModal();
+  });
+
+  function handleCertSubmit(e) {
+    e.preventDefault();
+    closeCertModal();
+    alert('Application Submitted Successfully! 🚀\nAdmin will verify your document soon. Your certified badge will appear once approved.');
+    document.getElementById('certForm').reset();
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const fid = parseInt(localStorage.getItem('currentFarmer') || '1');
     const farmer = (typeof FARMERS !== 'undefined') ? (FARMERS.find(f => f.id === fid) || FARMERS[0]) : null;
@@ -600,7 +699,7 @@
       document.getElementById('fullAddressEl').textContent = farmer.address + ', ' + farmer.city + ', ' + farmer.state;
       document.getElementById('locationDistEl').textContent = farmer.distance || '0 km';
 
-      // Certifications
+      // Certifications asal
       const certsEl = document.getElementById('certsEl');
       certsEl.innerHTML = '';
       if (farmer.certifications && farmer.certifications.length > 0) {
@@ -619,7 +718,7 @@
       document.getElementById('avgRating').textContent = farmer.rating;
       document.getElementById('reviewCountEl').textContent = farmer.reviews + ' reviews';
 
-      // AMBIL PRODUK ASAL BALIK
+      // Ambil produk asal balik
       if (typeof PRODUCTS !== 'undefined') {
         const grid = document.getElementById('farmerProductGrid');
         grid.innerHTML = '';

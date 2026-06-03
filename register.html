@@ -5,27 +5,83 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeryHub - Create Account</title>
   <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <style>
-    body { background: #e0ead8; }
-    .reg-header { padding: 20px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
-    .reg-body { padding: 24px 20px; }
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    body {
+      background: #e0ead8;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    /* STATUS BAR ALIGNMENT */
+    .status-icons { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+
+    .reg-header {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #eef0ed;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .back-btn {
+      color: #1f2937;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f4f5f7;
+      border: none;
+      transition: background 0.2s;
+    }
+    .back-btn:active { background: #e5e7eb; }
+
+    .reg-body { padding: 24px 20px; background: #fafafa; min-height: calc(100% - 70px); }
+
+    /* ROLE SELECTION CARDS */
     .role-select-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-    .role-card { border: 2px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
-    .role-card.selected { border-color: var(--primary); background: var(--green-50); }
-    .role-card .role-icon { font-size: 40px; margin-bottom: 10px; }
-    .role-card .role-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-    .role-card .role-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
-    .role-card.selected .role-title { color: var(--primary); }
-    .step-indicator { display: flex; gap: 8px; margin-bottom: 24px; }
-    .step-dot { flex: 1; height: 4px; border-radius: 2px; background: var(--gray-200); }
-    .step-dot.done { background: var(--primary); }
-    .section-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 16px; }
+    .role-card {
+      border: 1.5px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 20px 14px;
+      text-align: center;
+      cursor: pointer;
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      transition: all 0.2s ease;
+    }
+    .role-card.selected { border-color: #16a34a; background: #f0fdf4; }
+    .role-card .role-icon { font-size: 28px; margin-bottom: 12px; color: #9ca3af; transition: color 0.2s; }
+    .role-card.selected .role-icon { color: #16a34a; }
+    .role-card .role-title { font-size: 14.5px; font-weight: 700; color: #1f2937; margin-bottom: 4px; font-family: inherit; }
+    .role-card .role-desc { font-size: 11px; color: #6b7280; line-height: 1.4; font-weight: 500; }
+    .role-card.selected .role-title { color: #16a34a; }
+
+    .section-label { font-size: 11px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
+
+    /* INPUT FIELDS */
+    .input-group { margin-bottom: 16px; }
+    .input-label { font-size: 12.5px; font-weight: 700; color: #374151; margin-bottom: 6px; display: block; }
+    .input { width: 100%; border: 1px solid #e5e7eb; border-radius: 12px; padding: 11px 14px; font-size: 13.5px; background: #ffffff; color: #1f2937; outline: none; font-weight: 500; font-family: inherit; box-sizing: border-box; }
+    .input:focus { border-color: #16a34a; box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1); }
+
     .terms-check { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 24px; }
-    .terms-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
-    .terms-text a { color: var(--primary); font-weight: 600; }
-    input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); margin-top: 2px; flex-shrink: 0; }
-    .login-link { text-align: center; font-size: 14px; color: var(--text-muted); margin-top: 16px; }
-    .login-link a { color: var(--primary); font-weight: 700; text-decoration: none; }
+    .terms-text { font-size: 12.5px; color: #4b5563; line-height: 1.5; font-weight: 500; }
+    .terms-text a { color: #16a34a; font-weight: 600; text-decoration: none; }
+    .terms-text a:hover { text-decoration: underline; }
+    input[type="checkbox"] { width: 18px; height: 18px; accent-color: #16a34a; margin-top: 2px; flex-shrink: 0; }
+
+    /* BUTTONS */
+    .btn-full { width: 100%; padding: 12px; font-size: 14px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; transition: all 0.2s; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-primary { background: #16a34a; color: #ffffff; box-shadow: 0 2px 4px rgba(22,163,74,0.15); }
+    .btn-primary:active { background: #15803d; }
   </style>
 </head>
 <body>
@@ -33,34 +89,34 @@
   <div class="status-bar">
     <span>9:41</span>
     <div class="notch"></div>
-    <div class="status-icons">📶 🔋</div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
   </div>
+
   <div class="screen">
     <div class="reg-header">
-      <a href="index.html" class="back-btn">←</a>
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
       <div>
-        <div class="page-title" style="margin:0">Create Account</div>
-        <div style="font-size:12px;color:var(--text-muted)">Join 10,000+ users on AeryHub</div>
+        <div class="page-title" style="margin:0; font-size:18px; font-weight:800; color:#1f2937;">Create Account</div>
+        <div style="font-size:12px; color:#6b7280; font-weight:500; margin-top:2px;">Join 10,000+ users on AeryHub</div>
       </div>
     </div>
 
     <div class="reg-body">
-      <div class="step-indicator">
-        <div class="step-dot done" id="s1"></div>
-        <div class="step-dot" id="s2"></div>
-        <div class="step-dot" id="s3"></div>
-      </div>
-
+      <!-- STEP 1: BASIC INFORMATION -->
       <div id="step1">
         <div class="section-label">Select your role</div>
         <div class="role-select-grid">
           <div class="role-card selected" id="role-consumer" onclick="selectRole('consumer')">
-            <div class="role-icon">🛒</div>
+            <div class="role-icon"><i class="fa-solid fa-cart-shopping"></i></div>
             <div class="role-title">Consumer</div>
             <div class="role-desc">Buy fresh produce directly from local farms</div>
           </div>
           <div class="role-card" id="role-farmer" onclick="selectRole('farmer')">
-            <div class="role-icon">🧑‍🌾</div>
+            <div class="role-icon"><i class="fa-solid fa-wheat-awn"></i></div>
             <div class="role-title">Farmer</div>
             <div class="role-desc">Sell your produce directly to consumers</div>
           </div>
@@ -88,50 +144,35 @@
           <div class="terms-text">I agree to AeryHub's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></div>
         </div>
 
-        <button class="btn btn-primary btn-full" onclick="nextStep()">Continue →</button>
-        <div class="login-link">Already have an account? <a href="login.html">Sign In</a></div>
+        <button class="btn-full btn-primary" id="step1-btn" onclick="nextStep()">Create Account <i class="fa-solid fa-seedling"></i></button>
       </div>
 
-      <!-- Step 2: Farmer extra -->
+      <!-- STEP 2: FARM DETAILS (FARMER ONLY - REQUIRED) -->
       <div id="step2" style="display:none">
-        <div class="section-label">Farm Details (Optional)</div>
+        <div class="section-label">Farm Details (Required)</div>
         <div class="input-group">
           <label class="input-label">Farm Name</label>
-          <input type="text" class="input" placeholder="e.g. Ladang Hijau Selangor">
+          <input type="text" class="input" placeholder="e.g. Ladang Hijau Selangor" id="farmname">
         </div>
         <div class="input-group">
-          <label class="input-label">Farm Location</label>
-          <input type="text" class="input" placeholder="e.g. Kuala Kubu Bharu, Selangor">
+          <label class="input-label">Address</label>
+          <input type="text" class="input" placeholder="e.g. No.12, Jalan Kampung Baru" id="farmaddress">
         </div>
         <div class="input-group">
-          <label class="input-label">Years of Experience</label>
-          <select class="input">
-            <option>Less than 1 year</option>
-            <option>1–3 years</option>
-            <option>3–5 years</option>
-            <option>5–10 years</option>
-            <option>10+ years</option>
-          </select>
+          <label class="input-label">Postcode</label>
+          <input type="text" class="input" placeholder="e.g. 44000" id="farmpostcode">
         </div>
         <div class="input-group">
-          <label class="input-label">Main Produce</label>
-          <select class="input">
-            <option>Vegetables</option>
-            <option>Fruits</option>
-            <option>Herbs & Spices</option>
-            <option>Rice & Grains</option>
-            <option>Dairy & Eggs</option>
-            <option>Mixed</option>
-          </select>
+          <label class="input-label">City</label>
+          <input type="text" class="input" placeholder="e.g. Kuala Kubu Bharu" id="farmcity">
+        </div>
+        <div class="input-group">
+          <label class="input-label">State</label>
+          <input type="text" class="input" placeholder="e.g. Selangor" id="farmstate">
         </div>
 
-        <div style="background:var(--green-50);border:1.5px solid var(--green-200);border-radius:12px;padding:14px;margin-bottom:20px">
-          <div style="font-size:13px;font-weight:700;color:var(--green-700);margin-bottom:4px">💰 How AeryHub earns</div>
-          <div style="font-size:12px;color:var(--green-800);line-height:1.5">AeryHub charges a <strong>5% commission</strong> on each sale. Start with the Free Plan and upgrade to Pro (RM29/month) for advanced features.</div>
-        </div>
-
-        <button class="btn btn-primary btn-full" onclick="finalRegister()">Create Account 🌱</button>
-        <button class="btn btn-ghost btn-full" style="margin-top:10px" onclick="finalRegister()">Skip for Now</button>
+        <!-- Butang Skip telah dibuang sepenuhnya -->
+        <button class="btn-full btn-primary" style="margin-top: 24px;" onclick="finalRegister()">Create Account <i class="fa-solid fa-seedling"></i></button>
       </div>
     </div>
   </div>
@@ -142,45 +183,121 @@
 <script>
   let selectedRole = 'consumer';
 
+  function safeToast(msg) {
+    if (typeof showToast === 'function') {
+      showToast(msg);
+    } else {
+      alert(msg);
+    }
+  }
+
   function selectRole(role) {
     selectedRole = role;
     document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
     document.getElementById('role-' + role).classList.add('selected');
+
+    const step1Btn = document.getElementById('step1-btn');
+    if (role === 'farmer') {
+      step1Btn.innerHTML = 'Continue <i class="fa-solid fa-arrow-right" style="font-size:12px;"></i>';
+    } else {
+      step1Btn.innerHTML = 'Create Account <i class="fa-solid fa-seedling"></i>';
+    }
   }
 
   function nextStep() {
-    const name = document.getElementById('fullname').value;
-    const email = document.getElementById('reg-email').value;
-    const phone = document.getElementById('phone').value;
+    const name = document.getElementById('fullname').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
     const pass = document.getElementById('reg-pass').value;
+    const termsChecked = document.getElementById('terms').checked;
 
     if (!name || !email || !phone || !pass) {
-      showToast('Please fill in all fields');
+      safeToast('Please fill in all fields');
       return;
     }
     if (pass.length < 6) {
-      showToast('Password must be at least 6 characters');
+      safeToast('Password must be at least 6 characters');
+      return;
+    }
+    if (!termsChecked) {
+      safeToast('You must agree to the Terms of Service');
       return;
     }
 
     if (selectedRole === 'farmer') {
       document.getElementById('step1').style.display = 'none';
       document.getElementById('step2').style.display = 'block';
-      document.getElementById('s2').classList.add('done');
     } else {
       finalRegister();
     }
   }
 
   function finalRegister() {
-    const btn = document.querySelector('.btn-primary');
-    btn.textContent = 'Creating account...';
+    // Validasi paksa jika peranan ialah farmer (Mesti isi halaman kedua, tak leh kosong/skip)
+    if (selectedRole === 'farmer') {
+      const farmName = document.getElementById('farmname').value.trim();
+      const farmAddress = document.getElementById('farmaddress').value.trim();
+      const farmPostcode = document.getElementById('farmpostcode').value.trim();
+      const farmCity = document.getElementById('farmcity').value.trim();
+      const farmState = document.getElementById('farmstate').value.trim();
+
+      if (!farmName || !farmAddress || !farmPostcode || !farmCity || !farmState) {
+        safeToast('Please fill in all farm information fields');
+        return;
+      }
+    }
+
+    let currentFarmers = JSON.parse(localStorage.getItem('registeredFarmers')) || [];
+    const nextId = 11 + currentFarmers.length;
+
+    const newAccount = {
+      id: nextId,
+      name: document.getElementById('fullname').value.trim(),
+      email: document.getElementById('reg-email').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      role: selectedRole,
+      password: document.getElementById('reg-pass').value,
+
+      // Pembentukan data mengikut input yang wajib diisi
+      farm: (selectedRole === 'farmer') ? document.getElementById('farmname').value.trim() : "0",
+      address: (selectedRole === 'farmer') ? document.getElementById('farmaddress').value.trim() : "0",
+      postcode: (selectedRole === 'farmer') ? document.getElementById('farmpostcode').value.trim() : "0",
+      city: (selectedRole === 'farmer') ? document.getElementById('farmcity').value.trim() : "0",
+      state: (selectedRole === 'farmer') ? document.getElementById('farmstate').value.trim() : "0",
+
+      distance: "0",
+      rating: 0,
+      reviews: 0,
+      image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face",
+      farmImage: "https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=400&h=200&fit=crop",
+      products: 0,
+      sold: 0,
+      certified: false,
+      bio: (selectedRole === 'farmer') ? "Welcome to my farm page!" : "0",
+      certifications: []
+    };
+
+    if (selectedRole === 'farmer') {
+      currentFarmers.push(newAccount);
+      localStorage.setItem('registeredFarmers', JSON.stringify(currentFarmers));
+    }
+
+    localStorage.setItem('currentUser', JSON.stringify(newAccount));
+
+    const activeBtn = document.querySelector('#step2').style.display === 'block'
+      ? document.querySelector('#step2 .btn-primary')
+      : document.querySelector('#step1 .btn-primary');
+
+    if (activeBtn) {
+      activeBtn.innerHTML = 'Creating account... <i class="fa-solid fa-spinner fa-spin"></i>';
+    }
+
     setTimeout(() => {
-      AppState.login(selectedRole);
-      if (selectedRole === 'farmer') window.location.href = 'farmer-dashboard.html';
-      else window.location.href = 'home.html';
+      window.location.href = 'login.html';
     }, 1000);
   }
+
+  selectRole('consumer');
 </script>
 </body>
 </html>
