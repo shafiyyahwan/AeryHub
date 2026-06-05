@@ -194,8 +194,18 @@
     .chat-input:focus { border-color: #16a34a; background: #ffffff; }
     .send-btn { width: 42px; height: 42px; border-radius: 12px; background: #16a34a; border: none; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
-    .status-icons { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
-    .nav-icon { font-size: 18px; margin-bottom: 4px; }
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
     .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
     .toast.show { opacity: 1; }
   </style>
@@ -281,7 +291,7 @@
     <a href="marketplace.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
-    <a href="order-details.html" class="nav-item">
+    <a href="my-orders.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
     </a>
     <a href="consumer-chat.html" class="nav-item active">

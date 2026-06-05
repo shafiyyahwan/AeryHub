@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - My Orders</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    body {
+      background: #e0ead8;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .screen {
+      flex: 1;
+      overflow-y: auto;
+      background: #fafafa;
+      position: relative;
+      scrollbar-width: none;
+      padding-bottom: 80px;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+
+    .market-header {
+      padding: 16px 20px 12px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .market-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #f4f5f7;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .icon-btn:active { background: #e5e7eb; }
+
+    /* ── TABS SEGMENT ARCHITECTURE ── */
+    .tabs-container { padding: 12px 20px 4px; }
+    .order-tabs {
+      display: flex;
+      background: #f1f3f0;
+      border-radius: 12px;
+      padding: 4px;
+    }
+    .order-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+    .order-tab.active {
+      background: white;
+      color: var(--primary);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    /* ── ORDERS STRUCTURAL CARDS ── */
+    .order-card {
+      background: var(--surface);
+      border-bottom: 1px solid #f3f4f6;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .order-card:hover { background: var(--gray-50); }
+
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .order-id {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      font-family: monospace;
+    }
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .status-confirmed { background: #dbeafe; color: #1e40af; }
+    .status-out_for_delivery { background: #d1fae5; color: #065f46; }
+    .status-delivered { background: #e8f5e9; color: var(--primary); }
+
+    .order-items-preview {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .order-avatar-wrap {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .order-avatar {
+      width: 48px !important;
+      height: 48px !important;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid #eee;
+    }
+    .more-items-badge {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: #f1f3f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border: 1px solid #eee;
+    }
+
+    .order-info { flex: 1; min-width: 0; }
+    .shop-name { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .items-desc { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
+
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #f9faf9;
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+    .order-date { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .order-total { font-size: 14px; font-weight: 800; color: var(--primary); }
+
+    /* ── TRACKER GRAPHICS ── */
+    .tracker-row {
+      display: flex;
+      align-items: center;
+      margin: 4px 0 16px;
+      padding: 0 4px;
+    }
+    .tracker-node { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .tracker-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--gray-200); border: 2px solid var(--gray-300); }
+    .tracker-dot.done { background: var(--primary); border-color: var(--primary); }
+    .tracker-dot.active { background: white; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.25); }
+    .tracker-label { font-size: 9px; color: var(--text-muted); font-weight: 600; }
+    .tracker-label.active { color: var(--primary); font-weight: 700; }
+    .tracker-line { flex: 1; height: 2px; background: var(--gray-200); margin-top: -14px; }
+    .tracker-line.done { background: var(--primary); }
+
+    /* ── DETAIL OVERLAY MODAL VIEW ── */
+    .detail-screen {
+      display: none;
+      flex-direction: column;
+      height: calc(100% - 44px);
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: #f4f6f3;
+      z-index: 40;
+    }
+    .detail-header {
+      padding: 14px 16px;
+      background: #ffffff;
+      border-bottom: 1px solid #eef0ed;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+    .detail-header-info { flex: 1; min-width: 0; }
+    .detail-header-title { font-size: 14.5px; font-weight: 700; color: #1f2937; }
+    .detail-header-id { font-size: 11.5px; color: var(--text-muted); font-weight: 600; margin-top: 2px; font-family: monospace; }
+
+    .detail-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scrollbar-width: none;
+    }
+    .detail-content::-webkit-scrollbar { display: none; }
+
+    .detail-section-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid #eef0ed;
+    }
+    .detail-section-title { font-size: 12.5px; font-weight: 800; color: #1f2937; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+
+    /* ── POPUP REVIEW OVERLAY ── */
+    .review-modal-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .review-modal {
+      background: #ffffff;
+      width: 100%;
+      max-width: 320px;
+      border-radius: 24px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+    .modal-title { font-size: 16px; font-weight: 800; color: #1f2937; margin-bottom: 6px; }
+    .modal-subtitle { font-size: 12px; color: #6b7280; margin-bottom: 16px; }
+    .star-rating-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 16px; }
+    .star-rating-container i { font-size: 28px; color: #d1d5db; cursor: pointer; transition: transform 0.1s, color 0.1s; }
+    .star-rating-container i.selected { color: #eab308; transform: scale(1.1); }
+    .review-textarea { width: 100%; height: 75px; background: #f4f6f3; border: 1px solid #e5e7eb; border-radius: 12px; padding: 10px 12px; font-size: 12.5px; font-family: inherit; outline: none; resize: none; margin-bottom: 16px; box-sizing: border-box; color: #1f2937; }
+    .review-textarea:focus { border-color: var(--primary); background: #ffffff; }
+    .modal-actions { display: flex; gap: 10px; }
+    .btn-modal { flex: 1; padding: 10px; font-size: 12.5px; font-weight: 700; border-radius: 12px; cursor: pointer; border: none; font-family: inherit; }
+    .btn-modal.cancel { background: #f3f4f6; color: #4b5563; }
+    .btn-modal.submit { background: var(--primary); color: #ffffff; }
+
+    .action-btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 9px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+    .action-btn-outline:hover { background: #fafafa; }
+
+    .empty-state { text-align: center; padding: 60px 24px; color: var(--text-muted); font-size: 13px; font-weight: 500; }
+    .empty-state i { font-size: 38px; opacity: 0.6; margin-bottom: 12px; display: block; color: var(--text-muted); }
+
+    .status-icons { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+    .nav-icon { font-size: 18px; margin-bottom: 4px; }
+    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="review-modal-overlay" id="reviewModalOverlay">
+    <div class="review-modal">
+      <div class="modal-title" id="modalShopName">Leave a Review</div>
+      <div class="modal-subtitle">How was your fresh farm product?</div>
+      <div class="star-rating-container" id="starRatingWrap">
+        <i class="fa-solid fa-star" data-value="1"></i>
+        <i class="fa-solid fa-star" data-value="2"></i>
+        <i class="fa-solid fa-star" data-value="3"></i>
+        <i class="fa-solid fa-star" data-value="4"></i>
+        <i class="fa-solid fa-star" data-value="5"></i>
+      </div>
+      <textarea class="review-textarea" id="reviewComment" placeholder="Write your experience here (optional)..."></textarea>
+      <div class="modal-actions">
+        <button class="btn-modal cancel" onclick="closeReviewModal()">Cancel</button>
+        <button class="btn-modal submit" onclick="submitReviewData()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
+  </div>
+
+  <div class="screen" id="ordersListScreen">
+    <div class="market-header">
+      <div class="market-header-row">
+        <div style="font-size:20px; font-weight:800; color:var(--text)">
+          My Orders
+        </div>
+        <a href="notifications.html" class="icon-btn" style="width:40px; height:40px; border-radius:12px; text-decoration: none;">
+          <i class="fa-regular fa-bell"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="tabs-container">
+      <div class="order-tabs">
+        <div class="order-tab active" id="tabActiveBtn" onclick="toggleActiveTab('active', this)">Active (0)</div>
+        <div class="order-tab" id="tabCompletedBtn" onclick="toggleActiveTab('completed', this)">Completed (2)</div>
+      </div>
+    </div>
+
+    <div id="activeOrdersWrap" style="margin-top:8px"></div>
+    <div id="completedOrdersWrap" style="margin-top:8px; display:none"></div>
+  </div>
+
+  <div class="detail-screen" id="detailScreen">
+    <div class="detail-header">
+      <button onclick="closeDetails()" class="icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="detail-header-info">
+        <div class="detail-header-title" id="detailShopTitle">Farm Details</div>
+        <div class="detail-header-id" id="detailOrderIdSub">AH-000000</div>
+      </div>
+      <button onclick="showToast('Invoice generation feature active!')" class="icon-btn" style="background:#e8f5e9;color:#16a34a"><i class="fa-solid fa-file-invoice-dollar"></i></button>
+    </div>
+
+    <div class="detail-content">
+      <div class="detail-section-card">
+        <div class="detail-section-title">Order Status Summary</div>
+        <div style="font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 4px;" id="detailStatusText">Delivered</div>
+        <div style="font-size: 12px; color: var(--text-muted); font-weight: 500;" id="detailStatusDesc">Your batch has been successfully delivered.</div>
+      </div>
+
+      <div class="detail-section-card">
+        <div class="detail-section-title">Fulfillment Method</div>
+        <div style="font-size:13px; font-weight:600; color:var(--text); display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-truck" id="detailFulfillIcon" style="color:var(--primary)"></i>
+          <span id="detailFulfillLabel">Standard Direct Delivery</span>
+        </div>
+      </div>
+
+      <div class="detail-section-card">
+        <div class="detail-section-title">Payment Breakdown</div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:8px; font-weight: 500;">
+          <span>Subtotal</span>
+          <span id="detailSubtotalPrice">RM 0.00</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-muted); margin-bottom:8px; font-weight: 500;">
+          <span>Fulfillment Fee</span>
+          <span id="detailFulfillPrice">RM 0.00</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; font-weight:800; color:var(--text); border-top:1px dashed #eef0ed; padding-top:8px;">
+          <span>Total Paid</span>
+          <span id="detailTotalPrice" style="color:var(--primary)">RM 0.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="home.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
+    </a>
+    <a href="marketplace.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
+    </a>
+    <a href="my-orders.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
+    </a>
+    <a href="consumer-chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
+    </a>
+    <a href="consumer-profile.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
+    </a>
+  </nav>
+</div>
+
+<div class="toast" id="customToast"></div>
+
+<script src="data.js"></script>
+<script>
+  let selectedStars = 5;
+  let activeReviewOrderId = '';
+  let activeDetailTarget = null;
+
+  // COMPLETED HISTORY REPLICATING PRECISE LOCAL STRUCTURE PATTERNS
+  let COMPLETED_ORDERS_DATA = [
+    {
+      id: "AH-20260530-008",
+      shopName: "Sunshine Orchard",
+      imgUrl: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=100&h=100&fit=crop",
+      desc: "1 item &middot; Harumanis Mango",
+      date: "30 May 2026",
+      total: "RM 15.00",
+      subtotal: "RM 10.00",
+      fee: "RM 5.00",
+      method: "delivery",
+      methodLabel: "Standard Delivery",
+      statusText: "Delivered",
+      statusDesc: "Order completed and parcel signed by customer."
+    },
+    {
+      id: "AH-20260528-022",
+      shopName: "Padi Murni Kedah",
+      imgUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=100&fit=crop",
+      hasMore: true,
+      desc: "3 items",
+      date: "28 May 2026",
+      total: "RM 54.50",
+      subtotal: "RM 49.50",
+      fee: "RM 5.00",
+      method: "delivery",
+      methodLabel: "Standard Delivery",
+      statusText: "Delivered",
+      statusDesc: "Parcel securely handed over to recipient."
+    }
+  ];
+
+  function toggleActiveTab(tab, element) {
+    document.querySelectorAll('.order-tab').forEach(t => t.classList.remove('active'));
+    element.classList.add('active');
+    document.getElementById('activeOrdersWrap').style.display = tab === 'active' ? 'block' : 'none';
+    document.getElementById('completedOrdersWrap').style.display = tab === 'completed' ? 'block' : 'none';
+  }
+
+  function renderCompletedOrders() {
+    const container = document.getElementById('completedOrdersWrap');
+    if (!container) return;
+    container.innerHTML = '';
+
+    COMPLETED_ORDERS_DATA.forEach(order => {
+        const card = document.createElement('div');
+        card.className = 'order-card';
+        card.onclick = () => openDetails(order);
+
+        // Check review storage presence dynamically
+        const hasReview = localStorage.getItem(`review_${order.id}`);
+        let actionButtonHtml = '';
+        if (hasReview) {
+          actionButtonHtml = `<button class="action-btn-outline" onclick="event.stopPropagation(); viewSavedReview('${order.id}')"><i class="fa-solid fa-star" style="color:#eab308"></i> View Review</button>`;
+        } else {
+          actionButtonHtml = `<button class="action-btn-outline" onclick="event.stopPropagation(); triggerReviewPrompt('${order.id}', '${order.shopName}')"><i class="fa-regular fa-star"></i> Leave Review</button>`;
+        }
+
+        card.innerHTML = `
+        <div class="order-card-header">
+          <div class="order-id">${order.id}</div>
+          <span class="status-badge status-delivered"><i class="fa-solid fa-circle-check"></i> Delivered</span>
+        </div>
+        <div class="order-items-preview">
+          <div class="order-avatar-wrap">
+            <img src="${order.imgUrl}" class="order-avatar" alt="">
+            ${order.hasMore ? `<div class="more-items-badge">+1</div>` : ''}
+          </div>
+          <div class="order-info">
+            <div class="shop-name">${order.shopName}</div>
+            <div class="items-desc">${order.desc}</div>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> ${order.date}</div>
+          <div class="order-total">${order.total}</div>
+        </div>
+        <div>${actionButtonHtml}</div>
+      `;
+        container.appendChild(card);
+      }
+    );
+  }
+
+  function openDetails(order) {
+    activeDetailTarget = order;
+    document.getElementById('detailShopTitle').textContent = order.shopName;
+    document.getElementById('detailOrderIdSub').textContent = order.id;
+    document.getElementById('detailStatusText').textContent = order.statusText;
+    document.getElementById('detailStatusDesc').textContent = order.statusDesc;
+    document.getElementById('detailFulfillLabel').textContent = order.methodLabel || 'Direct Handling';
+    document.getElementById('detailSubtotalPrice').textContent = order.subtotal || order.total;
+    document.getElementById('detailFulfillPrice').textContent = order.fee || 'RM 0.00';
+    document.getElementById('detailTotalPrice').textContent = order.total;
+
+    const iconNode = document.getElementById('detailFulfillIcon');
+    if (order.method === 'pickup') {
+      iconNode.className = "fa-solid fa-store";
+    } else {
+      iconNode.className = "fa-solid fa-truck";
+    }
+
+    document.getElementById('detailScreen').style.display = 'flex';
+  }
+
+  function closeDetails() {
+    document.getElementById('detailScreen').style.display = 'none';
+    activeDetailTarget = null;
+  }
+
+  // ── STAR ENGINE SUB SYSTEMS ──
+  function initStarsEngine() {
+    const stars = document.querySelectorAll('#starRatingWrap i');
+    stars.forEach(star => {
+      star.addEventListener('click', function() {
+        selectedStars = parseInt(this.getAttribute('data-value'), 10);
+        updateStarDisplay(selectedStars);
+      });
+    });
+  }
+
+  function updateStarDisplay(rating) {
+    const stars = document.querySelectorAll('#starRatingWrap i');
+    stars.forEach(star => {
+      const val = parseInt(star.getAttribute('data-value'), 10);
+      if (val <= rating) {
+        star.classList.add('selected');
+      } else {
+        star.classList.remove('selected');
+      }
+    });
+  }
+
+  function triggerReviewPrompt(orderId, shopName) {
+    activeReviewOrderId = orderId;
+    document.getElementById('modalShopName').textContent = "Review: " + shopName;
+    document.getElementById('reviewComment').value = '';
+    selectedStars = 5;
+    updateStarDisplay(5);
+    document.getElementById('reviewModalOverlay').style.display = 'flex';
+  }
+
+  function closeReviewModal() {
+    document.getElementById('reviewModalOverlay').style.display = 'none';
+  }
+
+  function submitReviewData() {
+    const comment = document.getElementById('reviewComment').value.trim();
+    const reviewPayload = {
+      stars: selectedStars,
+      comment: comment || "Great fresh products!",
+      date: new Date().toLocaleDateString()
+    };
+
+    localStorage.setItem(`review_${activeReviewOrderId}`, JSON.stringify(reviewPayload));
+    closeReviewModal();
+    showToast('Review submitted! Thank you 😊');
+    renderCompletedOrders();
+  }
+
+  function viewSavedReview(orderId) {
+    const savedData = localStorage.getItem(`review_${orderId}`);
+    if (savedData) {
+      const review = JSON.parse(savedData);
+      showToast(`Your Review: ${"⭐".repeat(review.stars)} "${review.comment}"`);
+    } else {
+      showToast('Thank you for providing product feedback!');
+    }
+  }
+
+  window.showToast = function(msg) {
+    const t = document.getElementById('customToast');
+    if(t) {
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initStarsEngine();
+    renderCompletedOrders();
+
+    // ── DYNAMIC LOCALSTORAGE CHECKOUT REPLICATION ENGINE ──
+    const lastOrderId = localStorage.getItem('lastOrder');
+    const fulfillMethod = localStorage.getItem('fulfillMethod') || 'delivery';
+    const activeWrap = document.getElementById('activeOrdersWrap');
+
+    if (lastOrderId) {
+      document.getElementById('tabActiveBtn').textContent = "Active (1)";
+
+      const methodLabel = fulfillMethod === 'pickup' ? 'Farm Pickup' : 'Delivery';
+      const badgeIcon = fulfillMethod === 'pickup' ? '<i class="fa-solid fa-store"></i> Ready for Pickup' : '<i class="fa-solid fa-truck-fast"></i> Out for Delivery';
+      const badgeClass = fulfillMethod === 'pickup' ? 'status-confirmed' : 'status-out_for_delivery';
+
+      let dynamicShopName = 'Ladang Hijau Selangor';
+      if (typeof FARMERS !== 'undefined' && localStorage.getItem('currentFarmerId')) {
+        const currentFarmerId = parseInt(localStorage.getItem('currentFarmerId'), 10);
+        const f = FARMERS.find(farmer => farmer.id === currentFarmerId);
+        if (f && f.farm) dynamicShopName = f.farm;
+      }
+
+      // Reconstruct runtime checkout state parameters for view integration
+      const dynamicActiveObj = {
+        id: lastOrderId,
+        shopName: dynamicShopName,
+        imgUrl: "https://images.unsplash.com/photo-1546470427-e26264be0b11?w=100&h=100&fit=crop",
+        desc: `Fresh Handpicked Batch &middot; ${methodLabel}`,
+        date: "Today, June 2026",
+        total: "RM 22.00",
+        subtotal: "RM 17.00",
+        fee: "RM 5.00",
+        method: fulfillMethod,
+        methodLabel: fulfillMethod === 'pickup' ? 'Farm Pickup Counter' : 'Standard Delivery',
+        statusText: fulfillMethod === 'pickup' ? 'Ready for Pickup' : 'Out for Delivery',
+        statusDesc: fulfillMethod === 'pickup' ? 'Your order is packed and ready at the selected farm outpost.' : 'The driver is carrying your fresh farm package.'
+      };
+
+      const card = document.createElement('div');
+      card.className = 'order-card';
+      card.onclick = () => openDetails(dynamicActiveObj);
+
+      card.innerHTML = `
+        <div class="order-card-header">
+          <div class="order-id">${lastOrderId}</div>
+          <span class="status-badge ${badgeClass}">${badgeIcon}</span>
+        </div>
+
+        <div class="tracker-row">
+          <div class="tracker-node">
+            <div class="tracker-dot done"></div>
+            <div class="tracker-label">Ordered</div>
+          </div>
+          <div class="tracker-line done"></div>
+          <div class="tracker-node">
+            <div class="tracker-dot done"></div>
+            <div class="tracker-label">Confirmed</div>
+          </div>
+          <div class="tracker-line done"></div>
+          <div class="tracker-node">
+            <div class="tracker-dot done"></div>
+            <div class="tracker-label">Preparing</div>
+          </div>
+          <div class="tracker-line ${fulfillMethod === 'delivery' ? 'done' : ''}"></div>
+          <div class="tracker-node">
+            <div class="tracker-dot active"></div>
+            <div class="tracker-label active">${fulfillMethod === 'delivery' ? 'On Way' : 'Ready'}</div>
+          </div>
+          <div class="tracker-line"></div>
+          <div class="tracker-node">
+            <div class="tracker-dot"></div>
+            <div class="tracker-label">Received</div>
+          </div>
+        </div>
+
+        <div class="order-items-preview">
+          <div class="order-avatar-wrap">
+            <img src="${dynamicActiveObj.imgUrl}" class="order-avatar" alt="">
+          </div>
+          <div class="order-info">
+            <div class="shop-name">${dynamicActiveObj.shopName}</div>
+            <div class="items-desc">${dynamicActiveObj.desc}</div>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> ${dynamicActiveObj.date}</div>
+          <div class="order-total" id="activeCheckoutTotal">RM 22.00</div>
+        </div>
+      `;
+      activeWrap.appendChild(card);
+
+      // Extract raw element context strings if present across modules
+      const globalTotalStr = document.getElementById('co-total');
+      if (globalTotalStr) {
+        document.getElementById('activeCheckoutTotal').textContent = globalTotalStr.textContent;
+        dynamicActiveObj.total = globalTotalStr.textContent;
+      }
+    } else {
+      // DEFAULT APP STATE EMPTY CONTAINER FALLBACK
+      activeWrap.innerHTML = `
+        <div class="empty-state">
+          <i class="fa-solid fa-box-open"></i>
+          No active orders at the moment.
+        </div>
+      `;
+    }
+  });
+</script>
+</body>
+</html>

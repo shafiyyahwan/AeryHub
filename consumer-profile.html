@@ -57,6 +57,19 @@
       z-index: 10;
     }
 
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 18px;
+      margin-bottom: 4px;
+    }
+
     /* ── DIUBAHSUAI: SUSUNAN ROW PFP & BUTTON SAMA SEBIJI MACAM FARMER PROFILE ── */
     .avatar-action-row {
       display: flex;
@@ -215,6 +228,17 @@
       transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500;
     }
     .toast.show { opacity: 1; }
+
+    /* Profile Copyright Styling */
+    .profile-copyright {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+      opacity: 0.7;
+    }
   </style>
 </head>
 <body>
@@ -268,7 +292,7 @@
 
     <!-- BUYER STATS -->
     <div class="farmer-stats-row">
-      <div class="fstat" onclick="window.location.href='order-details.html'">
+      <div class="fstat" onclick="window.location.href='my-orders.html'">
         <div class="fstat-val" id="totalOrdersCount">3</div>
         <div class="fstat-label">Total Orders</div>
       </div>
@@ -313,7 +337,7 @@
       <!-- ACCOUNT SETTINGS -->
       <div class="sec-label">Account Settings</div>
       <div class="menu-list">
-        <a href="order-details.html" class="menu-item">
+        <a href="my-orders.html" class="menu-item">
           <div class="menu-item-left">
             <i class="fa-solid fa-clock-rotate-left"></i>
             <span>Order History</span>
@@ -341,6 +365,11 @@
         <i class="fa-solid fa-right-from-bracket" style="margin-right:6px"></i> Log Out
       </button>
 
+      <!-- Copyright Notice -->
+      <div class="profile-copyright">
+        &copy; 2026 Aeryza. All rights reserved.
+      </div>
+
     </div>
   </div>
 
@@ -352,7 +381,7 @@
     <a href="marketplace.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
-    <a href="order.html" class="nav-item">
+    <a href="my-orders.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
     </a>
     <a href="consumer-chat.html" class="nav-item">

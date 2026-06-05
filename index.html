@@ -16,14 +16,15 @@
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
-      padding: 60px 28px 40px;
+      padding: 60px 28px 24px; /* Slightly adjusted bottom padding to clear space for footer */
       text-align: center;
       background: linear-gradient(
-          160deg,
-          #1f6f3d 0%,
-          #2a8a4a 50%,
-          #3aa35c 100%
-        );
+        160deg,
+        #1f6f3d 0%,
+        #2a8a4a 50%,
+        #3aa35c 100%
+      );
+      box-sizing: border-box;
     }
 
     .splash-screen::before {
@@ -168,6 +169,15 @@
     }
     .splash-login a { color: white; text-decoration: none; font-weight: 700; }
 
+    /* Copyright Notice */
+    .splash-copyright {
+      margin-top: 24px;
+      font-size: 11px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.45);
+      letter-spacing: 0.3px;
+    }
+
     /* Status bar on dark background */
     .status-bar { background: #1f6f3d; color: rgba(255,255,255,.9); }
     .status-icons { display: flex; align-items: center; gap: 6px; }
@@ -238,6 +248,11 @@
         </div>
         <div class="splash-login">
           Already have an account? <a href="login.html">Sign In</a>
+        </div>
+
+        <!-- Copyright Footer Component -->
+        <div class="splash-copyright">
+          &copy; 2026 Aeryza. All rights reserved.
         </div>
       </div>
 
