@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - Bulk Order</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    body{background:#e0ead8;}
+    .status-bar{background:#1F5A2D!important;color:#fff!important;}
+    .screen{flex:1;overflow-y:auto;background:#F5F5EE;position:relative;scrollbar-width:none;padding-bottom:96px;}
+    .screen::-webkit-scrollbar{display:none;}
+
+    .green-zone{background:#1F5A2D;padding:0 20px 20px;position:sticky;top:0;z-index:100;}
+    .header-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0 12px;}
+    .back-btn{background:transparent;border:none;color:#fff;font-size:18px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;text-decoration:none;}
+    .page-title{font-size:20px;font-weight:700;color:#fff;line-height:1;letter-spacing:.2px;}
+    .header-spacer{width:28px;height:28px;}
+    .header-subtitle{font-size:13px;color:#E6F2DF;font-weight:500;margin-top:4px;text-align:center;}
+
+    .supplier-card{margin:16px 20px 12px;background:#fff;border-radius:18px;padding:15px;border:1px solid #eef0ed;box-shadow:0 4px 12px rgba(0,0,0,.03);}
+    .supplier-top{display:flex;align-items:center;gap:12px;}
+    .supplier-img{width:52px;height:52px;border-radius:14px;object-fit:cover;background:#e8f0e8;}
+    .supplier-label{font-size:11px;font-weight:800;color:#1F5A2D;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+    .supplier-name{font-size:15px;font-weight:800;color:#1f2937;}
+    .supplier-meta{font-size:12px;color:#6b7280;font-weight:600;margin-top:4px;}
+
+    .section{padding:0 20px;margin-top:14px;}
+    .section-title{font-size:14px;font-weight:800;color:#1f2937;margin-bottom:10px;}
+    .bulk-card{background:#fff;border-radius:18px;border:1px solid #eef0ed;overflow:hidden;}
+    .bulk-item{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid #f1f3ef;}
+    .bulk-item:last-child{border-bottom:none;}
+    .product-img{width:54px;height:54px;border-radius:12px;object-fit:cover;background:#f1f3f0;flex-shrink:0;}
+    .product-info{flex:1;min-width:0;}
+    .product-name{font-size:13.5px;font-weight:800;color:#1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .product-unit{font-size:12px;color:#8a8f87;font-weight:600;margin-top:4px;}
+    .qty-box{width:82px;border:1px solid #D7E4D2;background:#F7FAF5;border-radius:12px;padding:8px 10px;display:flex;align-items:center;gap:5px;}
+    .qty-box input{width:38px;border:none;background:transparent;outline:none;font-size:13px;font-weight:800;color:#1f2937;text-align:right;}
+    .qty-box span{font-size:12px;font-weight:700;color:#6b7280;}
+
+    .form-card{background:#fff;border-radius:18px;border:1px solid #eef0ed;padding:15px;display:flex;flex-direction:column;gap:12px;}
+    .field-label{font-size:12px;font-weight:800;color:#1f2937;margin-bottom:6px;}
+    .field-input,.field-textarea{width:100%;box-sizing:border-box;border:1px solid #D7E4D2;background:#F7FAF5;border-radius:14px;padding:12px 14px;font-family:inherit;font-size:13px;font-weight:600;color:#1f2937;outline:none;}
+    .field-input:focus,.field-textarea:focus{border-color:#1F5A2D;background:#fff;}
+    .field-textarea{height:82px;resize:none;line-height:1.4;}
+
+    .summary-card{background:#EAF3E5;border:1px solid #D7E8CE;border-radius:18px;padding:15px;margin:14px 20px 0;}
+    .summary-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:#334155;margin-bottom:8px;}
+    .summary-row:last-child{margin-bottom:0;padding-top:8px;border-top:1px dashed #C7DCC0;font-size:15px;color:#1F5A2D;}
+
+    .submit-area{padding:16px 20px 0;}
+    .submit-btn{width:100%;height:50px;border:none;border-radius:18px;background:#1F5A2D;color:#fff;font-size:15px;font-weight:800;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 14px rgba(31,90,45,.24);}
+    .submit-btn:active{opacity:.9;}
+    .nav-icon{font-size:18px;margin-bottom:4px;}
+    .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;font-weight:500;}
+    .toast.show{opacity:1;}
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="green-zone">
+      <div class="header-row">
+        <a href="b2b-home.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div>
+          <div class="page-title">Bulk Order</div>
+          <div class="header-subtitle">Request weekly supply</div>
+        </div>
+        <div class="header-spacer"></div>
+      </div>
+    </div>
+
+    <div class="supplier-card">
+      <div class="supplier-top">
+        <img id="supplierImg" class="supplier-img" src="img/farm1.jpg" alt="Supplier">
+        <div>
+          <div class="supplier-label">Assigned Supplier</div>
+          <div class="supplier-name" id="supplierName">Ladang Hijau Selangor</div>
+          <div class="supplier-meta" id="supplierMeta">Kuala Kubu Bharu, Selangor · MyGAP</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Select bulk products</div>
+      <div class="bulk-card" id="bulkProducts"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Delivery details</div>
+      <div class="form-card">
+        <div>
+          <div class="field-label">Delivery date</div>
+          <input type="date" class="field-input" id="deliveryDate" value="2026-07-10">
+        </div>
+        <div>
+          <div class="field-label">Delivery location</div>
+          <input type="text" class="field-input" id="deliveryLocation" value="Restoran Seri Selera, Cheras">
+        </div>
+        <div>
+          <div class="field-label">Notes</div>
+          <textarea class="field-textarea" id="orderNotes">Weekly restaurant supply. Please confirm available quantity.</textarea>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="section">
+      <div class="section-title">Payment terms</div>
+      <div class="form-card">
+        <div>
+          <div class="field-label">Payment method</div>
+          <select class="field-input" id="paymentMethod">
+            <option value="Invoice / Bank Transfer">Invoice / Bank Transfer</option>
+            <option value="FPX Online Banking">FPX Online Banking</option>
+            <option value="Cash on Delivery">Cash on Delivery</option>
+          </select>
+        </div>
+        <div>
+          <div class="field-label">Payment terms</div>
+          <select class="field-input" id="paymentTerms">
+            <option value="Pay after farmer confirmation">Pay after farmer confirmation</option>
+            <option value="50% deposit before delivery">50% deposit before delivery</option>
+            <option value="Pay upon delivery">Pay upon delivery</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-row"><span>Total selected quantity</span><span id="totalQty">0 kg</span></div>
+      <div class="summary-row"><span>Estimated amount</span><span id="estimatedTotal">RM 0.00</span></div>
+    </div>
+
+    <div class="submit-area">
+      <button class="submit-btn" onclick="submitBulkOrder()">
+        <i class="fa-solid fa-paper-plane"></i>
+        Submit Bulk Request
+      </button>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="b2b-home.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
+    </a>
+    <a href="bulk-orders.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-boxes-stacked"></i></span>Bulk
+    </a>
+    <a href="b2b-orders.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
+    </a>
+    <a href="b2b-chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
+    </a>
+    <a href="b2b-profile.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
+    </a>
+  </nav>
+</div>
+
+<div class="toast" id="customToast"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  const bulkDefaults = [
+    { productId: 1, qty: 20 },
+    { productId: 2, qty: 10 },
+    { productId: 5, qty: 15 }
+  ];
+
+  function initBulkOrderPage(){
+    if(typeof AppState !== 'undefined' && AppState.init) AppState.init();
+
+    let farmer = null;
+    if(AppState && AppState.getAssignedFarmer){
+      farmer = AppState.getAssignedFarmer();
+    }
+    if(!farmer && typeof FARMERS !== 'undefined'){
+      farmer = FARMERS.find(f => f.id === 1);
+    }
+
+    if(farmer){
+      document.getElementById('supplierName').textContent = farmer.farm || farmer.name;
+      document.getElementById('supplierMeta').textContent = `${farmer.city}, ${farmer.state} · ${farmer.certified ? 'MyGAP' : 'Local Supplier'}`;
+      document.getElementById('supplierImg').src = farmer.image || farmer.farmImage || 'img/farm1.jpg';
+    }
+
+    renderBulkProducts(farmer ? farmer.id : 1);
+    updateSummary();
+  }
+
+  function renderBulkProducts(farmerId){
+    const wrap = document.getElementById('bulkProducts');
+    wrap.innerHTML = '';
+
+    const products = (typeof PRODUCTS !== 'undefined')
+      ? PRODUCTS.filter(p => p.farmerId === farmerId).slice(0, 3)
+      : [];
+
+    const selected = products.length ? products : [];
+
+    selected.forEach((product, index) => {
+      const firstPrice = product.pricing && product.pricing[0] ? product.pricing[0] : { label:'1kg', price:0 };
+      const defaultQty = bulkDefaults[index] ? bulkDefaults[index].qty : 5;
+
+      const row = document.createElement('div');
+      row.className = 'bulk-item';
+      row.dataset.productId = product.id;
+      row.dataset.price = firstPrice.price || 0;
+      row.innerHTML = `
+        <img class="product-img" src="${product.images && product.images[0] ? product.images[0] : 'https://via.placeholder.com/80?text=Fresh'}" alt="${product.name}">
+        <div class="product-info">
+          <div class="product-name">${product.name}</div>
+          <div class="product-unit">Bulk unit: kg · Base price RM ${(firstPrice.price || 0).toFixed(2)}</div>
+        </div>
+        <div class="qty-box">
+          <input type="number" min="0" value="${defaultQty}" oninput="updateSummary()">
+          <span>kg</span>
+        </div>
+      `;
+      wrap.appendChild(row);
+    });
+  }
+
+  function updateSummary(){
+    let totalQty = 0;
+    let totalAmount = 0;
+
+    document.querySelectorAll('.bulk-item').forEach(row => {
+      const qty = Number(row.querySelector('input').value) || 0;
+      const price = Number(row.dataset.price) || 0;
+      totalQty += qty;
+      totalAmount += qty * price;
+    });
+
+    document.getElementById('totalQty').textContent = `${totalQty} kg`;
+    document.getElementById('estimatedTotal').textContent = `RM ${totalAmount.toFixed(2)}`;
+  }
+
+  function submitBulkOrder(){
+    const items = [];
+    document.querySelectorAll('.bulk-item').forEach(row => {
+      const qty = Number(row.querySelector('input').value) || 0;
+      if(qty > 0){
+        items.push({
+          productId: Number(row.dataset.productId),
+          quantity: qty + ' kg'
+        });
+      }
+    });
+
+    if(items.length === 0){
+      showToast('Please enter at least one quantity');
+      return;
+    }
+
+    const order = {
+      id: 'BO-' + Date.now().toString().slice(-5),
+      buyerId: AppState.currentUser && AppState.currentUser.buyerId ? AppState.currentUser.buyerId : 1,
+      farmerId: AppState.currentUser && AppState.currentUser.assignedFarmerId ? AppState.currentUser.assignedFarmerId : 1,
+      status: 'Pending Farmer Review',
+      deliveryDate: document.getElementById('deliveryDate').value,
+      deliveryLocation: document.getElementById('deliveryLocation').value,
+      notes: document.getElementById('orderNotes').value,
+      paymentMethod: document.getElementById('paymentMethod').value,
+      paymentTerms: document.getElementById('paymentTerms').value,
+      items
+    };
+
+    const saved = JSON.parse(localStorage.getItem('bulkOrders') || '[]');
+    saved.unshift(order);
+    localStorage.setItem('bulkOrders', JSON.stringify(saved));
+    localStorage.setItem('lastBulkOrder', JSON.stringify(order));
+
+    showToast('Bulk order request submitted');
+    setTimeout(() => window.location.href = 'b2b-orders.html', 900);
+  }
+
+  window.showToast = function(msg){
+    const t = document.getElementById('customToast');
+    if(t){
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', initBulkOrderPage);
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AeryHub - Chat</title>
+  <title>AeryHub - B2B Chat</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
   <style>
-    body { background:#F5F5EE; }
+    body { background:#e0ead8; }
 
     .status-bar {
       background:#1F5A2D !important;
@@ -551,9 +551,9 @@
     <div class="chat-messages" id="chatMessages"></div>
 
     <div class="quick-replies" id="quickReplies">
-      <div class="qr-chip" onclick="sendQuick('Is this still available?')">Is this available?</div>
-      <div class="qr-chip" onclick="sendQuick('When is the next harvest?')">Next harvest?</div>
-      <div class="qr-chip" onclick="sendQuick('Can I pick up from farm today?')">Farm pickup today?</div>
+      <div class="qr-chip" onclick="sendQuick('Can I confirm this week's supply?')">Confirm weekly supply?</div>
+      <div class="qr-chip" onclick="sendQuick('Can you prepare 20kg tomorrow?')">20kg tomorrow?</div>
+      <div class="qr-chip" onclick="sendQuick('Can we arrange delivery?')">Arrange delivery?</div>
     </div>
 
     <div class="chat-input-bar">
@@ -568,19 +568,19 @@
   </div>
 
   <nav class="bottom-nav" id="bottomNav">
-    <a href="home.html" class="nav-item">
+    <a href="b2b-home.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
-    <a href="marketplace.html" class="nav-item">
-      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
+    <a href="bulk-orders.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-boxes-stacked"></i></span>Bulk
     </a>
-    <a href="my-orders.html" class="nav-item">
+    <a href="b2b-orders.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
     </a>
-    <a href="consumer-chat.html" class="nav-item active">
+    <a href="b2b-chat.html" class="nav-item active">
       <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
     </a>
-    <a href="consumer-profile.html" class="nav-item">
+    <a href="b2b-profile.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
     </a>
   </nav>
@@ -594,19 +594,40 @@
   let currentConvo = null;
 
   const AUTO_REPLIES = [
-    "Hello! Thank you for reaching out! 😊",
-    "Yes, the produce is freshly harvested today!",
-    "You're welcome to pick up at the farm anytime between 7AM–12PM.",
-    "All our products are certified organic. No pesticides used."
+    "Hello! Thank you for reaching out. We can prepare the weekly supply for your restaurant.",
+    "Yes, the requested quantity is available. We will confirm the harvest schedule shortly.",
+    "Delivery can be arranged through our logistics partner.",
+    "Thank you. I will update you once the bulk order is ready for confirmation."
   ];
   let replyIdx = 0;
 
   let EXTENDED_CONVOS = [
-    ...CHAT_CONVERSATIONS,
-    { id: 3, farmerId: 9, farmerName: "Aisyah Mohd", lastMessage: "We have fresh pandan and lemongrass today!", time: "2d ago", unread: 0, messages: [
-        { from: "consumer", text: "Do you have pandan leaves?", time: "2 days ago" },
-        { from: "farmer", text: "We have fresh pandan and lemongrass today!", time: "2 days ago" },
-      ]}
+    {
+      id: 1,
+      farmerId: 1,
+      farmerName: "Ladang Hijau Selangor",
+      lastMessage: "Your weekly supply request can be prepared for Friday delivery.",
+      time: "10m ago",
+      unread: 1,
+      messages: [
+        { from: "consumer", text: "Hi, can we confirm this week's vegetables supply for Restoran Seri Selera?", time: "9:35 AM" },
+        { from: "farmer", text: "Hello! Yes, we can prepare the weekly supply. Please confirm the quantity needed.", time: "9:39 AM" },
+        { from: "consumer", text: "We need 20kg tomato, 10kg lettuce and 15kg spinach.", time: "9:41 AM" },
+        { from: "farmer", text: "Your weekly supply request can be prepared for Friday delivery.", time: "9:45 AM" }
+      ]
+    },
+    {
+      id: 2,
+      farmerId: 1,
+      farmerName: "Ladang Hijau Selangor",
+      lastMessage: "The bulk order BO-1001 is currently under farmer review.",
+      time: "Yesterday",
+      unread: 0,
+      messages: [
+        { from: "consumer", text: "Hi, I have submitted bulk order BO-1001.", time: "Yesterday" },
+        { from: "farmer", text: "The bulk order BO-1001 is currently under farmer review.", time: "Yesterday" }
+      ]
+    }
   ];
 
   function renderConvos() {
@@ -729,7 +750,7 @@
   function openFarmerProfile() {
     if (!currentConvo) return;
     localStorage.setItem('currentFarmer', currentConvo.farmerId);
-    window.location.href = 'profile-farmer.html';
+    window.location.href = 'farmer-profile.html';
   }
 
   function appendMessage(from, text, time) {

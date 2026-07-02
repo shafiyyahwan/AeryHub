@@ -75,7 +75,7 @@
       backdrop-filter: blur(10px);
       box-shadow: 0 8px 24px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.12);
     }
-    .app-logo { width: 120px; height: 120px; object-fit: contain; }
+    .app-logo { width: 70px; height: 70px; object-fit: contain; }
 
     /* Brand text — identical values to splash's .splash-title / .splash-tagline */
     .app-name {
@@ -305,7 +305,10 @@
     const pass  = document.getElementById('password').value;
     const btn   = document.getElementById('signin-btn');
 
-    if (!email || !pass) { showToast('Please fill in all fields'); return; }
+    if (!email || !pass) {
+      showToast('Please fill in all fields');
+      return;
+    }
 
     btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Signing in…';
     btn.disabled = true;
@@ -314,9 +317,15 @@
       if (email === 'farmer@aeryhub.com' && pass === '123456') {
         AppState.login('farmer');
         window.location.href = 'farmer-dashboard.html';
+
       } else if (email === 'consumer@aeryhub.com' && pass === '123456') {
         AppState.login('consumer');
         window.location.href = 'home.html';
+
+      } else if (email === 'b2b@aeryhub.com' && pass === '123456') {
+        AppState.login('b2b');
+        window.location.href = 'b2b-home.html';
+
       } else {
         showToast('Invalid credentials');
         btn.innerHTML = 'Sign In';

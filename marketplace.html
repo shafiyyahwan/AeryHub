@@ -13,17 +13,73 @@
       background: #e0ead8;
     }
 
-    .market-header {
-      padding: 16px 20px 12px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+    /* ── Status bar: white on green (matches home.html) ── */
+    .status-bar {
+      background: #1F5A2D !important;
+      color: #fff !important;
+    }
+
+    /* ── Green top-zone (title + search fused) — matches home.html's .green-zone,
+         sticky so it stays pinned while the grid scrolls beneath it ── */
+    .green-zone {
+      background: #1F5A2D;
+      padding: 0 20px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .screen {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .market-header-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      padding: 14px 0 12px;
+    }
+
+    .market-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1;
+      letter-spacing: .2px;
+    }
+
+    /* ── Header action button (matches home.html's .icon-btn) ── */
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.14);
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+    }
+
+    /* ── Search bar (matches home.html) ── */
+    .search-bar {
+      background: #fff;
+      border: none;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
+      margin-top: 15px;
+    }
+
+    /* ── Filter/category section sits below the green zone, non-sticky ── */
+    .filter-section {
+      padding: 16px 20px 0;
+      background: var(--surface, #fff);
+      border-bottom: 1px solid var(--border);
     }
 
     .filter-bar {
@@ -31,7 +87,7 @@
       gap: 8px;
       overflow-x: auto;
       scrollbar-width: none;
-      padding-bottom: 2px;
+      padding-bottom: 14px;
     }
 
     .filter-bar::-webkit-scrollbar {
@@ -52,8 +108,8 @@
     }
 
     .filter-chip.active {
-      background: var(--primary);
-      border-color: var(--primary);
+      background: #1F5A2D;
+      border-color: #1F5A2D;
       color: white;
     }
 
@@ -98,14 +154,6 @@
       background: var(--green-500);
     }
 
-    .status-icons {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
     .nav-icon {
       font-size: 18px;
       margin-bottom: 4px;
@@ -137,15 +185,20 @@
 
     .cart-count {
       position: absolute;
-      top: -4px;
-      right: -4px;
-      background: #ee4d2d;
-      color: white;
-      border-radius: 50%;
-      padding: 2px 6px;
-      font-size: 10px;
+      top: -2px;
+      right: -2px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 11px;
       font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       line-height: 1;
+      text-align: center;
     }
   </style>
 </head>
@@ -166,26 +219,26 @@
 
   <div class="screen">
 
-    <div class="market-header">
+    <div class="green-zone">
       <div class="market-header-row">
-        <div style="font-size:20px;font-weight:800;color:var(--text)">
-          Marketplace
-        </div>
-        <a href="cart.html" class="icon-btn cart-nav-icon" style="text-decoration:none; width:40px; height:40px; border-radius:12px; background:var(--gray-100); border:none; display:flex; align-items:center; justify-content:center; font-size:18px; position:relative; color:var(--text);">
+        <div class="market-title">Marketplace</div>
+        <a href="cart.html" class="icon-btn cart-nav-icon" id="cartIconMarket">
           <i class="fa-solid fa-cart-shopping"></i>
         </a>
       </div>
 
-      <div class="search-bar" style="margin-bottom:12px">
+      <div class="search-bar">
         <span class="search-icon">
           <i class="fa-solid fa-magnifying-glass"></i>
         </span>
         <input type="text" placeholder="Search products..." id="searchInput" oninput="filterProducts()">
-        <span style="font-size:16px;color:var(--text-muted)">
+        <span style="font-size:16px;cursor:pointer">
           <i class="fa-solid fa-sliders"></i>
         </span>
       </div>
+    </div>
 
+    <div class="filter-section">
       <div class="filter-bar" id="catFilter">
         <div class="filter-chip active" onclick="filterCat('')" data-cat="">All</div>
         <div class="filter-chip" onclick="filterCat('Vegetables')" data-cat="Vegetables">Vegetables</div>

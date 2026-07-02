@@ -272,10 +272,333 @@
     .empty-state { text-align: center; padding: 60px 24px; color: var(--text-muted); font-size: 13px; font-weight: 500; }
     .empty-state i { font-size: 38px; opacity: 0.6; margin-bottom: 12px; display: block; color: var(--text-muted); }
 
-    .status-icons { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
     .nav-icon { font-size: 18px; margin-bottom: 4px; }
     .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
     .toast.show { opacity: 1; }
+
+
+    /* ── GREEN HEADER (match Marketplace style exactly) ── */
+    .status-bar{
+      background:#1F5A2D !important;
+      color:#ffffff !important;
+    }
+
+    .green-zone{
+      background:#1F5A2D;
+      padding:0 20px 20px;
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+
+    .market-header-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 0 12px;
+    }
+
+    .market-title{
+      font-size:20px;
+      font-weight:700;
+      color:#ffffff;
+      line-height:1;
+      letter-spacing:.2px;
+    }
+
+    .green-zone .icon-btn{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:rgba(255,255,255,.14);
+      color:#ffffff;
+      border:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      cursor:pointer;
+      text-decoration:none;
+      position:relative;
+    }
+
+    .green-zone .icon-btn:active{
+      background:rgba(255,255,255,.24);
+    }
+
+    .green-zone .search-bar{
+      background:#ffffff;
+      border:none;
+      border-radius:14px;
+      box-shadow:0 4px 12px rgba(0,0,0,.12);
+      margin-top:15px;
+    }
+
+    /* ── FINAL SHOPEE-STYLE ORDER STAGES ── */
+    .screen { background:#F5F5EE; }
+
+    .stage-tabs-container{
+      background:#ffffff;
+      border-bottom:1px solid #edf0e8;
+      overflow-x:auto;
+      scrollbar-width:none;
+    }
+    .stage-tabs-container::-webkit-scrollbar{ display:none; }
+
+    .stage-tabs{
+      display:flex;
+      min-width:max-content;
+      padding:0 8px;
+    }
+
+    .stage-tab{
+      min-width:78px;
+      padding:13px 8px 11px;
+      text-align:center;
+      font-size:11.5px;
+      font-weight:800;
+      color:#6b7280;
+      cursor:pointer;
+      border-bottom:3px solid transparent;
+      position:relative;
+      white-space:nowrap;
+    }
+
+    .stage-tab.active{
+      color:#1F5A2D;
+      border-bottom-color:#1F5A2D;
+    }
+
+    .orders-wrap{
+      margin-top:12px;
+      padding:0 12px 12px;
+      display:none;
+    }
+
+    .orders-wrap.active{
+      display:block;
+    }
+
+    .order-card{
+      background:#ffffff;
+      margin-bottom:12px;
+      padding:0;
+      border:1px solid #eef0ed;
+      border-radius:16px;
+      overflow:hidden;
+      cursor:pointer;
+      box-shadow:0 2px 8px rgba(31,90,45,.04);
+    }
+
+    .order-card-header{
+      padding:13px 16px;
+      margin-bottom:0;
+      border-bottom:1px solid #f1f3ef;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .order-shop-title{
+      font-size:13.5px;
+      font-weight:800;
+      color:#1f2937;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      min-width:0;
+    }
+
+    .order-shop-title span{
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .order-product-row{
+      display:flex;
+      gap:12px;
+      padding:14px 16px;
+      align-items:flex-start;
+    }
+
+    .order-product-img{
+      width:66px !important;
+      height:66px !important;
+      border-radius:10px;
+      object-fit:cover;
+      border:1px solid #eeeeee;
+      flex-shrink:0;
+    }
+
+    .order-product-info{
+      flex:1;
+      min-width:0;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .order-product-main{
+      min-width:0;
+      flex:1;
+      text-align:left;
+    }
+
+    .order-product-name{
+      font-size:13.5px;
+      font-weight:800;
+      color:#1f2937;
+      line-height:1.25;
+      margin-bottom:5px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .order-product-variation{
+      font-size:12px;
+      font-weight:600;
+      color:#8a8f87;
+      line-height:1.35;
+      text-align:left;
+    }
+
+    .order-product-qty{
+      font-size:12.5px;
+      font-weight:700;
+      color:#6b7280;
+      min-width:32px;
+      text-align:right;
+      padding-top:1px;
+    }
+
+    .order-footer{
+      border-top:1px solid #f1f3ef;
+      padding:12px 16px;
+      margin-top:0;
+      background:#ffffff;
+    }
+
+    .order-date{
+      font-size:11.5px;
+    }
+
+    .order-total{
+      color:#1F5A2D;
+      font-size:15px;
+    }
+
+    .order-actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      padding:0 16px 14px;
+      background:#ffffff;
+    }
+
+    .action-btn-outline{
+      width:auto;
+      min-width:104px;
+      margin-top:0;
+      padding:9px 13px;
+      border-radius:18px;
+      font-size:12px;
+      font-weight:800;
+      background:#ffffff;
+    }
+
+    .action-btn-primary{
+      border:1px solid #1F5A2D;
+      color:#1F5A2D;
+    }
+
+    .action-btn-secondary{
+      border:1px solid #d7dfd2;
+      color:#374151;
+    }
+
+    .empty-state{
+      background:transparent;
+      margin:12px 0;
+    }
+
+
+    /* ── GREEN ORDER DETAIL PAGE HEADER (MATCHES MARKETPLACE) ── */
+    .detail-screen{
+      display:none;
+      flex-direction:column;
+      position:absolute;
+      top:44px;
+      bottom:0;
+      left:0;
+      right:0;
+      height:auto;
+      background:#F5F5EE;
+      z-index:300;
+    }
+
+    .detail-header{
+      padding:16px 20px 18px;
+      background:#1F5A2D;
+      border-bottom:none;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-shrink:0;
+    }
+
+    .detail-header .icon-btn{
+      width:32px;
+      height:32px;
+      border-radius:0;
+      background:transparent !important;
+      color:#ffffff !important;
+      border:none;
+      box-shadow:none;
+      font-size:17px;
+      padding:0;
+    }
+
+    .detail-header .icon-btn:active{
+      background:transparent !important;
+      opacity:.75;
+    }
+
+    .detail-header-info{
+      flex:1;
+      min-width:0;
+    }
+
+    .detail-header-title{
+      font-size:20px;
+      font-weight:700;
+      color:#ffffff;
+      line-height:1.1;
+      letter-spacing:.2px;
+    }
+
+    .detail-header-id{
+      font-size:12px;
+      color:#E6F2DF;
+      font-weight:600;
+      margin-top:5px;
+      font-family:inherit;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .detail-invoice-btn{
+      color:#ffffff !important;
+      font-size:18px !important;
+    }
+
+    .detail-content{
+      background:#F5F5EE;
+      padding:14px 16px 24px;
+    }
+
   </style>
 </head>
 <body>
@@ -311,36 +634,47 @@
   </div>
 
   <div class="screen" id="ordersListScreen">
-    <div class="market-header">
+    <div class="green-zone">
       <div class="market-header-row">
-        <div style="font-size:20px; font-weight:800; color:var(--text)">
-          My Orders
-        </div>
-        <a href="notifications.html" class="icon-btn" style="width:40px; height:40px; border-radius:12px; text-decoration: none;">
-          <i class="fa-regular fa-bell"></i>
+        <div class="market-title">My Orders</div>
+        <a class="icon-btn nav-badge">
+          <i class="fas fa-bell"></i>
         </a>
       </div>
-    </div>
 
-    <div class="tabs-container">
-      <div class="order-tabs">
-        <div class="order-tab active" id="tabActiveBtn" onclick="toggleActiveTab('active', this)">Active (0)</div>
-        <div class="order-tab" id="tabCompletedBtn" onclick="toggleActiveTab('completed', this)">Completed (2)</div>
+      <div class="search-bar">
+        <span class="search-icon">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+        <input type="text" placeholder="Search orders..." id="orderSearchInput" oninput="searchOrders(this.value)">
       </div>
     </div>
 
-    <div id="activeOrdersWrap" style="margin-top:8px"></div>
-    <div id="completedOrdersWrap" style="margin-top:8px; display:none"></div>
+    <div class="stage-tabs-container">
+      <div class="stage-tabs">
+        <div class="stage-tab active" id="tabToPayBtn" onclick="switchStage('toPay', this)">To Pay</div>
+        <div class="stage-tab" id="tabToShipBtn" onclick="switchStage('toShip', this)">To Ship</div>
+        <div class="stage-tab" id="tabToReceiveBtn" onclick="switchStage('toReceive', this)">To Receive</div>
+        <div class="stage-tab" id="tabCompletedBtn" onclick="switchStage('completed', this)">Completed</div>
+        <div class="stage-tab" id="tabCancelledBtn" onclick="switchStage('cancelled', this)">Cancelled</div>
+      </div>
+    </div>
+
+    <div id="toPayOrdersWrap" class="orders-wrap active"></div>
+    <div id="toShipOrdersWrap" class="orders-wrap"></div>
+    <div id="toReceiveOrdersWrap" class="orders-wrap"></div>
+    <div id="completedOrdersWrap" class="orders-wrap"></div>
+    <div id="cancelledOrdersWrap" class="orders-wrap"></div>
   </div>
 
   <div class="detail-screen" id="detailScreen">
     <div class="detail-header">
       <button onclick="closeDetails()" class="icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
       <div class="detail-header-info">
-        <div class="detail-header-title" id="detailShopTitle">Farm Details</div>
+        <div class="detail-header-title" id="detailShopTitle">Order Details</div>
         <div class="detail-header-id" id="detailOrderIdSub">AH-000000</div>
       </div>
-      <button onclick="showToast('Invoice generation feature active!')" class="icon-btn" style="background:#e8f5e9;color:#16a34a"><i class="fa-solid fa-file-invoice-dollar"></i></button>
+      <button onclick="showToast('Invoice generation feature active!')" class="icon-btn detail-invoice-btn"><i class="fa-solid fa-file-invoice-dollar"></i></button>
     </div>
 
     <div class="detail-content">
@@ -401,99 +735,206 @@
 <script>
   let selectedStars = 5;
   let activeReviewOrderId = '';
+  let activeReviewProductId = '';
   let activeDetailTarget = null;
+  let currentOrderSearch = '';
 
-  // COMPLETED HISTORY REPLICATING PRECISE LOCAL STRUCTURE PATTERNS
-  let COMPLETED_ORDERS_DATA = [
-    {
-      id: "AH-20260530-008",
-      shopName: "Sunshine Orchard",
-      imgUrl: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=100&h=100&fit=crop",
-      desc: "1 item &middot; Harumanis Mango",
-      date: "30 May 2026",
-      total: "RM 15.00",
-      subtotal: "RM 10.00",
-      fee: "RM 5.00",
-      method: "delivery",
-      methodLabel: "Standard Delivery",
-      statusText: "Delivered",
-      statusDesc: "Order completed and parcel signed by customer."
-    },
-    {
-      id: "AH-20260528-022",
-      shopName: "Padi Murni Kedah",
-      imgUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=100&h=100&fit=crop",
-      hasMore: true,
-      desc: "3 items",
-      date: "28 May 2026",
-      total: "RM 54.50",
-      subtotal: "RM 49.50",
-      fee: "RM 5.00",
-      method: "delivery",
-      methodLabel: "Standard Delivery",
-      statusText: "Delivered",
-      statusDesc: "Parcel securely handed over to recipient."
-    }
-  ];
+  const DEFAULT_PRODUCT_IMG = "https://images.unsplash.com/photo-1546470427-e26264be0b11?w=120&h=120&fit=crop";
 
-  function toggleActiveTab(tab, element) {
-    document.querySelectorAll('.order-tab').forEach(t => t.classList.remove('active'));
+  const STAGE_LABELS = {
+    toPay: "To Pay",
+    toShip: "To Ship",
+    toReceive: "To Receive",
+    completed: "Completed",
+    cancelled: "Cancelled"
+  };
+
+  let ORDERS_DATA = {
+    toPay: [],
+    toShip: [],
+    toReceive: [],
+    completed: [
+      {
+        id: "AH-20260530-008",
+        shopName: "Sunshine Orchard",
+        productId: 101,
+        productName: "Harumanis Mango",
+        variation: "1 kg pack",
+        qty: 1,
+        imgUrl: "https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=120&h=120&fit=crop",
+        date: "30 May 2026",
+        total: "RM 15.00",
+        subtotal: "RM 10.00",
+        fee: "RM 5.00",
+        method: "delivery",
+        methodLabel: "Standard Delivery",
+        statusText: "Completed",
+        statusDesc: "Order completed and parcel signed by customer."
+      },
+      {
+        id: "AH-20260528-022",
+        shopName: "Padi Murni Kedah",
+        productId: 102,
+        productName: "Bario Rice",
+        variation: "5 kg bag",
+        qty: 3,
+        imgUrl: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=120&h=120&fit=crop",
+        date: "28 May 2026",
+        total: "RM 54.50",
+        subtotal: "RM 49.50",
+        fee: "RM 5.00",
+        method: "delivery",
+        methodLabel: "Standard Delivery",
+        statusText: "Completed",
+        statusDesc: "Parcel securely handed over to recipient."
+      }
+    ],
+    cancelled: []
+  };
+
+  function switchStage(stage, element) {
+    document.querySelectorAll('.stage-tab').forEach(t => t.classList.remove('active'));
     element.classList.add('active');
-    document.getElementById('activeOrdersWrap').style.display = tab === 'active' ? 'block' : 'none';
-    document.getElementById('completedOrdersWrap').style.display = tab === 'completed' ? 'block' : 'none';
+
+    document.querySelectorAll('.orders-wrap').forEach(w => w.classList.remove('active'));
+    const target = document.getElementById(stage + 'OrdersWrap');
+    if (target) target.classList.add('active');
   }
 
-  function renderCompletedOrders() {
-    const container = document.getElementById('completedOrdersWrap');
+  function createOrderCard(order, stage) {
+    const card = document.createElement('div');
+    card.className = 'order-card';
+    card.onclick = () => openDetails(order);
+
+    const hasReview = localStorage.getItem(`review_${order.id}`);
+    let actionButtonHtml = '';
+
+    if (stage === 'completed') {
+      const buyAgainButton = `
+        <button class="action-btn-outline action-btn-secondary" onclick="event.stopPropagation(); buyAgain('${order.productId}')">
+          <i class="fa-solid fa-bag-shopping"></i> Buy Again
+        </button>`;
+
+      if (hasReview) {
+        actionButtonHtml = `
+          ${buyAgainButton}
+          <button class="action-btn-outline action-btn-primary" onclick="event.stopPropagation(); viewSavedReview('${order.id}')">
+            <i class="fa-solid fa-star" style="color:#eab308"></i> View Review
+          </button>`;
+      } else {
+        actionButtonHtml = `
+          ${buyAgainButton}
+          <button class="action-btn-outline action-btn-primary" onclick="event.stopPropagation(); triggerReviewPrompt('${order.id}', '${order.productId}', '${escapeQuotes(order.productName)}')">
+            <i class="fa-regular fa-star"></i> Leave Review
+          </button>`;
+      }
+    }
+
+    card.innerHTML = `
+      <div class="order-card-header">
+        <div class="order-shop-title">
+          <i class="fa-solid fa-store" style="color:#1F5A2D;font-size:12px;"></i>
+          <span>${order.shopName}</span>
+        </div>
+      </div>
+
+      <div class="order-product-row">
+        <img src="${order.imgUrl || DEFAULT_PRODUCT_IMG}" class="order-product-img" alt="">
+        <div class="order-product-info">
+          <div class="order-product-main">
+            <div class="order-product-name">${order.productName || 'Fresh Produce'}</div>
+            <div class="order-product-variation">${order.variation || 'Standard pack'}</div>
+          </div>
+          <div class="order-product-qty">x${order.qty || 1}</div>
+        </div>
+      </div>
+
+      <div class="order-footer">
+        <div class="order-date">
+          <i class="fa-regular fa-calendar" style="margin-right:4px;"></i> ${order.date}
+        </div>
+        <div class="order-total">${order.total}</div>
+      </div>
+
+      ${actionButtonHtml ? `<div class="order-actions">${actionButtonHtml}</div>` : ''}
+    `;
+
+    return card;
+  }
+
+  function escapeQuotes(text) {
+    return String(text || '').replace(/'/g, "\\'").replace(/"/g, "&quot;");
+  }
+
+  function renderOrdersByStage(stage) {
+    const container = document.getElementById(stage + 'OrdersWrap');
     if (!container) return;
+
+    const rawOrders = ORDERS_DATA[stage] || [];
+    const orders = rawOrders.filter(order => {
+      if (!currentOrderSearch) return true;
+      const q = currentOrderSearch.toLowerCase();
+      return String(order.id || '').toLowerCase().includes(q) ||
+        String(order.shopName || '').toLowerCase().includes(q) ||
+        String(order.productName || '').toLowerCase().includes(q) ||
+        String(order.variation || '').toLowerCase().includes(q);
+    });
     container.innerHTML = '';
 
-    COMPLETED_ORDERS_DATA.forEach(order => {
-        const card = document.createElement('div');
-        card.className = 'order-card';
-        card.onclick = () => openDetails(order);
-
-        // Check review storage presence dynamically
-        const hasReview = localStorage.getItem(`review_${order.id}`);
-        let actionButtonHtml = '';
-        if (hasReview) {
-          actionButtonHtml = `<button class="action-btn-outline" onclick="event.stopPropagation(); viewSavedReview('${order.id}')"><i class="fa-solid fa-star" style="color:#eab308"></i> View Review</button>`;
-        } else {
-          actionButtonHtml = `<button class="action-btn-outline" onclick="event.stopPropagation(); triggerReviewPrompt('${order.id}', '${order.shopName}')"><i class="fa-regular fa-star"></i> Leave Review</button>`;
-        }
-
-        card.innerHTML = `
-        <div class="order-card-header">
-          <div class="order-id">${order.id}</div>
-          <span class="status-badge status-delivered"><i class="fa-solid fa-circle-check"></i> Delivered</span>
-        </div>
-        <div class="order-items-preview">
-          <div class="order-avatar-wrap">
-            <img src="${order.imgUrl}" class="order-avatar" alt="">
-            ${order.hasMore ? `<div class="more-items-badge">+1</div>` : ''}
+    if (orders.length === 0) {
+      if (stage === 'cancelled') {
+        container.innerHTML = `
+          <div class="empty-state cancelled-empty">
+            ${currentOrderSearch ? 'No matching orders found.' : 'No cancelled orders.'}
           </div>
-          <div class="order-info">
-            <div class="shop-name">${order.shopName}</div>
-            <div class="items-desc">${order.desc}</div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fa-solid fa-box-open"></i>
+            ${currentOrderSearch ? 'No matching orders found.' : 'No orders in ' + STAGE_LABELS[stage] + '.'}
           </div>
-        </div>
-        <div class="order-footer">
-          <div class="order-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> ${order.date}</div>
-          <div class="order-total">${order.total}</div>
-        </div>
-        <div>${actionButtonHtml}</div>
-      `;
-        container.appendChild(card);
+        `;
       }
-    );
+      return;
+    }
+
+    orders.forEach(order => {
+      container.appendChild(createOrderCard(order, stage));
+    });
+  }
+
+  function searchOrders(value) {
+    currentOrderSearch = String(value || '').trim();
+    renderAllOrders();
+  }
+
+  function renderAllOrders() {
+    ['toPay', 'toShip', 'toReceive', 'completed', 'cancelled'].forEach(renderOrdersByStage);
+    updateStageCounts();
+  }
+
+  function updateStageCounts() {
+    const mapping = {
+      tabToPayBtn: 'toPay',
+      tabToShipBtn: 'toShip',
+      tabToReceiveBtn: 'toReceive',
+      tabCompletedBtn: 'completed',
+      tabCancelledBtn: 'cancelled'
+    };
+
+    Object.entries(mapping).forEach(([btnId, stage]) => {
+      const btn = document.getElementById(btnId);
+      if (btn) btn.textContent = `${STAGE_LABELS[stage]} (${(ORDERS_DATA[stage] || []).length})`;
+    });
   }
 
   function openDetails(order) {
     activeDetailTarget = order;
-    document.getElementById('detailShopTitle').textContent = order.shopName;
-    document.getElementById('detailOrderIdSub').textContent = order.id;
-    document.getElementById('detailStatusText').textContent = order.statusText;
-    document.getElementById('detailStatusDesc').textContent = order.statusDesc;
+    document.getElementById('detailShopTitle').textContent = 'Order Details';
+    document.getElementById('detailOrderIdSub').textContent = `${order.shopName} • ${order.id}`;
+    document.getElementById('detailStatusText').textContent = order.statusText || 'Order Status';
+    document.getElementById('detailStatusDesc').textContent = order.statusDesc || 'Your order is being processed.';
     document.getElementById('detailFulfillLabel').textContent = order.methodLabel || 'Direct Handling';
     document.getElementById('detailSubtotalPrice').textContent = order.subtotal || order.total;
     document.getElementById('detailFulfillPrice').textContent = order.fee || 'RM 0.00';
@@ -506,15 +947,20 @@
       iconNode.className = "fa-solid fa-truck";
     }
 
+    document.getElementById('ordersListScreen').style.display = 'none';
+    const bottomNav = document.querySelector('.bottom-nav');
+    if (bottomNav) bottomNav.style.display = 'none';
     document.getElementById('detailScreen').style.display = 'flex';
   }
 
   function closeDetails() {
     document.getElementById('detailScreen').style.display = 'none';
+    document.getElementById('ordersListScreen').style.display = 'block';
+    const bottomNav = document.querySelector('.bottom-nav');
+    if (bottomNav) bottomNav.style.display = 'flex';
     activeDetailTarget = null;
   }
 
-  // ── STAR ENGINE SUB SYSTEMS ──
   function initStarsEngine() {
     const stars = document.querySelectorAll('#starRatingWrap i');
     stars.forEach(star => {
@@ -529,17 +975,14 @@
     const stars = document.querySelectorAll('#starRatingWrap i');
     stars.forEach(star => {
       const val = parseInt(star.getAttribute('data-value'), 10);
-      if (val <= rating) {
-        star.classList.add('selected');
-      } else {
-        star.classList.remove('selected');
-      }
+      star.classList.toggle('selected', val <= rating);
     });
   }
 
-  function triggerReviewPrompt(orderId, shopName) {
+  function triggerReviewPrompt(orderId, productId, productName) {
     activeReviewOrderId = orderId;
-    document.getElementById('modalShopName').textContent = "Review: " + shopName;
+    activeReviewProductId = productId;
+    document.getElementById('modalShopName').textContent = "Review: " + productName;
     document.getElementById('reviewComment').value = '';
     selectedStars = 5;
     updateStarDisplay(5);
@@ -552,16 +995,47 @@
 
   function submitReviewData() {
     const comment = document.getElementById('reviewComment').value.trim();
+    const order = findOrderById(activeReviewOrderId);
+
     const reviewPayload = {
+      orderId: activeReviewOrderId,
+      productId: activeReviewProductId,
+      productName: order?.productName || "Fresh Produce",
+      shopName: order?.shopName || "Local Farm",
       stars: selectedStars,
+      rating: selectedStars,
       comment: comment || "Great fresh products!",
-      date: new Date().toLocaleDateString()
+      date: new Date().toLocaleDateString('en-MY'),
+      userName: "AeryHub Customer"
     };
 
+    // Order-level review, used by this orders page
     localStorage.setItem(`review_${activeReviewOrderId}`, JSON.stringify(reviewPayload));
+
+    // Product-level reviews, so product details page can read/display it
+    const productReviewKey = `productReviews_${activeReviewProductId}`;
+    const existingProductReviews = JSON.parse(localStorage.getItem(productReviewKey) || '[]');
+    const filteredReviews = existingProductReviews.filter(r => r.orderId !== activeReviewOrderId);
+    filteredReviews.unshift(reviewPayload);
+    localStorage.setItem(productReviewKey, JSON.stringify(filteredReviews));
+
+    // Extra generic key in case your product-details page reads all reviews together
+    const allReviews = JSON.parse(localStorage.getItem('productReviews') || '[]');
+    const filteredAllReviews = allReviews.filter(r => r.orderId !== activeReviewOrderId);
+    filteredAllReviews.unshift(reviewPayload);
+    localStorage.setItem('productReviews', JSON.stringify(filteredAllReviews));
+
     closeReviewModal();
-    showToast('Review submitted! Thank you 😊');
-    renderCompletedOrders();
+    showToast('Review saved to product reviews 😊');
+    renderAllOrders();
+  }
+
+  function findOrderById(orderId) {
+    for (const stage of Object.keys(ORDERS_DATA)) {
+      const found = ORDERS_DATA[stage].find(order => order.id === orderId);
+      if (found) return found;
+    }
+    return null;
   }
 
   function viewSavedReview(orderId) {
@@ -570,7 +1044,83 @@
       const review = JSON.parse(savedData);
       showToast(`Your Review: ${"⭐".repeat(review.stars)} "${review.comment}"`);
     } else {
-      showToast('Thank you for providing product feedback!');
+      showToast('No saved review found.');
+    }
+  }
+
+  function loadOrdersFromStorage() {
+    const savedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+
+    savedOrders.forEach(order => {
+      if (!order || !order.id || !order.items || order.items.length === 0) return;
+
+      const firstItem = order.items[0];
+      const itemCount = order.items.length;
+
+      let dynamicShopName = 'Ladang Hijau Selangor';
+      if (typeof FARMERS !== 'undefined' && order.farmer) {
+        const farmerObj = FARMERS.find(farmer => farmer.id === order.farmer);
+        if (farmerObj) dynamicShopName = farmerObj.farm || farmerObj.name || dynamicShopName;
+      }
+
+      const productName = itemCount > 1
+        ? `${firstItem.name || 'Fresh Produce'} + ${itemCount - 1} more item${itemCount > 2 ? 's' : ''}`
+        : (firstItem.name || 'Fresh Produce');
+
+      const variation = firstItem.variation || 'Standard';
+      const qty = parseInt(firstItem.qty, 10) || 1;
+      const productId = firstItem.productId || order.id;
+      const productImg = firstItem.image || DEFAULT_PRODUCT_IMG;
+
+      const subtotalValue = Number(order.subtotal) || 0;
+      const feeValue = Number(order.deliveryFee) || 0;
+      const totalValue = Number(order.total) || 0;
+
+      const formattedOrder = {
+        id: order.id,
+        shopName: dynamicShopName,
+        productId: productId,
+        productName: productName,
+        variation: variation,
+        qty: qty,
+        imgUrl: productImg,
+        date: order.date || new Date(order.createdAt || Date.now()).toLocaleDateString('en-MY'),
+        total: `RM ${totalValue.toFixed(2)}`,
+        subtotal: `RM ${subtotalValue.toFixed(2)}`,
+        fee: feeValue === 0 ? 'FREE' : `RM ${feeValue.toFixed(2)}`,
+        method: order.fulfillment || 'delivery',
+        methodLabel: order.fulfillment === 'pickup' ? 'Farm Pickup' : 'Standard Delivery',
+        statusText: order.fulfillment === 'pickup' ? 'Ready for Pickup' : 'Order Confirmed',
+        statusDesc: order.fulfillment === 'pickup'
+          ? `Please collect your order during your selected slot: ${order.slot || 'Selected pickup slot'}.`
+          : `Your fresh produce is being prepared. Delivery slot: ${order.slot || 'Selected delivery slot'}.`
+      };
+
+      // Prevent duplicate render if page reloads
+      const alreadyExists =
+        ORDERS_DATA.toPay.some(o => o.id === formattedOrder.id) ||
+        ORDERS_DATA.toShip.some(o => o.id === formattedOrder.id) ||
+        ORDERS_DATA.toReceive.some(o => o.id === formattedOrder.id) ||
+        ORDERS_DATA.completed.some(o => o.id === formattedOrder.id) ||
+        ORDERS_DATA.cancelled.some(o => o.id === formattedOrder.id);
+
+      if (alreadyExists) return;
+
+      if (order.status === 'ready_for_pickup' || order.fulfillment === 'pickup') {
+        ORDERS_DATA.toShip.unshift(formattedOrder);
+      } else {
+        ORDERS_DATA.toReceive.unshift(formattedOrder);
+      }
+    });
+  }
+
+
+  function buyAgain(productId) {
+    if (productId) {
+      localStorage.setItem('currentProduct', productId);
+      window.location.href = 'product-details.html';
+    } else {
+      window.location.href = 'marketplace.html';
     }
   }
 
@@ -585,111 +1135,8 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     initStarsEngine();
-    renderCompletedOrders();
-
-    // ── DYNAMIC LOCALSTORAGE CHECKOUT REPLICATION ENGINE ──
-    const lastOrderId = localStorage.getItem('lastOrder');
-    const fulfillMethod = localStorage.getItem('fulfillMethod') || 'delivery';
-    const activeWrap = document.getElementById('activeOrdersWrap');
-
-    if (lastOrderId) {
-      document.getElementById('tabActiveBtn').textContent = "Active (1)";
-
-      const methodLabel = fulfillMethod === 'pickup' ? 'Farm Pickup' : 'Delivery';
-      const badgeIcon = fulfillMethod === 'pickup' ? '<i class="fa-solid fa-store"></i> Ready for Pickup' : '<i class="fa-solid fa-truck-fast"></i> Out for Delivery';
-      const badgeClass = fulfillMethod === 'pickup' ? 'status-confirmed' : 'status-out_for_delivery';
-
-      let dynamicShopName = 'Ladang Hijau Selangor';
-      if (typeof FARMERS !== 'undefined' && localStorage.getItem('currentFarmerId')) {
-        const currentFarmerId = parseInt(localStorage.getItem('currentFarmerId'), 10);
-        const f = FARMERS.find(farmer => farmer.id === currentFarmerId);
-        if (f && f.farm) dynamicShopName = f.farm;
-      }
-
-      // Reconstruct runtime checkout state parameters for view integration
-      const dynamicActiveObj = {
-        id: lastOrderId,
-        shopName: dynamicShopName,
-        imgUrl: "https://images.unsplash.com/photo-1546470427-e26264be0b11?w=100&h=100&fit=crop",
-        desc: `Fresh Handpicked Batch &middot; ${methodLabel}`,
-        date: "Today, June 2026",
-        total: "RM 22.00",
-        subtotal: "RM 17.00",
-        fee: "RM 5.00",
-        method: fulfillMethod,
-        methodLabel: fulfillMethod === 'pickup' ? 'Farm Pickup Counter' : 'Standard Delivery',
-        statusText: fulfillMethod === 'pickup' ? 'Ready for Pickup' : 'Out for Delivery',
-        statusDesc: fulfillMethod === 'pickup' ? 'Your order is packed and ready at the selected farm outpost.' : 'The driver is carrying your fresh farm package.'
-      };
-
-      const card = document.createElement('div');
-      card.className = 'order-card';
-      card.onclick = () => openDetails(dynamicActiveObj);
-
-      card.innerHTML = `
-        <div class="order-card-header">
-          <div class="order-id">${lastOrderId}</div>
-          <span class="status-badge ${badgeClass}">${badgeIcon}</span>
-        </div>
-
-        <div class="tracker-row">
-          <div class="tracker-node">
-            <div class="tracker-dot done"></div>
-            <div class="tracker-label">Ordered</div>
-          </div>
-          <div class="tracker-line done"></div>
-          <div class="tracker-node">
-            <div class="tracker-dot done"></div>
-            <div class="tracker-label">Confirmed</div>
-          </div>
-          <div class="tracker-line done"></div>
-          <div class="tracker-node">
-            <div class="tracker-dot done"></div>
-            <div class="tracker-label">Preparing</div>
-          </div>
-          <div class="tracker-line ${fulfillMethod === 'delivery' ? 'done' : ''}"></div>
-          <div class="tracker-node">
-            <div class="tracker-dot active"></div>
-            <div class="tracker-label active">${fulfillMethod === 'delivery' ? 'On Way' : 'Ready'}</div>
-          </div>
-          <div class="tracker-line"></div>
-          <div class="tracker-node">
-            <div class="tracker-dot"></div>
-            <div class="tracker-label">Received</div>
-          </div>
-        </div>
-
-        <div class="order-items-preview">
-          <div class="order-avatar-wrap">
-            <img src="${dynamicActiveObj.imgUrl}" class="order-avatar" alt="">
-          </div>
-          <div class="order-info">
-            <div class="shop-name">${dynamicActiveObj.shopName}</div>
-            <div class="items-desc">${dynamicActiveObj.desc}</div>
-          </div>
-        </div>
-        <div class="order-footer">
-          <div class="order-date"><i class="fa-regular fa-calendar" style="margin-right:4px;"></i> ${dynamicActiveObj.date}</div>
-          <div class="order-total" id="activeCheckoutTotal">RM 22.00</div>
-        </div>
-      `;
-      activeWrap.appendChild(card);
-
-      // Extract raw element context strings if present across modules
-      const globalTotalStr = document.getElementById('co-total');
-      if (globalTotalStr) {
-        document.getElementById('activeCheckoutTotal').textContent = globalTotalStr.textContent;
-        dynamicActiveObj.total = globalTotalStr.textContent;
-      }
-    } else {
-      // DEFAULT APP STATE EMPTY CONTAINER FALLBACK
-      activeWrap.innerHTML = `
-        <div class="empty-state">
-          <i class="fa-solid fa-box-open"></i>
-          No active orders at the moment.
-        </div>
-      `;
-    }
+    loadOrdersFromStorage();
+    renderAllOrders();
   });
 </script>
 </body>

@@ -9,8 +9,8 @@
 
   <style>
     :root {
-      --primary: #16a34a;
-      --primary-dark: #15803d;
+      --primary: #1F5A2D;
+      --primary-dark: #163f20;
       --bg: #fafaf5;
       --surface: #ffffff;
       --text: #1f2937;
@@ -20,7 +20,7 @@
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #e8ede5;
+      background: #e0ead8;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -47,14 +47,14 @@
 
     .status-bar {
       height: 44px;
-      background: #fff;
+      background: #1F5A2D;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 28px;
       font-size: 13px;
       font-weight: 600;
-      color: var(--text);
+      color: #fff;
       flex-shrink: 0;
       position: relative;
       z-index: 10;
@@ -89,8 +89,8 @@
     .img-wrap { position: relative; background: #f0f0f0; height: 280px; overflow: hidden; }
     .img-wrap img { width: 100%; height: 100%; object-fit: cover; display: none; }
 
-    .img-placeholder { width: 100%; height: 100%; background: #edf4ed; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; position: absolute; top:0; left:0; }
-    .img-placeholder i { font-size: 48px; color: #2e7d32; opacity: 0.3; }
+    .img-placeholder { width: 100%; height: 100%; background: #edf1ec; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; position: absolute; top:0; left:0; }
+    .img-placeholder i { font-size: 48px; color: #1F5A2D; opacity: 0.3; }
 
     .gallery-back {
       position: absolute;
@@ -135,6 +135,15 @@
       position: relative;
     }
 
+    /* GRADE BADGE ON IMAGE */
+    .grade-ribbon {
+      position: absolute;
+      top: 16px;
+      left: 68px;
+      z-index: 10;
+      display: none;
+    }
+
     .img-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 5; }
     .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.4); }
     .dot.active { background: #fff; width: 16px; border-radius: 3px; }
@@ -161,7 +170,26 @@
     }
     .prod-like-btn.active i { color: #d11a2a; }
 
-    .prod-price { font-size: 26px; font-weight: 800; color: #16a34a; line-height: 1.1; margin-top: 4px; }
+    /* GRADE BADGE (pill, shown under the product name) */
+    .grade-row { margin-top: 6px; }
+    .grade-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      border: 1px solid transparent;
+    }
+    .grade-badge i { font-size: 10px; }
+    .grade-badge.grade-premium { background: #FEF3C7; color: #92400E; border-color: #FDE68A; }
+    .grade-badge.grade-1 { background: #DBEAFE; color: #1E40AF; border-color: #BFDBFE; }
+    .grade-badge.grade-2 { background: #E5E7EB; color: #374151; border-color: #D1D5DB; }
+
+    .prod-price { font-size: 26px; font-weight: 800; color: var(--primary); line-height: 1.1; margin-top: 10px; }
     .price-sub { font-size: 11px; color: #666; margin-top: 2px; font-weight: 500; }
     .rating-row { display: flex; align-items: center; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
     .stars-container { color: #ffc107; font-size: 11px; display: inline-flex; gap: 1px; }
@@ -171,10 +199,10 @@
 
     .var-block { background: #fff; padding: 16px; border-bottom: 6px solid #f5f5f5; }
     .var-label { font-size: 12px; color: #555; margin-bottom: 10px; font-weight: 500; }
-    .var-label b { color: #16a34a; font-weight: 700; }
+    .var-label b { color: var(--primary); font-weight: 700; }
     .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
     .chip { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1.5px solid #eee; background: #fff; color: #444; cursor: pointer; }
-    .chip.active { border-color: #16a34a; color: #16a34a; background: #e8f5e9; }
+    .chip.active { border-color: var(--primary); color: var(--primary); background: #eaf1e9; }
 
     .inline-qty-section {
       display: flex;
@@ -221,7 +249,7 @@
 
     .shop-block { background: #fff; padding: 16px; border-bottom: 6px solid #f5f5f5; }
     .shop-row { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .shop-av { width: 44px; height: 44px; border-radius: 12px; background: #e8f5e9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 1px solid #eaeaea; }
+    .shop-av { width: 44px; height: 44px; border-radius: 12px; background: #eaf1e9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 1px solid #eaeaea; }
     .shop-av img { width: 100%; height: 100%; object-fit: cover; }
 
     .shop-info { flex: 1; min-width: 0; }
@@ -235,7 +263,7 @@
       width: 14px;
       height: 14px;
       border-radius: 50%;
-      background: #16a34a;
+      background: var(--primary);
       color: #ffffff;
       font-size: 8px;
       display: flex;
@@ -324,7 +352,7 @@
 
     .review-block { background: #fff; padding: 16px; border-bottom: 6px solid #f5f5f5; }
     .review-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .see-all { font-size: 11px; color: #16a34a; cursor: pointer; font-weight: 600; }
+    .see-all { font-size: 11px; color: var(--primary); cursor: pointer; font-weight: 600; }
     .rv-summary { display: flex; align-items: center; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid #f5f5f5; margin-bottom: 8px; }
     .rv-big { font-size: 32px; font-weight: 800; color: #111827; line-height: 1; }
 
@@ -332,7 +360,7 @@
     .bar-row { display: flex; align-items: center; gap: 6px; margin: 1px 0; }
     .bar-lbl { font-size: 10px; color: #777; width: 8px; text-align: right; }
     .bar-track { flex: 1; height: 4px; background: #eee; border-radius: 2px; overflow: hidden; }
-    .bar-fill { height: 100%; background: #16a34a; }
+    .bar-fill { height: 100%; background: var(--primary); }
 
     .rv-card { padding: 14px 0; border-bottom: 1px solid #f5f5f5; display: flex; gap: 12px; align-items: flex-start; }
     .rv-card:last-child { border-bottom: none; }
@@ -360,9 +388,9 @@
       flex: 1;
       height: 48px;
       background: #ffffff;
-      border: 1.5px solid #16a34a;
+      border: 1.5px solid var(--primary);
       border-radius: 16px;
-      color: #16a34a;
+      color: var(--primary);
       font-size: 15px;
       font-weight: 700;
       cursor: pointer;
@@ -375,7 +403,7 @@
     .bb-add-style {
       flex: 2;
       height: 48px;
-      background: #16a34a;
+      background: var(--primary);
       color: #fff;
       border: none;
       border-radius: 16px;
@@ -386,7 +414,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25);
+      box-shadow: 0 4px 14px rgba(31, 90, 45, 0.25);
     }
 
     /* TOAST STYLE */
@@ -438,6 +466,9 @@
         <div class="prod-name-row">
           <div class="prod-name" id="prodName">...</div>
           <button class="prod-like-btn" id="wishBtnRow"><i class="fa-solid fa-heart" id="wishIconRow"></i></button>
+        </div>
+        <div class="grade-row" id="gradeRow" style="display:none;">
+          <span class="grade-badge" id="gradeBadge"></span>
         </div>
         <div class="prod-price" id="prodPrice">RM 0.00</div>
         <div class="price-sub" id="prodUnit"></div>
@@ -551,6 +582,15 @@
     return `<div class="stars-container">${starsHtml}</div>`;
   }
 
+  // Maps a grade string from data.js to a badge CSS class + icon
+  function getGradeStyle(grade) {
+    const g = (grade || '').toLowerCase();
+    if (g.includes('premium')) return { cls: 'grade-premium', icon: 'fa-crown' };
+    if (g.includes('1')) return { cls: 'grade-1', icon: 'fa-star' };
+    if (g.includes('2')) return { cls: 'grade-2', icon: 'fa-leaf' };
+    return { cls: 'grade-2', icon: 'fa-leaf' };
+  }
+
   function selectVariation(label, price, element) {
     selectedPrice = Number(price);
     selectedUnitLabel = label;
@@ -561,14 +601,17 @@
     element.classList.add('active');
   }
 
+  // FIX: Cart badge now reflects the number of distinct products/variants in
+  // the cart (one line item = 1), not the sum of every item's quantity.
+  // e.g. 2x Organic Tomato = counts as 1. Adding a different product = +1.
   function updateCartBadge() {
     let currentCart = JSON.parse(localStorage.getItem('cart')) || [];
-    const count = currentCart.reduce((sum, item) => sum + (Number(item.qty) || 1), 0);
+    const count = currentCart.length;
     document.querySelectorAll('.cart-nav-icon').forEach(el => {
       let badge = el.querySelector('.cart-count');
       if (!badge) {
-        badge = document.createElement('span'); badge.className = 'cart-count';
-        badge.style = "position:absolute;top:-4px;right:-4px;background:#ee4d2d;color:white;border-radius:50%;padding:2px 6px;font-size:10px;font-weight:700;border:2px solid white;min-width:12px;text-align:center;";
+        badge = document.createElement('span');
+        badge.className = 'cart-count';
         el.appendChild(badge);
       }
       badge.textContent = count; badge.style.display = count > 0 ? 'block' : 'none';
@@ -620,6 +663,18 @@
       document.getElementById('prodPrice').textContent = 'RM ' + selectedPrice.toFixed(2);
       document.getElementById('prodUnit').textContent = 'per ' + selectedUnitLabel;
       document.getElementById('varSelected').textContent = selectedUnitLabel;
+
+      // Grade badge (Premium / Grade 1 / Grade 2) from data.js
+      const gradeRow = document.getElementById('gradeRow');
+      const gradeBadge = document.getElementById('gradeBadge');
+      if (currentProduct.grade) {
+        const style = getGradeStyle(currentProduct.grade);
+        gradeBadge.className = 'grade-badge ' + style.cls;
+        gradeBadge.innerHTML = `<i class="fa-solid ${style.icon}"></i> ${currentProduct.grade}`;
+        gradeRow.style.display = 'block';
+      } else {
+        gradeRow.style.display = 'none';
+      }
 
       // Dots Gallery Generator (Sebab terpadam tadi)
       const dots = document.getElementById('galleryDots');

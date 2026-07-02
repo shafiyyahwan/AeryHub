@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - Business Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { background:#e0ead8; }
+
+    .status-bar {
+      background:#1F5A2D !important;
+      color:#fff !important;
+      position:relative;
+      z-index:30;
+    }
+    .status-bar span,
+    .status-icons,
+    .status-icons i { color:#fff !important; }
+
+    .screen {
+      background:#F5F5EE;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      padding-bottom:86px;
+    }
+
+    .green-zone {
+      background:#1F5A2D;
+      padding:0 20px 30px;
+      position:relative;
+      z-index:10;
+      flex-shrink:0;
+      min-height:118px;
+    }
+
+    .home-header {
+      background:transparent !important;
+      padding:14px 0 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .profile-title {
+      font-size:20px;
+      font-weight:800;
+      color:#fff;
+      line-height:1;
+    }
+
+    .header-actions {
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .icon-btn {
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      cursor:pointer;
+      text-decoration:none;
+      position:relative;
+    }
+    .icon-btn:active { background:rgba(255,255,255,.24); }
+
+    .cart-count {
+      position:absolute;
+      top:-2px;
+      right:-2px;
+      background:#ef4444;
+      color:#fff;
+      font-size:11px;
+      font-weight:700;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      line-height:1;
+    }
+
+    .identity-area {
+      position:relative;
+      background:#F5F5EE;
+      padding:16px 18px 16px;
+      border-bottom:1px solid #E4E8DD;
+      z-index:10;
+    }
+
+    .avatar-action-row {
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      margin-top:-44px;
+      margin-bottom:22px;
+      position:relative;
+      z-index:30;
+    }
+
+    .business-avatar {
+      width:100px;
+      height:100px;
+      border-radius:50px;
+      object-fit:cover;
+      border:4px solid #F5F5EE;
+      background:#F5F5EE;
+      box-shadow:0 4px 18px rgba(0,0,0,.18);
+      flex-shrink:0;
+    }
+
+    .edit-profile-row {
+      display:flex;
+      justify-content:flex-end;
+      margin-top:-66px;
+      margin-bottom:24px;
+      position:relative;
+      z-index:35;
+    }
+
+    .edit-btn-white {
+      padding:9px 18px;
+      border-radius:22px;
+      background:#fff;
+      color:#1F5A2D;
+      font-size:12px;
+      font-weight:700;
+      border:1px solid #E4E8DD;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      box-shadow:0 2px 8px rgba(0,0,0,.06);
+    }
+    .edit-btn-white:active { background:#F7F8F5; }
+
+    .name-row {
+      display:flex;
+      align-items:center;
+      gap:7px;
+      margin-bottom:10px;
+    }
+    .shop-name {
+      font-size:20px;
+      font-weight:800;
+      color:var(--text);
+      line-height:1.2;
+    }
+    .business-type {
+      font-size:13px;
+      color:var(--text-muted);
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .business-type i { color:var(--primary); font-size:12px; }
+
+    .stats-row {
+      display:flex;
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      background:#F5F5EE;
+    }
+    .stat {
+      flex:1;
+      padding:13px 6px;
+      text-align:center;
+      border-right:1px solid var(--border);
+    }
+    .stat:last-child { border-right:none; }
+    .stat-val { font-size:16px; font-weight:800; color:var(--text); }
+    .stat-label { font-size:10px; color:var(--text-muted); font-weight:600; margin-top:2px; }
+
+    .content-wrap { padding:0 18px 30px; }
+
+    .sec-label {
+      font-size:11px;
+      font-weight:700;
+      color:#71717a;
+      margin-bottom:8px;
+      margin-top:20px;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+    }
+
+    .info-card, .supplier-card, .menu-list {
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:14px;
+      overflow:hidden;
+    }
+
+    .info-card { padding:14px; display:flex; flex-direction:column; gap:12px; }
+
+    .info-item {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .info-icon {
+      width:32px;
+      height:32px;
+      border-radius:10px;
+      background:#f4f6f3;
+      color:var(--primary);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      flex-shrink:0;
+    }
+    .info-content { flex:1; }
+    .info-title { font-size:12px; color:var(--text-muted); font-weight:600; }
+    .info-value { font-size:13px; color:var(--text); font-weight:500; margin-top:5px; line-height:1.45; }
+
+    .supplier-card { padding:14px; }
+    .supplier-top { display:flex; align-items:center; gap:12px; }
+    .supplier-img { width:54px; height:54px; border-radius:14px; object-fit:cover; background:#e8f0e8; }
+    .supplier-label { font-size:11px; font-weight:800; color:#1F5A2D; text-transform:uppercase; letter-spacing:.4px; margin-bottom:3px; }
+    .supplier-name { font-size:14px; font-weight:800; color:#1f2937; }
+    .supplier-meta { font-size:12px; color:#6b7280; font-weight:600; margin-top:4px; }
+    .supplier-action { margin-top:12px; width:100%; border:none; border-radius:12px; padding:10px; background:#F0F7EC; color:#1F5A2D; font-weight:800; font-size:12px; }
+
+    .menu-item {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      text-decoration:none;
+      color:var(--text);
+      font-size:13.5px;
+      font-weight:600;
+      background:var(--surface);
+      cursor:pointer;
+    }
+    .menu-item:last-child { border-bottom:none; }
+    .menu-item-left { display:flex; align-items:center; gap:12px; }
+    .menu-item-left i { width:16px; color:#4b5563; }
+    .menu-item i.chevron { color:var(--gray-400); font-size:12px; }
+
+    .logout-btn {
+      margin-top:24px;
+      width:100%;
+      background:#ef4444;
+      border-color:#ef4444;
+      color:white;
+      border-radius:12px;
+      padding:11px;
+      font-weight:700;
+    }
+
+    .profile-copyright {
+      margin-top:32px;
+      text-align:center;
+      font-size:11px;
+      font-weight:500;
+      color:var(--text-muted);
+      letter-spacing:.3px;
+      opacity:.7;
+    }
+
+    .nav-icon { font-size:18px; margin-bottom:4px; }
+
+    .toast {
+      position:fixed;
+      bottom:90px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(0,0,0,.85);
+      color:#fff;
+      padding:8px 18px;
+      border-radius:20px;
+      font-size:12px;
+      z-index:99;
+      opacity:0;
+      transition:opacity .2s;
+      pointer-events:none;
+      white-space:nowrap;
+      font-weight:500;
+    }
+    .toast.show { opacity:1; }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="green-zone">
+      <div class="home-header">
+        <div class="profile-title">Business Profile</div>
+        <div class="header-actions">
+          <a href="notifications.html" class="icon-btn nav-badge" aria-label="Notifications">
+            <i class="fas fa-bell"></i>
+          </a>
+          <a href="bulk-orders.html" class="icon-btn" aria-label="Bulk Orders">
+            <i class="fa-solid fa-boxes-stacked"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="identity-area">
+      <div class="avatar-action-row">
+        <img id="businessAvatar" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=120&h=120&fit=crop" class="business-avatar" alt="Business">
+      </div>
+
+      <div class="edit-profile-row">
+        <button class="edit-btn-white" onclick="editProfile()">
+          <i class="fas fa-edit"></i> Edit Profile
+        </button>
+      </div>
+
+      <div class="name-row">
+        <div class="shop-name" id="businessName">Restoran Seri Selera</div>
+      </div>
+
+      <div class="business-type">
+        <i class="fas fa-location-dot"></i>
+        <span id="businessCityState">Cheras, Kuala Lumpur</span>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat" onclick="window.location.href='bulk-orders.html'">
+        <div class="stat-val" id="bulkOrdersCount">4</div>
+        <div class="stat-label">Bulk Orders</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val">1</div>
+        <div class="stat-label">Supplier</div>
+      </div>
+      <div class="stat" onclick="window.location.href='b2b-orders.html'">
+        <div class="stat-val">RM 780</div>
+        <div class="stat-label">Monthly Spend</div>
+      </div>
+    </div>
+
+    <div class="content-wrap">
+      <div class="sec-label">Assigned Supplier</div>
+      <div class="supplier-card">
+        <div class="supplier-top">
+          <img id="supplierImg" class="supplier-img" src="img/farm1.jpg" alt="Supplier">
+          <div>
+            <div class="supplier-label">Assigned Farmer</div>
+            <div class="supplier-name" id="supplierName">Ladang Hijau Selangor</div>
+            <div class="supplier-meta" id="supplierMeta">Kuala Kubu Bharu, Selangor · MyGAP</div>
+          </div>
+        </div>
+        <button class="supplier-action" onclick="window.location.href='bulk-orders.html'">
+          <i class="fa-solid fa-boxes-stacked"></i> Create Bulk Order
+        </button>
+      </div>
+
+      <div class="sec-label">Business Details</div>
+      <div class="info-card">
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
+          <div class="info-content">
+            <div class="info-title">Business Email</div>
+            <div class="info-value" id="businessEmail">b2b@aeryhub.com</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
+          <div class="info-content">
+            <div class="info-title">Contact Number</div>
+            <div class="info-value" id="businessPhone">+60 12-234 8890</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-building"></i></div>
+          <div class="info-content">
+            <div class="info-title">Business Type</div>
+            <div class="info-value" id="businessType">Restaurant / Food Service</div>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-icon"><i class="fa-solid fa-truck"></i></div>
+          <div class="info-content">
+            <div class="info-title">Delivery Address</div>
+            <div class="info-value" id="businessAddress">Restoran Seri Selera, Jalan Cheras, 56000 Kuala Lumpur</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-label">Account Settings</div>
+      <div class="menu-list">
+        <a href="b2b-orders.html" class="menu-item">
+          <div class="menu-item-left">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Order History</span>
+          </div>
+          <i class="fa-solid fa-chevron-right chevron"></i>
+        </a>
+        <a href="bulk-orders.html" class="menu-item">
+          <div class="menu-item-left">
+            <i class="fa-solid fa-boxes-stacked"></i>
+            <span>Bulk Order Templates</span>
+          </div>
+          <i class="fa-solid fa-chevron-right chevron"></i>
+        </a>
+        <div class="menu-item" onclick="showToast('Payment method updated!')">
+          <div class="menu-item-left">
+            <i class="fa-solid fa-credit-card"></i>
+            <span>Business Payment Method</span>
+          </div>
+          <i class="fa-solid fa-chevron-right chevron"></i>
+        </div>
+        <div class="menu-item" onclick="showToast('Language set to English')">
+          <div class="menu-item-left">
+            <i class="fa-solid fa-globe"></i>
+            <span>Language</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-muted);font-weight:500">English</div>
+        </div>
+      </div>
+
+      <button class="btn btn-sm logout-btn" onclick="logoutUser()">
+        <i class="fa-solid fa-right-from-bracket" style="margin-right:6px"></i> Log Out
+      </button>
+
+      <div class="profile-copyright">
+        &copy; 2026 Aeryza. All rights reserved.
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="b2b-home.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
+    </a>
+    <a href="bulk-orders.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-boxes-stacked"></i></span>Bulk
+    </a>
+    <a href="b2b-orders.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
+    </a>
+    <a href="b2b-chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
+    </a>
+    <a href="b2b-profile.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
+    </a>
+  </nav>
+</div>
+
+<div class="toast" id="customToast"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  function showToast(msg) {
+    const t = document.getElementById('customToast');
+    if (t) {
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  }
+
+  function editProfile() {
+    const newName = prompt('Enter business name:', document.getElementById('businessName').textContent);
+    if (newName && newName.trim() !== '') {
+      localStorage.setItem('b2b_business_name', newName.trim());
+      document.getElementById('businessName').textContent = newName.trim();
+    }
+
+    const newPhone = prompt('Enter contact number:', document.getElementById('businessPhone').textContent);
+    if (newPhone && newPhone.trim() !== '') {
+      localStorage.setItem('b2b_business_phone', newPhone.trim());
+      document.getElementById('businessPhone').textContent = newPhone.trim();
+    }
+
+    const newAddress = prompt('Enter delivery address:', document.getElementById('businessAddress').textContent);
+    if (newAddress && newAddress.trim() !== '') {
+      localStorage.setItem('b2b_business_address', newAddress.trim());
+      document.getElementById('businessAddress').textContent = newAddress.trim();
+    }
+
+    showToast('Business profile updated successfully');
+  }
+
+  function logoutUser() {
+    if (confirm('Are you sure you want to log out?')) {
+      showToast('Logging out...');
+      setTimeout(() => window.location.href = 'login.html', 900);
+    }
+  }
+
+  function loadAssignedSupplier() {
+    if (typeof AppState !== 'undefined' && AppState.init) AppState.init();
+
+    let farmer = null;
+    if (typeof AppState !== 'undefined' && AppState.getAssignedFarmer) {
+      farmer = AppState.getAssignedFarmer();
+    }
+    if (!farmer && typeof FARMERS !== 'undefined') {
+      farmer = FARMERS.find(f => f.id === 1);
+    }
+
+    if (farmer) {
+      document.getElementById('supplierName').textContent = farmer.farm || farmer.name || 'Assigned Supplier';
+      document.getElementById('supplierMeta').textContent = `${farmer.city || 'Selangor'}, ${farmer.state || 'Malaysia'} · ${farmer.certified ? 'MyGAP' : 'Local Supplier'}`;
+      document.getElementById('supplierImg').src = farmer.image || farmer.farmImage || 'img/farm1.jpg';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedName = localStorage.getItem('b2b_business_name');
+    const savedPhone = localStorage.getItem('b2b_business_phone');
+    const savedAddress = localStorage.getItem('b2b_business_address');
+
+    if (savedName) document.getElementById('businessName').textContent = savedName;
+    if (savedPhone) document.getElementById('businessPhone').textContent = savedPhone;
+    if (savedAddress) document.getElementById('businessAddress').textContent = savedAddress;
+
+    const savedOrders = JSON.parse(localStorage.getItem('bulkOrders') || '[]');
+    if (savedOrders.length > 0) {
+      document.getElementById('bulkOrdersCount').textContent = savedOrders.length;
+    }
+
+    loadAssignedSupplier();
+  });
+</script>
+</body>
+</html>

@@ -4,65 +4,134 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeryHub - Profile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style1.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap');
-
     body {
       background: #e0ead8;
     }
 
-    /* ── STATUS BAR (IKUT FARMER-PROFILE: ABSOLUTE & LUTSINAR) ── */
+    /* ── STATUS BAR: same as Home ── */
     .status-bar {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      z-index: 20;
-      background: transparent;
-    }
-    .status-bar span, .status-icons {
-      color: white !important;
-    }
-
-    /* ── COVER HIJAU (IKUT TINGGI & STRUKTUR FARMER-PROFILE) ── */
-    .farm-cover {
-      height: 180px;
+      background: #1F5A2D !important;
+      color: #fff !important;
       position: relative;
-      flex-shrink: 0;
-      background: linear-gradient(135deg, #16a34a 0%, #047857 100%);
-      overflow: visible;
+      z-index: 30;
+    }
+    .status-bar span,
+    .status-icons,
+    .status-icons i {
+      color: #fff !important;
     }
 
-    /* BUTANG BACK (IKUT KETINGGIAN 54px FARMER-PROFILE) */
-    .cover-btn {
-      position: absolute;
-      top: 54px;
-      width: 36px; height: 36px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(6px);
-      border: none; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      text-decoration: none; color: var(--text); font-size: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    .screen {
+      background: #F5F5EE;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
-    .cover-back { left: 16px; }
 
-    /* ── KAWASAN KANDUNGAN PUTHIH ── */
-    .farmer-identity {
+    /* ── GREEN HEADER: copied from Home structure ── */
+    .green-zone {
+      background: #1F5A2D;
+      padding: 0 20px 30px;
       position: relative;
-      background: var(--surface);
-      padding: 16px 18px 16px;
-      border-bottom: 1px solid var(--border);
       z-index: 10;
+      flex-shrink: 0;
     }
 
-    .status-icons {
+    .home-header {
+      background: transparent !important;
+      padding: 14px 0 12px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.14);
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .icon-btn:active {
+      background: rgba(255,255,255,.24);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: #ef4444;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      text-align: center;
+    }
+
+    /* ── EDIT PROFILE BUTTON: below green header, beside avatar area ── */
+    .edit-profile-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -68px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 35;
+    }
+
+    .edit-btn-white {
+      padding: 9px 18px;
+      border-radius: 22px;
+      background: #ffffff;
+      color: #1F5A2D;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid #E4E8DD;
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
-      font-weight: 600;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .edit-btn-white:hover,
+    .edit-btn-white:active {
+      background: #F7F8F5;
+    }
+
+    /* ── PROFILE IDENTITY AREA ── */
+    .farmer-identity {
+      position: relative;
+      background: #F5F5EE;
+      padding: 16px 18px 16px;
+      border-bottom: 1px solid #E4E8DD;
+      z-index: 10;
     }
 
     .nav-icon {
@@ -70,50 +139,26 @@
       margin-bottom: 4px;
     }
 
-    /* ── DIUBAHSUAI: SUSUNAN ROW PFP & BUTTON SAMA SEBIJI MACAM FARMER PROFILE ── */
     .avatar-action-row {
       display: flex;
-      justify-content: space-between; /* PFP ke kiri, butang ke kanan */
-      align-items: flex-end; /* Bawah butang sejajar dengan bawah PFP */
-      margin-top: -56px; /* Tolak naik ke atas melangkaui cover hijau */
-      margin-bottom: 16px;
+      justify-content: flex-start;
+      align-items: flex-end;
+      margin-top: -44px;
+      margin-bottom: 28px;   /* was 16px */
       position: relative;
       z-index: 30;
     }
 
     /* Reka bentuk PFP kekal statik mengikut speks farmer-profile */
     .farmer-avatar {
-      width: 84px;
-      height: 84px;
-      border-radius: 20px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50px;
       object-fit: cover;
-      border: 4px solid #fff;
-      background: #fff;
+      border: 4px solid #F5F5EE;
+      background: #F5F5EE;
       box-shadow: 0 4px 18px rgba(0,0,0,0.18);
       flex-shrink: 0;
-    }
-
-    /* Controls container ditolak rapat ke kanan menggunakan margin-left: auto */
-    .profile-controls {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-left: auto;
-      margin-bottom: 4px;
-    }
-
-    .edit-btn {
-      padding: 7px 18px;
-      border-radius: 20px;
-      background: #f3f4f6;
-      color: #374151;
-      font-size: 12px; font-weight: 700;
-      border: 1px solid #e5e7eb; cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
-      transition: all 0.2s;
-    }
-    .edit-btn:hover {
-      background: #e5e7eb;
     }
 
     /* Nama row asal awak */
@@ -125,11 +170,6 @@
       font-size: 20px; font-weight: 800;
       color: var(--text); line-height: 1.2;
     }
-    .buyer-badge {
-      font-size: 10px; padding: 3px 8px; background: #dbeafe; color: #1e40af;
-      border-radius: 20px; font-weight: 700;
-    }
-
     .farm-location-line {
       font-size: 13px; color: var(--text-muted);
       display: flex; align-items: center; gap: 5px;
@@ -141,7 +181,7 @@
       display: flex;
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
-      background: var(--surface);
+      background: #F5F5EE;
     }
     .fstat {
       flex: 1; padding: 13px 6px;
@@ -244,43 +284,52 @@
 <body>
 <div class="phone-frame">
 
-  <!-- Status Bar (Ikut Farmer-Profile) -->
+  <!-- Status Bar (matched to home.html) -->
   <div class="status-bar">
     <span>9:41</span>
     <div class="notch"></div>
     <div class="status-icons">
-      <i class="fas fa-signal"></i>
-      <i class="fas fa-wifi"></i>
-      <i class="fas fa-battery-three-quarters"></i>
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
     </div>
   </div>
 
   <div class="screen">
 
-    <!-- COVER HIJAU -->
-    <div class="farm-cover">
-      <a href="home.html" class="cover-btn cover-back">
-        <i class="fas fa-chevron-left"></i>
-      </a>
+    <!-- GREEN HEADER: icons on the right, Edit Profile right below them -->
+    <div class="green-zone">
+      <div class="home-header">
+
+        <div class="header-actions">
+          <a href="notifications.html" class="icon-btn nav-badge" aria-label="Notifications">
+            <i class="fas fa-bell"></i>
+          </a>
+          <a href="cart.html" class="icon-btn cart-nav-icon" id="cartIconProfile" aria-label="Cart">
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+        </div>
+      </div>
+
     </div>
 
-    <!-- IDENTITY (KAWASAN PUTIH) -->
+    <!-- IDENTITY AREA -->
     <div class="farmer-identity">
 
-      <!-- ROW SEJAJAR: Dah diselaraskan kelas CSS & fungsinya -->
+      <!-- Avatar overlaps the green header -->
       <div class="avatar-action-row">
         <img id="buyerAvatar" src="img/sarahLim.jpg" class="farmer-avatar">
-        <div class="profile-controls">
-          <button class="edit-btn" onclick="editProfile()">
-            <i class="fas fa-edit"></i> Edit Profile
-          </button>
-        </div>
+      </div>
+
+      <div class="edit-profile-row">
+        <button class="edit-btn-white" onclick="editProfile()">
+          <i class="fas fa-edit"></i> Edit Profile
+        </button>
       </div>
 
       <!-- Nama Pembeli -->
       <div class="name-row">
         <div class="shop-name" id="buyerName">Sarah Lim</div>
-        <span class="buyer-badge"><i class="fa-solid fa-seedling"></i> Consumer</span>
       </div>
 
       <!-- Negeri & Negara -->
@@ -302,7 +351,7 @@
       </div>
       <div class="fstat">
         <div class="fstat-val" id="savedFarmsCount">5</div>
-        <div class="fstat-label">Farms Followed</div>
+        <div class="fstat-label">Following</div>
       </div>
     </div>
 
@@ -396,6 +445,8 @@
 
 <div class="toast" id="customToast"></div>
 
+<script src="data.js"></script>
+<script src="script.js"></script>
 <script>
   function showToast(msg) {
     const t = document.getElementById('customToast');
@@ -457,7 +508,39 @@
     if (localStorage.getItem('lastOrder')) {
       document.getElementById('totalOrdersCount').textContent = "3";
     }
+
+    updateProfileCartBadge();
   });
+
+  function updateProfileCartBadge() {
+    const cartIcon = document.getElementById('cartIconProfile');
+    if (!cartIcon) return;
+
+    const oldBadge = cartIcon.querySelector('.cart-count');
+    if (oldBadge) oldBadge.remove();
+
+    let cartItems = [];
+
+    try {
+      cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+      if (!cartItems.length) {
+        cartItems = JSON.parse(localStorage.getItem('aeryhub_cart') || '[]');
+      }
+    } catch (e) {
+      cartItems = [];
+    }
+
+    const count = cartItems.reduce((sum, item) => {
+      return sum + (parseInt(item.qty || item.quantity || 1, 10) || 1);
+    }, 0);
+
+    if (count > 0) {
+      const badge = document.createElement('span');
+      badge.className = 'cart-count';
+      badge.textContent = count;
+      cartIcon.appendChild(badge);
+    }
+  }
 </script>
 </body>
 </html>

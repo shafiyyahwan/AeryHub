@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - My Orders</title>
+  <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <style>
+    body{background:#e0ead8;}
+    .status-bar{background:#1F5A2D!important;color:#fff!important;}
+    .screen{flex:1;overflow-y:auto;background:#F5F5EE;position:relative;scrollbar-width:none;padding-bottom:96px;}
+    .screen::-webkit-scrollbar{display:none;}
+
+    .green-zone{background:#1F5A2D;padding:0 20px 16px;position:sticky;top:0;z-index:100;}
+    .header-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0 12px;}
+    .back-btn{background:transparent;border:none;color:#fff;font-size:18px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;text-decoration:none;}
+    .page-title{font-size:20px;font-weight:700;color:#fff;line-height:1;letter-spacing:.2px;}
+    .header-spacer{width:28px;height:28px;}
+    .header-subtitle{font-size:13px;color:#E6F2DF;font-weight:500;margin-top:4px;text-align:center;}
+
+    /* Filter tabs */
+    .filter-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-top:2px;}
+    .filter-tabs::-webkit-scrollbar{display:none;}
+    .filter-tab{flex-shrink:0;padding:8px 15px;border-radius:20px;background:rgba(255,255,255,.14);color:#E6F2DF;font-size:12.5px;font-weight:700;border:1px solid rgba(255,255,255,.18);white-space:nowrap;}
+    .filter-tab.active{background:#fff;color:#1F5A2D;border-color:#fff;}
+
+    .section{padding:0 20px;margin-top:16px;}
+    .section-title{font-size:14px;font-weight:800;color:#1f2937;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+    .section-count{font-size:12px;font-weight:700;color:#8a8f87;}
+
+    /* Order card */
+    .order-list{display:flex;flex-direction:column;gap:12px;}
+    .order-card{background:#fff;border-radius:18px;border:1px solid #eef0ed;box-shadow:0 4px 12px rgba(0,0,0,.03);overflow:hidden;}
+    .order-head{display:flex;align-items:center;gap:12px;padding:14px;cursor:pointer;}
+    .order-icon{width:46px;height:46px;border-radius:13px;background:#EAF3E5;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#1F5A2D;font-size:18px;}
+    .order-main{flex:1;min-width:0;}
+    .order-top-row{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+    .order-id{font-size:13.5px;font-weight:800;color:#1f2937;}
+    .order-badge{font-size:10.5px;font-weight:800;padding:4px 9px;border-radius:20px;white-space:nowrap;text-transform:uppercase;letter-spacing:.3px;}
+    .badge-pending{background:#FEF3C7;color:#92400E;}
+    .badge-confirmed{background:#DBEAFE;color:#1E40AF;}
+    .badge-transit{background:#EDE9FE;color:#5B21B6;}
+    .badge-delivered{background:#DCFCE7;color:#166534;}
+    .badge-cancelled{background:#FEE2E2;color:#991B1B;}
+    .order-sub{font-size:12px;color:#6b7280;font-weight:600;margin-top:4px;}
+    .order-meta-row{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+    .order-farmer{font-size:12px;color:#1F5A2D;font-weight:700;}
+    .order-total{font-size:13px;font-weight:800;color:#1f2937;}
+    .chevron{font-size:13px;color:#c2c8bd;transition:transform .2s;flex-shrink:0;}
+    .order-card.open .chevron{transform:rotate(180deg);}
+
+    .order-body{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+    .order-card.open .order-body{max-height:400px;}
+    .order-body-inner{padding:0 14px 14px;border-top:1px solid #f1f3ef;padding-top:12px;}
+    .order-items{display:flex;flex-direction:column;gap:8px;margin-bottom:10px;}
+    .order-item-row{display:flex;justify-content:space-between;font-size:12.5px;color:#374151;font-weight:600;}
+    .order-item-row span:last-child{color:#8a8f87;font-weight:700;}
+    .order-detail-line{display:flex;gap:8px;font-size:12px;color:#6b7280;font-weight:600;margin-top:4px;}
+    .order-detail-line i{width:14px;color:#1F5A2D;}
+    .order-notes{font-size:12px;color:#6b7280;font-style:italic;margin-top:8px;line-height:1.4;}
+    .order-actions{display:flex;gap:8px;margin-top:12px;}
+    .order-action-btn{flex:1;height:38px;border-radius:12px;border:1px solid #D7E4D2;background:#F7FAF5;color:#1F5A2D;font-size:12.5px;font-weight:800;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;}
+    .order-action-btn.solid{background:#1F5A2D;color:#fff;border:none;}
+
+    /* Empty state */
+    .empty-state{padding:50px 20px;text-align:center;}
+    .empty-icon{width:64px;height:64px;border-radius:20px;background:#EAF3E5;color:#1F5A2D;font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+    .empty-title{font-size:15px;font-weight:800;color:#1f2937;margin-bottom:6px;}
+    .empty-sub{font-size:12.5px;color:#8a8f87;font-weight:600;margin-bottom:18px;line-height:1.4;}
+    .empty-cta{display:inline-flex;align-items:center;gap:8px;background:#1F5A2D;color:#fff;font-size:13px;font-weight:800;padding:11px 20px;border-radius:14px;text-decoration:none;}
+
+    .nav-icon{font-size:18px;margin-bottom:4px;}
+    .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;z-index:999;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;font-weight:500;}
+    .toast.show{opacity:1;}
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div class="green-zone">
+      <div class="header-row">
+        <a href="b2b-home.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div>
+          <div class="page-title">My Orders</div>
+          <div class="header-subtitle">Track your bulk requests</div>
+        </div>
+        <div class="header-spacer"></div>
+      </div>
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-tab active" data-filter="all">All</button>
+        <button class="filter-tab" data-filter="pending">Pending</button>
+        <button class="filter-tab" data-filter="confirmed">Confirmed</button>
+        <button class="filter-tab" data-filter="transit">In Transit</button>
+        <button class="filter-tab" data-filter="delivered">Delivered</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <span>Order history</span>
+        <span class="section-count" id="orderCount">0 orders</span>
+      </div>
+      <div class="order-list" id="orderList"></div>
+      <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="empty-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+        <div class="empty-title">No orders yet</div>
+        <div class="empty-sub">Your bulk requests will appear here<br>once you place one.</div>
+        <a href="bulk-orders.html" class="empty-cta"><i class="fa-solid fa-plus"></i> New Bulk Request</a>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="b2b-home.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
+    </a>
+    <a href="bulk-orders.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-boxes-stacked"></i></span>Bulk
+    </a>
+    <a href="b2b-orders.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
+    </a>
+    <a href="b2b-chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
+    </a>
+    <a href="b2b-profile.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
+    </a>
+  </nav>
+</div>
+
+<div class="toast" id="customToast"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  let currentFilter = 'all';
+  let allOrders = [];
+
+  // Demo fallback orders shown only if no saved orders exist yet,
+  // so the screen never looks broken on first visit.
+  const demoOrders = [
+    {
+      id: 'BO-90231',
+      farmerId: 1,
+      status: 'Pending Farmer Review',
+      deliveryDate: '2026-07-10',
+      deliveryLocation: 'Restoran Seri Selera, Cheras',
+      notes: 'Weekly restaurant supply. Please confirm available quantity.',
+      items: [
+        { productId: 1, quantity: '20 kg' },
+        { productId: 2, quantity: '10 kg' },
+        { productId: 5, quantity: '15 kg' }
+      ]
+    },
+    {
+      id: 'BO-88410',
+      farmerId: 1,
+      status: 'Confirmed',
+      deliveryDate: '2026-07-03',
+      deliveryLocation: 'Restoran Seri Selera, Cheras',
+      notes: 'Please deliver before 8am.',
+      items: [
+        { productId: 1, quantity: '15 kg' },
+        { productId: 3, quantity: '8 kg' }
+      ]
+    },
+    {
+      id: 'BO-84120',
+      farmerId: 1,
+      status: 'Delivered',
+      deliveryDate: '2026-06-26',
+      deliveryLocation: 'Restoran Seri Selera, Cheras',
+      notes: '',
+      items: [
+        { productId: 2, quantity: '12 kg' },
+        { productId: 4, quantity: '6 kg' }
+      ]
+    }
+  ];
+
+  function initOrdersPage(){
+    if(typeof AppState !== 'undefined' && AppState.init) AppState.init();
+
+    const saved = JSON.parse(localStorage.getItem('bulkOrders') || '[]');
+    allOrders = saved.length ? saved : demoOrders;
+
+    document.getElementById('filterTabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('.filter-tab');
+      if(!btn) return;
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = btn.dataset.filter;
+      renderOrders();
+    });
+
+    renderOrders();
+  }
+
+  function statusKey(status){
+    const s = (status || '').toLowerCase();
+    if(s.includes('pending')) return 'pending';
+    if(s.includes('confirm')) return 'confirmed';
+    if(s.includes('transit') || s.includes('shipped') || s.includes('delivery')) return 'transit';
+    if(s.includes('delivered') || s.includes('complete')) return 'delivered';
+    if(s.includes('cancel')) return 'cancelled';
+    return 'pending';
+  }
+
+  function badgeClass(key){
+    return {
+      pending:'badge-pending',
+      confirmed:'badge-confirmed',
+      transit:'badge-transit',
+      delivered:'badge-delivered',
+      cancelled:'badge-cancelled'
+    }[key] || 'badge-pending';
+  }
+
+  function statusIcon(key){
+    return {
+      pending:'fa-clock',
+      confirmed:'fa-circle-check',
+      transit:'fa-truck-fast',
+      delivered:'fa-box-open',
+      cancelled:'fa-circle-xmark'
+    }[key] || 'fa-clock';
+  }
+
+  function getProduct(productId){
+    if(typeof PRODUCTS === 'undefined') return null;
+    return PRODUCTS.find(p => p.id === productId) || null;
+  }
+
+  function getFarmer(farmerId){
+    if(typeof FARMERS === 'undefined') return null;
+    return FARMERS.find(f => f.id === farmerId) || null;
+  }
+
+  function estimateTotal(order){
+    let total = 0;
+    (order.items || []).forEach(item => {
+      const product = getProduct(item.productId);
+      const qtyNum = parseFloat(item.quantity) || 0;
+      const price = product && product.pricing && product.pricing[0] ? product.pricing[0].price : 0;
+      total += qtyNum * price;
+    });
+    return total;
+  }
+
+  function formatDate(dateStr){
+    if(!dateStr) return '—';
+    const d = new Date(dateStr);
+    if(isNaN(d)) return dateStr;
+    return d.toLocaleDateString('en-MY', { day:'numeric', month:'short', year:'numeric' });
+  }
+
+  function renderOrders(){
+    const list = document.getElementById('orderList');
+    const empty = document.getElementById('emptyState');
+    const countEl = document.getElementById('orderCount');
+
+    const filtered = currentFilter === 'all'
+      ? allOrders
+      : allOrders.filter(o => statusKey(o.status) === currentFilter);
+
+    countEl.textContent = `${filtered.length} order${filtered.length === 1 ? '' : 's'}`;
+
+    if(filtered.length === 0){
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+
+    list.innerHTML = filtered.map(order => {
+      const key = statusKey(order.status);
+      const farmer = getFarmer(order.farmerId);
+      const farmerName = farmer ? (farmer.farm || farmer.name) : 'Assigned Supplier';
+      const total = estimateTotal(order);
+
+      const itemsHtml = (order.items || []).map(item => {
+        const product = getProduct(item.productId);
+        const name = product ? product.name : `Product #${item.productId}`;
+        return `<div class="order-item-row"><span>${name}</span><span>${item.quantity}</span></div>`;
+      }).join('');
+
+      const notesHtml = order.notes
+        ? `<div class="order-notes"><i class="fa-solid fa-note-sticky"></i>&nbsp; ${order.notes}</div>`
+        : '';
+
+      return `
+        <div class="order-card" data-id="${order.id}">
+          <div class="order-head" onclick="toggleOrder('${order.id}')">
+            <div class="order-icon"><i class="fa-solid ${statusIcon(key)}"></i></div>
+            <div class="order-main">
+              <div class="order-top-row">
+                <span class="order-id">${order.id}</span>
+                <span class="order-badge ${badgeClass(key)}">${order.status}</span>
+              </div>
+              <div class="order-sub">${(order.items || []).length} item${(order.items || []).length === 1 ? '' : 's'} · Delivery ${formatDate(order.deliveryDate)}</div>
+              <div class="order-meta-row">
+                <span class="order-farmer">${farmerName}</span>
+                <span class="order-total">RM ${total.toFixed(2)}</span>
+              </div>
+            </div>
+            <i class="fa-solid fa-chevron-down chevron"></i>
+          </div>
+          <div class="order-body">
+            <div class="order-body-inner">
+              <div class="order-items">${itemsHtml}</div>
+              <div class="order-detail-line"><i class="fa-solid fa-location-dot"></i> ${order.deliveryLocation || '—'}</div>
+              <div class="order-detail-line"><i class="fa-solid fa-calendar-days"></i> Delivery on ${formatDate(order.deliveryDate)}</div>
+              ${notesHtml}
+              <div class="order-actions">
+                ${key === 'pending' ? `<button class="order-action-btn" onclick="event.stopPropagation(); cancelOrder('${order.id}')"><i class="fa-solid fa-xmark"></i> Cancel</button>` : ''}
+                <button class="order-action-btn solid" onclick="event.stopPropagation(); contactSupplier('${order.farmerId}')"><i class="fa-solid fa-comment"></i> Contact Supplier</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleOrder(id){
+    const card = document.querySelector(`.order-card[data-id="${id}"]`);
+    if(!card) return;
+    const isOpen = card.classList.contains('open');
+    document.querySelectorAll('.order-card.open').forEach(c => c.classList.remove('open'));
+    if(!isOpen) card.classList.add('open');
+  }
+
+  function cancelOrder(id){
+    const idx = allOrders.findIndex(o => o.id === id);
+    if(idx === -1) return;
+    allOrders[idx].status = 'Cancelled';
+
+    const saved = JSON.parse(localStorage.getItem('bulkOrders') || '[]');
+    const savedIdx = saved.findIndex(o => o.id === id);
+    if(savedIdx !== -1){
+      saved[savedIdx].status = 'Cancelled';
+      localStorage.setItem('bulkOrders', JSON.stringify(saved));
+    }
+    showToast('Order cancelled');
+    renderOrders();
+  }
+
+  function contactSupplier(farmerId){
+    window.location.href = 'b2b-chat.html';
+  }
+
+  window.showToast = function(msg){
+    const t = document.getElementById('customToast');
+    if(t){
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', initOrdersPage);
+</script>
+</body>
+</html>

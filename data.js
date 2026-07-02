@@ -14,21 +14,21 @@ const FARMERS = [
 ];
 
 const PRODUCTS = [
-  { id: 1, name: "Tomato Organik", category: "Vegetables", stock: 240, rating: 4.8, reviews: 89, sold: 1240, farmerId: 1, harvestDate: "2026-06-01", organic: true, description: "Tomato organik ranum matahari ditanam tanpa racun perosak di Kuala Kubu Bharu. Sesuai untuk salad dan sambal.", images: ["https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&h=400&fit=crop"], tags: ["organic", "fresh", "local", "sayur"], pricing: [{ label: "250g", price: 2.20 }, { label: "500g", price: 4.00 }, { label: "1kg", price: 7.50 }] },
-  { id: 2, name: "Cherry Tomato", category: "Vegetables", stock: 180, rating: 4.7, reviews: 64, sold: 530, farmerId: 1, harvestDate: "2026-06-01", organic: true, description: "Tomato ceri Cameron Highlands yang manis, rangup, dan penuh jus. Sesuai untuk snek sihat.", images: ["https://images.unsplash.com/photo-1558818498-28c1e002b655?w=400&h=400&fit=crop"], tags: ["organic", "sweet", "snack", "seasonal"], pricing: [{ label: "200g", price: 4.50 }, { label: "500g", price: 9.80 }] },
-  { id: 3, name: "Cili Merah Kulai Segar", category: "Vegetables", stock: 95, rating: 4.6, reviews: 112, sold: 2100, farmerId: 4, harvestDate: "2026-05-30", organic: false, description: "Cili merah gred Kulai yang pedas ketagih, dipetik segar dari ladang di Nilai.", images: ["https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=400&h=400&fit=crop"], tags: ["spicy", "fresh", "local", "seasonal"], pricing: [{ label: "100g", price: 3.20 }, { label: "250g", price: 7.00 }, { label: "500g", price: 13.50 }] },
-  { id: 4, name: "Salad Cameron", category: "Vegetables", stock: 320, rating: 4.9, reviews: 201, sold: 3420, farmerId: 2, harvestDate: "2026-06-02", organic: true, description: "Salad Butterhead segar dan rapuh dari tanah tinggi Cameron Highlands.", images: ["https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=400&h=400&fit=crop"], tags: ["organic", "highland", "crisp"], pricing: [{ label: "1 pokok (1 head)", price: 3.50 }, { label: "3 pokok (Combo Pack)", price: 9.00 }] },
-  { id: 5, name: "Bayam Hijau Segar", category: "Vegetables", stock: 150, rating: 4.7, reviews: 78, sold: 940, farmerId: 2, harvestDate: "2026-06-02", organic: true, description: "Bayam hijau organik kaya dengan zat besi, dituai subuh untuk kesegaran maksimum.", images: ["https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=400&fit=crop"], tags: ["organic", "nutritious", "sayur"], pricing: [{ label: "250g", price: 2.80 }, { label: "500g", price: 5.00 }] },
-  { id: 6, name: "Tembikai Seedles", category: "Fruits", stock: 48, rating: 4.8, reviews: 156, sold: 410, farmerId: 10, harvestDate: "2026-05-28", organic: false, description: "Tembikai merah tanpa biji yang manis, gred A, sesuai untuk cuaca panas Malaysia.", images: ["https://images.unsplash.com/photo-1563114773-84221bd62daa?w=400&h=400&fit=crop"], tags: ["sweet", "refreshing", "buah", "seasonal"], pricing: [{ label: "Saiz S (2-3kg)", price: 12.00 }, { label: "Saiz M (4-5kg)", price: 19.50 }, { label: "Saiz L (6kg+)", price: 26.00 }] },
-  { id: 7, name: "Buah Naga Merah", category: "Fruits", stock: 200, rating: 4.6, reviews: 93, sold: 1150, farmerId: 8, harvestDate: "2026-05-31", organic: false, description: "Buah naga isi merah organik dari Kuala Pilah. Manis gred premium.", images: ["https://images.unsplash.com/photo-1527325678964-54921661f888?w=400&h=400&fit=crop"], tags: ["sweet", "antioxidant", "buah", "seasonal"], pricing: [{ label: "1kg (2-3 biji)", price: 9.50 }, { label: "3kg (Kotak Borong)", price: 26.00 }] },
-  { id: 8, name: "Harumanis Perlis", category: "Fruits", stock: 120, rating: 4.9, reviews: 278, sold: 5620, farmerId: 6, harvestDate: "2026-05-25", organic: false, description: "Mangga Harumanis premium asli. Aromanya memikat, isinya tebal dan sangat manis.", images: ["https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=400&h=400&fit=crop"], tags: ["premium", "sweet", "seasonal"], pricing: [{ label: "1kg (Gred A)", price: 28.00 }, { label: "3kg (Kotak Hadiah)", price: 80.00 }] },
-  { id: 9, name: "Jagung Manis Madu", category: "Vegetables", stock: 400, rating: 4.7, reviews: 188, sold: 3890, farmerId: 10, harvestDate: "2026-06-01", organic: false, description: "Jagung manis mutiara madu dari Banting. Sangat manis, sesuai direbus atau dibakar.", images: ["https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop"], tags: ["sweet", "fresh", "banting"], pricing: [{ label: "3 Tongkol", price: 5.00 }, { label: "10 Tongkol (Pek Kenduri)", price: 15.00 }] },
-  { id: 10, name: "Terung Panjang", category: "Vegetables", stock: 88, rating: 4.5, reviews: 42, sold: 620, farmerId: 3, harvestDate: "2026-05-30", organic: false, description: "Terung panjang ungu segar dari Ipoh, berkulit nipis and empuk apabila dimasak.", images: ["/img/terung.jpg"], tags: ["fresh", "local", "sayur"], pricing: [{ label: "500g", price: 4.50 }, { label: "1kg", price: 8.00 }] },
-  { id: 11, name: "Timun Jepun Cameron", category: "Vegetables", stock: 175, rating: 4.6, reviews: 67, sold: 1430, farmerId: 2, harvestDate: "2026-06-02", organic: true, description: "Timun Jepun premium rangup tinggi kandungan air, ditanam secara hidroponik.", images: ["/img/pandan.jpg"], tags: ["crispy", "organic", "hidroponik"], pricing: [{ label: "500g", price: 3.80 }, { label: "1kg", price: 7.00 }] },
-  { id: 12, name: "Daun Pandan Wangi", category: "Herbs", stock: 300, rating: 4.8, reviews: 134, sold: 4500, farmerId: 9, harvestDate: "2026-06-02", organic: true, description: "Daun pandan tua kampung asli, beraroma pekat untuk masakan nasi lemak dan kuih.", images: ["https://images.unsplash.com/photo-1604499759580-39a8fb50a4b5?w=400&h=400&fit=crop"], tags: ["aromatic", "cooking", "baking"], pricing: [{ label: "100g (approx 10 helai)", price: 2.00 }, { label: "300g (Pek Komersial)", price: 5.00 }] },
-  { id: 13, name: "Serai Kampung Segar", category: "Herbs", stock: 220, rating: 4.7, reviews: 98, sold: 2310, farmerId: 9, harvestDate: "2026-06-01", organic: true, description: "Batang serai wangi kampung segar gred masakan dari Rawang.", images: ["/img/serai.jpg"], tags: ["aromatic", "cooking", "fresh"], pricing: [{ label: "250g (approx 5-7 batang)", price: 2.50 }, { label: "1kg", price: 8.50 }] },
-  { id: 14, name: "Ikan Siakap Sangkar", category: "Aquaculture products", stock: 65, rating: 4.9, reviews: 142, sold: 3240, farmerId: 10, harvestDate: "2026-06-02", organic: false, description: "Ikan Siakap hidup dari ternakan sangkar air masin Banting. Isi manis, bersih tanpa bau lumpur. Disiang percuma sebelum penghantaran.", images: ["/img/siakap.jpg"], tags: ["aquaculture", "seafood", "fresh-fish"], pricing: [{ label: "600g - 800g (1 ekor)", price: 16.80 }, { label: "900g - 1.1kg (1 ekor)", price: 23.50 }] },
-  { id: 15, name: "Udang Harimau Kolam Gred A", category: "Aquaculture products", stock: 45, rating: 4.8, reviews: 92, sold: 1410, farmerId: 10, harvestDate: "2026-06-02", organic: false, description: "Udang Harimau (Tiger Prawn) ternakan air payau premium, ditangkap segar mengikut pesanan. Kulit keras berkilat, isi padat mantap.", images: ["/img/udang.jpg"], tags: ["aquaculture", "prawns", "premium"], pricing: [{ label: "300g (approx 10-12 ekor)", price: 24.00 }, { label: "600g (approx 20-24 ekor)", price: 46.00 }] }
+  { id: 1, name: "Tomato Organik", category: "Vegetables", stock: 240, rating: 4.8, reviews: 89, sold: 1240, farmerId: 1, harvestDate: "2026-06-01", organic: true, grade: "Premium", description: "Tomato organik ranum matahari ditanam tanpa racun perosak di Kuala Kubu Bharu. Sesuai untuk salad dan sambal.", images: ["https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&h=400&fit=crop"], tags: ["organic", "fresh", "local", "sayur"], pricing: [{ label: "250g", price: 2.20 }, { label: "500g", price: 4.00 }, { label: "1kg", price: 7.50 }] },
+  { id: 2, name: "Cherry Tomato", category: "Vegetables", stock: 180, rating: 4.7, reviews: 64, sold: 530, farmerId: 1, harvestDate: "2026-06-01", organic: true, grade: "Grade 1", description: "Tomato ceri Cameron Highlands yang manis, rangup, dan penuh jus. Sesuai untuk snek sihat.", images: ["https://images.unsplash.com/photo-1558818498-28c1e002b655?w=400&h=400&fit=crop"], tags: ["organic", "sweet", "snack", "seasonal"], pricing: [{ label: "200g", price: 4.50 }, { label: "500g", price: 9.80 }] },
+  { id: 3, name: "Cili Merah Kulai Segar", category: "Vegetables", stock: 95, rating: 4.6, reviews: 112, sold: 2100, farmerId: 4, harvestDate: "2026-05-30", organic: false, grade: "Grade 1", description: "Cili merah gred Kulai yang pedas ketagih, dipetik segar dari ladang di Nilai.", images: ["https://images.unsplash.com/photo-1588252303782-cb80119abd6d?w=400&h=400&fit=crop"], tags: ["spicy", "fresh", "local", "seasonal"], pricing: [{ label: "100g", price: 3.20 }, { label: "250g", price: 7.00 }, { label: "500g", price: 13.50 }] },
+  { id: 4, name: "Salad Cameron", category: "Vegetables", stock: 320, rating: 4.9, reviews: 201, sold: 3420, farmerId: 2, harvestDate: "2026-06-02", organic: true, grade: "Premium", description: "Salad Butterhead segar dan rapuh dari tanah tinggi Cameron Highlands.", images: ["https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=400&h=400&fit=crop"], tags: ["organic", "highland", "crisp"], pricing: [{ label: "1 pokok (1 head)", price: 3.50 }, { label: "3 pokok (Combo Pack)", price: 9.00 }] },
+  { id: 5, name: "Bayam Hijau Segar", category: "Vegetables", stock: 150, rating: 4.7, reviews: 78, sold: 940, farmerId: 2, harvestDate: "2026-06-02", organic: true, grade: "Grade 1", description: "Bayam hijau organik kaya dengan zat besi, dituai subuh untuk kesegaran maksimum.", images: ["https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=400&h=400&fit=crop"], tags: ["organic", "nutritious", "sayur"], pricing: [{ label: "250g", price: 2.80 }, { label: "500g", price: 5.00 }] },
+  { id: 6, name: "Tembikai Seedles", category: "Fruits", stock: 48, rating: 4.8, reviews: 156, sold: 410, farmerId: 10, harvestDate: "2026-05-28", organic: false, grade: "Grade 1", description: "Tembikai merah tanpa biji yang manis, gred A, sesuai untuk cuaca panas Malaysia.", images: ["https://images.unsplash.com/photo-1563114773-84221bd62daa?w=400&h=400&fit=crop"], tags: ["sweet", "refreshing", "buah", "seasonal"], pricing: [{ label: "Saiz S (2-3kg)", price: 12.00 }, { label: "Saiz M (4-5kg)", price: 19.50 }, { label: "Saiz L (6kg+)", price: 26.00 }] },
+  { id: 7, name: "Buah Naga Merah", category: "Fruits", stock: 200, rating: 4.6, reviews: 93, sold: 1150, farmerId: 8, harvestDate: "2026-05-31", organic: false, grade: "Grade 2", description: "Buah naga isi merah organik dari Kuala Pilah. Manis gred premium.", images: ["https://images.unsplash.com/photo-1527325678964-54921661f888?w=400&h=400&fit=crop"], tags: ["sweet", "antioxidant", "buah", "seasonal"], pricing: [{ label: "1kg (2-3 biji)", price: 9.50 }, { label: "3kg (Kotak Borong)", price: 26.00 }] },
+  { id: 8, name: "Harumanis Perlis", category: "Fruits", stock: 120, rating: 4.9, reviews: 278, sold: 5620, farmerId: 6, harvestDate: "2026-05-25", organic: false, grade: "Premium", description: "Mangga Harumanis premium asli. Aromanya memikat, isinya tebal dan sangat manis.", images: ["https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=400&h=400&fit=crop"], tags: ["premium", "sweet", "seasonal"], pricing: [{ label: "1kg (Gred A)", price: 28.00 }, { label: "3kg (Kotak Hadiah)", price: 80.00 }] },
+  { id: 9, name: "Jagung Manis Madu", category: "Vegetables", stock: 400, rating: 4.7, reviews: 188, sold: 3890, farmerId: 10, harvestDate: "2026-06-01", organic: false, grade: "Grade 1", description: "Jagung manis mutiara madu dari Banting. Sangat manis, sesuai direbus atau dibakar.", images: ["https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop"], tags: ["sweet", "fresh", "banting"], pricing: [{ label: "3 Tongkol", price: 5.00 }, { label: "10 Tongkol (Pek Kenduri)", price: 15.00 }] },
+  { id: 10, name: "Terung Panjang", category: "Vegetables", stock: 88, rating: 4.5, reviews: 42, sold: 620, farmerId: 3, harvestDate: "2026-05-30", organic: false, grade: "Grade 2", description: "Terung panjang ungu segar dari Ipoh, berkulit nipis and empuk apabila dimasak.", images: ["/img/terung.jpg"], tags: ["fresh", "local", "sayur"], pricing: [{ label: "500g", price: 4.50 }, { label: "1kg", price: 8.00 }] },
+  { id: 11, name: "Timun Jepun Cameron", category: "Vegetables", stock: 175, rating: 4.6, reviews: 67, sold: 1430, farmerId: 2, harvestDate: "2026-06-02", organic: true, grade: "Grade 1", description: "Timun Jepun premium rangup tinggi kandungan air, ditanam secara hidroponik.", images: ["/img/pandan.jpg"], tags: ["crispy", "organic", "hidroponik"], pricing: [{ label: "500g", price: 3.80 }, { label: "1kg", price: 7.00 }] },
+  { id: 12, name: "Daun Pandan Wangi", category: "Herbs", stock: 300, rating: 4.8, reviews: 134, sold: 4500, farmerId: 9, harvestDate: "2026-06-02", organic: true, grade: "Premium", description: "Daun pandan tua kampung asli, beraroma pekat untuk masakan nasi lemak dan kuih.", images: ["https://images.unsplash.com/photo-1604499759580-39a8fb50a4b5?w=400&h=400&fit=crop"], tags: ["aromatic", "cooking", "baking"], pricing: [{ label: "100g (approx 10 helai)", price: 2.00 }, { label: "300g (Pek Komersial)", price: 5.00 }] },
+  { id: 13, name: "Serai Kampung Segar", category: "Herbs", stock: 220, rating: 4.7, reviews: 98, sold: 2310, farmerId: 9, harvestDate: "2026-06-01", organic: true, grade: "Grade 1", description: "Batang serai wangi kampung segar gred masakan dari Rawang.", images: ["/img/serai.jpg"], tags: ["aromatic", "cooking", "fresh"], pricing: [{ label: "250g (approx 5-7 batang)", price: 2.50 }, { label: "1kg", price: 8.50 }] },
+  { id: 14, name: "Ikan Siakap Sangkar", category: "Aquaculture products", stock: 65, rating: 4.9, reviews: 142, sold: 3240, farmerId: 10, harvestDate: "2026-06-02", organic: false, grade: "Premium", description: "Ikan Siakap hidup dari ternakan sangkar air masin Banting. Isi manis, bersih tanpa bau lumpur. Disiang percuma sebelum penghantaran.", images: ["/img/siakap.jpg"], tags: ["aquaculture", "seafood", "fresh-fish"], pricing: [{ label: "600g - 800g (1 ekor)", price: 16.80 }, { label: "900g - 1.1kg (1 ekor)", price: 23.50 }] },
+  { id: 15, name: "Udang Harimau Kolam Gred A", category: "Aquaculture products", stock: 45, rating: 4.8, reviews: 92, sold: 1410, farmerId: 10, harvestDate: "2026-06-02", organic: false, grade: "Premium", description: "Udang Harimau (Tiger Prawn) ternakan air payau premium, ditangkap segar mengikut pesanan. Kulit keras berkilat, isi padat mantap.", images: ["/img/udang.jpg"], tags: ["aquaculture", "prawns", "premium"], pricing: [{ label: "300g (approx 10-12 ekor)", price: 24.00 }, { label: "600g (approx 20-24 ekor)", price: 46.00 }] }
 ];
 
 
@@ -75,6 +75,31 @@ const FARMER_EARNINGS = {
   ]
 };
 
+const B2B_BUYERS = [
+  {
+    id: 1,
+    company: "Restoran Seri Selera",
+    email: "b2b@aeryhub.com",
+    assignedFarmerId: 1,
+    weeklyOrderDay: "Monday"
+  }
+];
+
+const BULK_ORDERS = [
+  {
+    id: "BO-1001",
+    buyerId: 1,
+    farmerId: 1,
+    status: "Active",
+    deliveryDate: "2026-07-10",
+    items: [
+      { productId: 1, quantity: "20 kg" },
+      { productId: 2, quantity: "10 kg" },
+      { productId: 5, quantity: "15 kg" }
+    ]
+  }
+];
+
 
 // App State
 const AppState = {
@@ -84,11 +109,41 @@ const AppState = {
   darkMode: false,
 
   login(role) {
+
     if (role === 'farmer') {
-      this.currentUser = { role: 'farmer', name: 'Ahmad Razif', email: 'farmer@aeryhub.com', farmerId: 1, plan: 'free' };
-    } else {
-      this.currentUser = { role: 'consumer', name: 'Sarah Lim', email: 'consumer@aeryhub.com', avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b047?w=100&h=100&fit=crop&crop=face' };
+
+      this.currentUser = {
+        role: 'farmer',
+        name: 'Ahmad Razif',
+        email: 'farmer@aeryhub.com',
+        farmerId: 1,
+        plan: 'free'
+      };
+
+    } else if (role === 'consumer') {
+
+      this.currentUser = {
+        role: 'consumer',
+        name: 'Sarah Lim',
+        email: 'consumer@aeryhub.com',
+        avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b047?w=100&h=100&fit=crop&crop=face'
+      };
+
+    } else if (role === 'b2b') {
+
+      const buyer = B2B_BUYERS[0];
+
+      this.currentUser = {
+        role: 'b2b',
+        buyerId: buyer.id,
+        company: buyer.company,
+        email: buyer.email,
+        assignedFarmerId: buyer.assignedFarmerId,
+        weeklyOrderDay: buyer.weeklyOrderDay
+      };
+
     }
+
     localStorage.setItem('aeryhub_user', JSON.stringify(this.currentUser));
   },
 
@@ -100,8 +155,10 @@ const AppState = {
 
   addToCart(productId, qty = 1) {
     const existing = this.cart.find(i => i.productId === productId);
+
     if (existing) existing.qty += qty;
     else this.cart.push({ productId, qty });
+
     this.saveCart();
   },
 
@@ -112,8 +169,14 @@ const AppState = {
 
   updateCartQty(productId, qty) {
     const item = this.cart.find(i => i.productId === productId);
+
     if (item) item.qty = qty;
-    if (qty <= 0) this.removeFromCart(productId);
+
+    if (qty <= 0) {
+      this.removeFromCart(productId);
+      return;
+    }
+
     this.saveCart();
   },
 
@@ -128,27 +191,74 @@ const AppState = {
 
   getCartTotal() {
     return this.cart.reduce((sum, item) => {
+
       const product = PRODUCTS.find(p => p.id === item.productId);
-      // FIXED: Safely access inner pricing structures to avoid RM NaN issues
-      const price = product && product.pricing && product.pricing.length > 0 ? product.pricing[0].price : 0;
+
+      const price =
+        product &&
+        product.pricing &&
+        product.pricing.length > 0
+          ? product.pricing[0].price
+          : 0;
+
       return sum + (price * item.qty);
+
     }, 0);
   },
 
   toggleWishlist(productId) {
+
     const idx = this.wishlist.indexOf(productId);
-    if (idx > -1) this.wishlist.splice(idx, 1);
-    else this.wishlist.push(productId);
+
+    if (idx > -1)
+      this.wishlist.splice(idx, 1);
+    else
+      this.wishlist.push(productId);
+
+  },
+
+  getAssignedFarmer() {
+
+    if (
+      !this.currentUser ||
+      this.currentUser.role !== 'b2b'
+    ) return null;
+
+    return FARMERS.find(
+      farmer => farmer.id === this.currentUser.assignedFarmerId
+    );
+
+  },
+
+  getBulkOrders() {
+
+    if (
+      !this.currentUser ||
+      this.currentUser.role !== 'b2b'
+    ) return [];
+
+    return BULK_ORDERS.filter(
+      order => order.buyerId === this.currentUser.buyerId
+    );
+
   },
 
   init() {
+
     const saved = localStorage.getItem('aeryhub_user');
-    if (saved) this.currentUser = JSON.parse(saved);
+
+    if (saved)
+      this.currentUser = JSON.parse(saved);
+
     this.loadCart();
+
     const dm = localStorage.getItem('aeryhub_dark');
+
     if (dm === 'true') {
       this.darkMode = true;
       document.body.classList.add('dark');
     }
+
   }
+
 };

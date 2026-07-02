@@ -9,9 +9,9 @@
   <style>
     /* DESIGN SYSTEM ROOT ACCENTS */
     :root {
-      --primary: #16a34a;
-      --primary-dark: #15803d;
-      --bg: #fafaf5;
+      --primary: #1F5A2D;
+      --primary-dark: #174722;
+      --bg: #F5F5EE;
       --surface: #ffffff;
       --text: #1f2937;
       --text-muted: #6b7280;
@@ -21,7 +21,7 @@
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: #e8ede5;
+      background: #e0ead8;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -50,18 +50,18 @@
     /* HARDWARE STATUS BAR WITH INTEGRATED NOTCH */
     .status-bar {
       height: 44px;
-      background: #ffffff;
+      background: #1F5A2D !important;
+      color: #ffffff !important;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 28px;
       font-size: 13px;
       font-weight: 600;
-      color: var(--text);
       flex-shrink: 0;
       position: relative;
       z-index: 30;
-      border-bottom: 1px solid rgba(0,0,0,0.03);
+      border-bottom: none;
     }
 
     .status-bar .notch {
@@ -79,7 +79,7 @@
     .screen {
       flex: 1;
       overflow-y: auto;
-      background: #f4f5f7;
+      background: #F5F5EE;
       position: relative;
       scrollbar-width: none;
       display: flex;
@@ -87,44 +87,61 @@
     }
     .screen::-webkit-scrollbar { display: none; }
 
-    /* FIXED STICKY TOP APP HEADER */
+    /* GREEN TOP APP HEADER - STANDARDISED WITH MARKETPLACE */
     .page-header {
-      background: var(--surface);
-      padding: 14px 20px;
+      background: #1F5A2D;
+      padding: 14px 20px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 25;
+      border-bottom: none;
     }
 
     .page-title {
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 700;
-      color: var(--text);
+      color: #ffffff;
+      line-height: 1;
+      letter-spacing: .2px;
     }
 
     .cover-back {
-      width: 36px;
+      width: 28px;
       height: 36px;
-      border-radius: 10px;
-      background: #f4f5f7;
+      border-radius: 0;
+      background: transparent;
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: var(--text);
+      justify-content: flex-start;
+      color: #ffffff;
       text-decoration: none;
-      font-size: 14px;
-      transition: background 0.2s;
+      font-size: 16px;
+      transition: opacity 0.2s;
+      flex-shrink: 0;
     }
-    .cover-back:active { background: #e5e7eb; }
+    .cover-back:active { opacity: .72; background: transparent; }
+
+    .clear-cart-btn {
+      background: rgba(255,255,255,.14);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      height: 36px;
+      padding: 0 12px;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .clear-cart-btn:active { background: rgba(255,255,255,.24); }
 
     /* FIXED STICKY GLOBAL UTILITY SELECT ROW */
     #globalSelectRow {
       padding: 12px 20px;
-      background: var(--surface);
+      background: #ffffff;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -411,7 +428,7 @@
         <i class="fa-solid fa-chevron-left"></i>
       </a>
       <div class="page-title">Shopping Cart</div>
-      <button onclick="wipeEntireCart()" style="background:none; border:none; font-size:13px; color:var(--red-500); font-weight:700; cursor:pointer; padding:4px;">Clear All</button>
+      <button onclick="wipeEntireCart()" class="clear-cart-btn">Clear All</button>
     </div>
 
     <div id="globalSelectRow">
@@ -455,8 +472,30 @@
   let localCartData = [];
 
   function syncLocalData() {
-    const raw = localStorage.getItem('cart');
+    const raw = localStorage.getItem('cart') || localStorage.getItem('aeryhub_cart');
     localCartData = raw ? JSON.parse(raw) : [];
+    // Normalise cart structure from data.js/AppState:
+    // AppState uses { productId, qty }, while checkout flow may use { id, variation, price, image }.
+    localCartData = localCartData.map(item => {
+      const targetId = item.id || item.productId;
+      const p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(prod => prod.id === targetId) : null;
+      const firstPricing = p && p.pricing && p.pricing.length > 0 ? p.pricing[0] : null;
+      const selectedVariation = item.variation || item.unit || (firstPricing ? firstPricing.label : 'Standard');
+      const matchedPricing = p && p.pricing ? p.pricing.find(pr => pr.label === selectedVariation) : null;
+
+      return {
+        ...item,
+        id: targetId,
+        productId: targetId,
+        name: item.name || (p ? p.name : 'Fresh Produce'),
+        image: item.image || (p && p.images && p.images.length ? p.images[0] : ''),
+        variation: selectedVariation,
+        unit: selectedVariation,
+        qty: parseInt(item.qty || item.quantity || 1, 10) || 1,
+        quantity: parseInt(item.qty || item.quantity || 1, 10) || 1,
+        price: item.price ?? (matchedPricing ? matchedPricing.price : (firstPricing ? firstPricing.price : 0))
+      };
+    });
 
     if (!window.AppState) {
       window.AppState = {};
@@ -466,6 +505,7 @@
 
   function saveLocalData() {
     localStorage.setItem('cart', JSON.stringify(localCartData));
+    localStorage.setItem('aeryhub_cart', JSON.stringify(localCartData));
     if (window.AppState) {
       window.AppState.cart = localCartData;
     }
@@ -541,7 +581,11 @@
         const displayUnit = item.variation || item.unit || (p ? p.unit : 'Standard');
 
         // FIX: Clean up any currency strings to protect against numerical operations breaking
-        let rawPrice = item.price ?? (p ? p.price : 0);
+        let rawPrice = item.price;
+        if (rawPrice === undefined || rawPrice === null) {
+          const matchedPricing = p && p.pricing ? p.pricing.find(pr => pr.label === displayUnit) : null;
+          rawPrice = matchedPricing ? matchedPricing.price : (p && p.pricing && p.pricing[0] ? p.pricing[0].price : 0);
+        }
         if (typeof rawPrice === 'string') {
           rawPrice = rawPrice.replace(/RM|\s|,/gi, '');
         }
@@ -685,7 +729,11 @@
       const itemKey = `${targetId}-${displayUnit}`;
 
       if (selectedItemsMap[itemKey]) {
-        let rawPrice = item.price ?? (p ? p.price : 0);
+        let rawPrice = item.price;
+        if (rawPrice === undefined || rawPrice === null) {
+          const matchedPricing = p && p.pricing ? p.pricing.find(pr => pr.label === displayUnit) : null;
+          rawPrice = matchedPricing ? matchedPricing.price : (p && p.pricing && p.pricing[0] ? p.pricing[0].price : 0);
+        }
         if (typeof rawPrice === 'string') {
           rawPrice = rawPrice.replace(/RM|\s|,/gi, '');
         }
@@ -752,7 +800,11 @@
         unit: item.variation || item.unit || (p ? p.unit : 'Standard'),
         qty: parseInt(item.qty || item.quantity, 10) || 1,
         quantity: parseInt(item.qty || item.quantity, 10) || 1,
-        price: item.price ?? (p ? p.price : 0)
+        price: item.price ?? (
+          p && p.pricing && p.pricing.length > 0
+            ? ((p.pricing.find(pr => pr.label === (item.variation || item.unit)) || p.pricing[0]).price)
+            : 0
+        )
       };
     });
 

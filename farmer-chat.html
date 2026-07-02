@@ -4,215 +4,529 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AeryHub - Farmer Chat</title>
+
   <link rel="stylesheet" href="css/style1.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { background:#F5F5EE; }
 
-    body {
-      background: #e0ead8;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+    .status-bar {
+      background:#1F5A2D !important;
+      color:#fff !important;
     }
 
-    /* CORE SCREEN INTERFACE CANVAS */
+    .status-bar span,
+    .status-icons { color:#fff !important; }
+
     .screen {
-      flex: 1;
-      overflow-y: auto;
-      background: #fafafa;
-      position: relative;
-      scrollbar-width: none;
-      padding-bottom: 80px;
-    }
-    .screen::-webkit-scrollbar { display: none; }
-
-    /* STICKY TOP PAGE APPBAR SYSTEM FROM MARKETPLACE */
-    .market-header {
-      padding: 16px 20px 12px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+      flex:1;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      background:#F5F5EE;
+      position:relative;
+      scrollbar-width:none;
+      padding-bottom:80px;
     }
 
-    .market-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .screen::-webkit-scrollbar { display:none; }
+
+    /* ── BEFORE CLICK: Conversation list header, same as consumer chat ── */
+    .green-zone {
+      background:#1F5A2D;
+      padding:0 20px 20px;
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+
+    .home-header {
+      background:transparent !important;
+      padding:14px 0 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .app-brand {
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .brand-name {
+      font-size:20px;
+      font-weight:700;
+      color:#ffffff;
+      line-height:1;
+      letter-spacing:.2px;
     }
 
     .icon-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: #f4f5f7;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text);
-      cursor: pointer;
-      font-size: 14px;
-      transition: background 0.2s;
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      cursor:pointer;
+      text-decoration:none;
+      position:relative;
+      flex-shrink:0;
     }
-    .icon-btn:active { background: #e5e7eb; }
 
-    /* PREMIUM APP SEARCH BAR DESIGN */
-    .search-container { padding: 12px 16px 4px; }
-    .search-wrapper { position: relative; display: flex; align-items: center; }
-    .search-wrapper i { position: absolute; left: 14px; color: var(--text-muted); font-size: 13px; }
-    .search-input { width: 100%; background: #f1f3f0; border: none; border-radius: 12px; padding: 10px 14px 10px 38px; font-size: 13px; font-weight: 500; outline: none; color: var(--text); font-family: inherit; }
+    .icon-btn:active { background:rgba(255,255,255,.24); }
 
-    /* CONVERSATION FEED ELEMENTS WITH FIXED AVATAR TRACKING */
-    .convo-item { display: flex; gap: 14px; align-items: center; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid #f3f4f6; background: var(--surface); transition: background 0.15s; }
-    .convo-item:hover { background: var(--gray-50); }
+    .search-bar {
+      background:#fff;
+      border:none;
+      border-radius:14px;
+      box-shadow:0 4px 12px rgba(0,0,0,.12);
+      margin-top:15px;
+    }
+
+    /* Let global style1.css handle search icon/input spacing as much as possible */
+    .search-bar input {
+      font-family:var(--font);
+      font-size:14px;
+      font-weight:500;
+    }
+
+    /* ── Conversation list ── */
+    .convo-list-wrap {
+      margin-top:0;
+      background:#F5F5EE;
+    }
+
+    #convoListItems {
+      background:#FFFFFF;
+      border-top-left-radius:18px;
+      border-top-right-radius:18px;
+      overflow:hidden;
+    }
+
+    .convo-item {
+      display:flex;
+      gap:14px;
+      align-items:center;
+      padding:14px 20px;
+      cursor:pointer;
+      border-bottom:1px solid #f3f4f6;
+      background:#FFFFFF;
+      transition:background .15s;
+    }
+
+    .convo-item:hover,
+    .convo-item:active { background:var(--gray-50); }
 
     .convo-avatar-wrap {
-      position: relative;
-      width: 48px;
-      height: 48px;
-      flex-shrink: 0;
+      position:relative;
+      width:48px;
+      height:48px;
+      flex-shrink:0;
     }
+
     .convo-avatar {
-      width: 48px !important;
-      height: 48px !important;
-      min-width: 48px !important;
-      max-width: 48px !important;
-      border-radius: 14px;
-      object-fit: cover;
-      border: 1px solid #eee;
-      display: block;
-      background: #ebeeeb;
+      width:48px !important;
+      height:48px !important;
+      min-width:48px !important;
+      max-width:48px !important;
+      border-radius:14px;
+      object-fit:cover;
+      border:1px solid #eee;
+      display:block;
+      background:#ebeeeb;
     }
-    .online-dot { position: absolute; bottom: -1px; right: -1px; width: 11px; height: 11px; border-radius: 50%; background: #22c55e; border: 2px solid var(--surface); }
 
-    .convo-info { flex: 1; min-width: 0; }
-    .convo-name { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 3px; display: flex; align-items: center; justify-content: space-between; font-family: inherit; }
-    .convo-last { font-size: 12.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
+    .online-dot {
+      position:absolute;
+      bottom:-1px;
+      right:-1px;
+      width:11px;
+      height:11px;
+      border-radius:50%;
+      background:#22c55e;
+      border:2px solid var(--surface);
+    }
 
-    .convo-right { text-align: right; flex-shrink: 0; }
-    .convo-time { font-size: 11px; color: var(--text-muted); margin-bottom: 5px; font-weight: 500; }
-    .unread-badge { background: #16a34a; color: white; border-radius: 10px; padding: 2px 7px; font-size: 10px; font-weight: 800; }
+    .convo-info { flex:1; min-width:0; }
 
-    /* FULL-SCREEN OVERLAY WINDOW INTERFACE */
+    .convo-name {
+      font-size:13.5px;
+      font-weight:700;
+      color:var(--text);
+      margin-bottom:3px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .convo-last {
+      font-size:12.5px;
+      color:var(--text-muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      font-weight:500;
+    }
+
+    .convo-right {
+      text-align:right;
+      flex-shrink:0;
+    }
+
+    .convo-time {
+      font-size:11px;
+      color:var(--text-muted);
+      margin-bottom:5px;
+      font-weight:500;
+    }
+
+    .unread-badge {
+      background:#1F5A2D;
+      color:white;
+      border-radius:10px;
+      padding:2px 7px;
+      font-size:10px;
+      font-weight:800;
+    }
+
+    /* ── AFTER CLICK: Specific chat, same style as consumer chat ── */
     .chat-screen {
-      display: none;
-      flex-direction: column;
-      height: calc(100% - 44px);
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      background: #f4f6f3;
-      z-index: 40;
+      display:none;
+      flex-direction:column;
+      position:absolute;
+      top:44px;
+      bottom:0;
+      left:0;
+      right:0;
+      background:#F5F5EE;
+      z-index:200;
     }
 
     .chat-header {
-      padding: 14px 16px;
-      background: #ffffff;
-      border-bottom: 1px solid #eef0ed;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
+      min-height:82px;
+      padding:18px 18px;
+      background:#1F5A2D;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-shrink:0;
     }
-    .chat-header-info { flex: 1; min-width: 0; }
-    .chat-header-name { font-size: 14.5px; font-weight: 700; color: #1f2937; }
-    .chat-header-status { font-size: 11.5px; color: #16a34a; font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
 
-    /* INTERACTIVE CHAT WRAPPERS */
+    .chat-header .icon-btn {
+      background:transparent;
+      color:#ffffff;
+      width:30px;
+      height:30px;
+      border:none;
+      outline:none;
+      box-shadow:none;
+      border-radius:0;
+      font-size:15px;
+      padding:0;
+    }
+
+    .chat-header .icon-btn:focus,
+    .chat-header .icon-btn:focus-visible,
+    .chat-header .icon-btn:active {
+      background:transparent;
+      outline:none;
+      box-shadow:none;
+    }
+
+    #chatAvatar {
+      width:50px !important;
+      height:50px !important;
+      border-radius:12px !important;
+      object-fit:cover;
+      border:2px solid rgba(255,255,255,.85);
+      flex-shrink:0;
+    }
+
+    .chat-header-info { flex:1; min-width:0; }
+
+    .chat-header-name {
+      font-size:16px;
+      font-weight:800;
+      color:#ffffff;
+      line-height:1.2;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .chat-header-status {
+      font-size:11.5px;
+      color:#E6F2DF;
+      font-weight:600;
+      margin-top:6px;
+      display:flex;
+      align-items:center;
+      gap:5px;
+    }
+
+    .chat-info-btn {
+      width:34px;
+      height:34px;
+      border-radius:0;
+      background:transparent;
+      color:#ffffff;
+      border:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:21px;
+      cursor:pointer;
+      flex-shrink:0;
+      outline:none;
+      box-shadow:none;
+      padding:0;
+    }
+
+    .chat-info-btn i { font-size:22px; }
+
+    .chat-info-btn:focus,
+    .chat-info-btn:focus-visible,
+    .chat-info-btn:active {
+      background:transparent;
+      outline:none;
+      box-shadow:none;
+    }
+
     .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: #f4f6f3;
-      scrollbar-width: none;
+      flex:1;
+      overflow-y:auto;
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      background:#F5F5EE;
+      scrollbar-width:none;
     }
-    .chat-messages::-webkit-scrollbar { display: none; }
-    .msg-row { display: flex; width: 100%; }
 
-    /* Farmer side: sent means sent by farmer (Right side) */
-    .msg-row.sent { justify-content: flex-end; }
-    .msg-wrapper { max-width: 78%; display: flex; flex-direction: column; }
-    .msg-row.sent .msg-wrapper { align-items: flex-end; }
+    .chat-messages::-webkit-scrollbar { display:none; }
+
+    .msg-row {
+      display:flex;
+      width:100%;
+    }
+
+    .msg-row.sent { justify-content:flex-end; }
+
+    .msg-wrapper {
+      max-width:78%;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .msg-row.sent .msg-wrapper { align-items:flex-end; }
 
     .message-bubble {
-      padding: 11px 15px;
-      font-size: 13px;
-      line-height: 1.5;
-      font-weight: 600;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      display:inline-block;
+      width:fit-content;
+      max-width:100%;
+      padding:11px 15px;
+      box-sizing:border-box;
+      font-size:13px;
+      line-height:1.5;
+      font-weight:600;
+      box-shadow:0 2px 4px rgba(0,0,0,.02);
     }
+
     .message-bubble.received {
-      background: #ffffff;
-      color: #1f2937;
-      border-radius: 4px 16px 16px 16px;
-      border: 1px solid #eef0ed;
+      background:#ffffff;
+      color:#1f2937;
+      border-radius:4px 16px 16px 16px;
+      border:1px solid #eef0ed;
     }
+
     .message-bubble.sent {
-      background: #16a34a;
-      color: #ffffff;
-      border-radius: 16px 16px 4px 16px;
+      background:#1F5A2D;
+      color:#ffffff;
+      border-radius:16px 16px 4px 16px;
     }
 
-    .message-time { font-size: 10px; color: #9ca3af; margin-top: 4px; font-weight: 600; }
-    .msg-day-label { text-align: center; font-size: 11px; color: #9ca3af; font-weight: 700; margin: 8px 0; letter-spacing: 0.5px; }
-
-    /* FIX: Latar belakang putih sepenuhnya untuk menutupi chat belakang */
-    #productContext {
-      display: none;
-      padding: 10px 16px 10px;
-      background: #ffffff !important;
-      border-bottom: 1px solid #eef0ed;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      z-index: 45;
+    .message-time {
+      font-size:10px;
+      color:#9ca3af;
+      margin-top:4px;
+      font-weight:600;
     }
 
-    /* FIX: Rupa fizikal kad dikecilkan dan disusun secara melintang (flex) mengikut consumer-chat */
-    .product-preview-bubble {
-      background: #f8faf8;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 8px;
-      max-width: 260px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
+    .msg-day-label {
+      text-align:center;
+      font-size:11px;
+      color:#9ca3af;
+      font-weight:700;
+      margin:8px 0;
+      letter-spacing:.5px;
     }
-    .ppb-img {
-      width: 55px !important;
-      height: 55px !important;
-      object-fit: cover;
-      border-radius: 8px;
-      flex-shrink: 0;
+
+    /* Product inquiry card inside chat messages */
+    .product-inquiry-row {
+      display:flex;
+      width:100%;
     }
-    .ppb-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+
+    .product-inquiry-row.sent { justify-content:flex-end; }
+    .product-inquiry-row.received { justify-content:flex-start; }
+
+    .product-inquiry-card {
+      max-width:270px;
+      background:#ffffff;
+      border:1px solid #E1E7DD;
+      padding:10px;
+      box-shadow:0 2px 6px rgba(0,0,0,.03);
     }
-    .ppb-name { font-size: 12px; font-weight: 700; color: #1f2937; line-height: 1.2; }
-    .ppb-price { font-size: 12px; font-weight: 800; color: #16a34a; margin-top: 0px; }
 
-    /* FLOATING CHIPS CHAT CONTEXT CONTROLS */
-    .quick-replies { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 12px 14px; background: #f4f6f3; }
-    .quick-replies::-webkit-scrollbar { display: none; }
-    .qr-chip { padding: 8px 14px; border-radius: 20px; background: #ffffff; border: 1px solid #e5e7eb; font-size: 11.5px; font-weight: 700; color: #4b5563; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+    .product-inquiry-row.sent .product-inquiry-card {
+      border-radius:16px 16px 4px 16px;
+    }
 
-    /* CHAT DIALOG INPUT ENGINE BAR */
-    .chat-input-bar { padding: 12px 14px 24px; background: #ffffff; border-top: 1px solid #eef0ed; display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
-    .chat-input { flex: 1; border: 1px solid #e5e7eb; border-radius: 14px; padding: 11px 16px; font-size: 13px; background: #f4f4f5; color: #1f2937; outline: none; font-weight: 600; }
-    .chat-input:focus { border-color: #16a34a; background: #ffffff; }
-    .send-btn { width: 42px; height: 42px; border-radius: 12px; background: #16a34a; border: none; color: white; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .product-inquiry-row.received .product-inquiry-card {
+      border-radius:4px 16px 16px 16px;
+    }
 
-    .status-icons { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
-    .nav-icon { font-size: 18px; margin-bottom: 4px; }
+    .product-inquiry-label {
+      font-size:11px;
+      font-weight:700;
+      color:#1F5A2D;
+      margin-bottom:8px;
+      display:flex;
+      align-items:center;
+      gap:5px;
+    }
 
-    /* SYSTEM DEEP TOAST ALERTS */
-    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
-    .toast.show { opacity: 1; }
+    .product-inquiry-content {
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .product-inquiry-img {
+      width:54px;
+      height:54px;
+      border-radius:10px;
+      object-fit:cover;
+      flex-shrink:0;
+    }
+
+    .product-inquiry-name {
+      font-size:12.5px;
+      font-weight:800;
+      color:#1f2937;
+      line-height:1.25;
+    }
+
+    .product-inquiry-price {
+      font-size:12px;
+      font-weight:800;
+      color:#1F5A2D;
+      margin-top:3px;
+    }
+
+    .quick-replies {
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      scrollbar-width:none;
+      padding:12px 14px;
+      background:#F5F5EE;
+      flex-shrink:0;
+    }
+
+    .quick-replies::-webkit-scrollbar { display:none; }
+
+    .qr-chip {
+      padding:8px 14px;
+      border-radius:20px;
+      background:#ffffff;
+      border:1px solid #e5e7eb;
+      font-size:11.5px;
+      font-weight:700;
+      color:#4b5563;
+      cursor:pointer;
+      white-space:nowrap;
+      box-shadow:0 2px 4px rgba(0,0,0,.02);
+    }
+
+    .chat-input-bar {
+      padding:12px 14px 24px;
+      background:#F5F5EE;
+      border-top:1px solid #E6ECE5;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-shrink:0;
+    }
+
+    .chat-input {
+      flex:1;
+      border:1px solid #F5F5EE;
+      border-radius:24px;
+      padding:12px 16px;
+      font-size:13px;
+      background:#ffffff;
+      color:#1f2937;
+      outline:none;
+      font-weight:600;
+      font-family:inherit;
+    }
+
+    .chat-input:focus {
+      border-color:#1F5A2D;
+      background:#ffffff;
+    }
+
+    .send-btn {
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      background:#1F5A2D;
+      border:none;
+      color:white;
+      font-size:14px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+    }
+
+    .nav-icon {
+      font-size:18px;
+      margin-bottom:4px;
+    }
+
+    .toast {
+      position:fixed;
+      bottom:90px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(0,0,0,.85);
+      color:#fff;
+      padding:8px 18px;
+      border-radius:20px;
+      font-size:12px;
+      z-index:999;
+      opacity:0;
+      transition:opacity .2s;
+      pointer-events:none;
+      white-space:nowrap;
+      font-weight:500;
+    }
+
+    .toast.show { opacity:1; }
   </style>
 </head>
-<body>
 
+<body>
 <div class="phone-frame">
   <div class="status-bar">
     <span>9:41</span>
@@ -224,50 +538,50 @@
     </div>
   </div>
 
+  <!-- BEFORE CLICK: Conversation list -->
   <div class="screen" id="convoList">
-    <div class="market-header">
-      <div class="market-header-row">
-        <div style="font-size:20px; font-weight:800; color:var(--text)">
-          Customer Messages
+    <div class="green-zone">
+      <div class="home-header">
+        <div class="app-brand">
+          <div class="brand-name">Messages</div>
         </div>
-        <button class="icon-btn" style="width:40px; height:40px; border-radius:12px;" onclick="showToast('Broadcast feature coming soon!')">
-          <i class="fa-solid fa-bullhorn"></i>
+
+        <button class="icon-btn" onclick="showToast('New message feature coming soon!')">
+          <i class="fa-regular fa-pen-to-square"></i>
         </button>
       </div>
-    </div>
 
-    <div class="search-container">
-      <div class="search-wrapper">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" class="search-input" placeholder="Search customer names...">
+      <div class="search-bar">
+        <span class="search-icon">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+        <input type="text" placeholder="Search conversations..." id="conversationSearch" oninput="filterConvos()">
       </div>
     </div>
 
-    <div style="margin-top:8px" id="convoListItems"></div>
+    <div class="convo-list-wrap" id="convoListItems"></div>
   </div>
 
+  <!-- AFTER CLICK: Specific chat -->
   <div class="chat-screen" id="chatScreen">
     <div class="chat-header">
-      <button onclick="closeChat()" class="icon-btn"><i class="fa-solid fa-chevron-left"></i></button>
-      <img id="chatAvatar" src="" style="width:38px;height:38px;border-radius:12px;object-fit:cover" alt="">
+      <button onclick="closeChat()" class="icon-btn" aria-label="Back">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <img id="chatAvatar" src="" alt="Customer">
+
       <div class="chat-header-info">
         <div class="chat-header-name" id="chatName">Customer</div>
-        <div class="chat-header-status"><i class="fa-solid fa-circle" style="font-size:8px;"></i> Active Customer</div>
-      </div>
-      <button onclick="showToast('Customer contact details hidden for privacy.')" class="icon-btn" style="background:#e8f5e9;color:#16a34a"><i class="fa-solid fa-info-circle"></i></button>
-    </div>
-
-    <div id="productContext">
-      <div style="font-size:10.5px; color:#6b7280; margin-bottom:6px; font-weight:700;">
-        <i class="fa-solid fa-circle-info" style="margin-right:3px;"></i> Customer inquiring about your product:
-      </div>
-      <div class="product-preview-bubble">
-        <img id="ppbImg" src="" class="ppb-img" alt="">
-        <div class="ppb-info">
-          <div class="ppb-name" id="ppbName"></div>
-          <div class="ppb-price" id="ppbPrice"></div>
+        <div class="chat-header-status">
+          <i class="fa-solid fa-circle" style="font-size:7px;"></i>
+          Active Customer
         </div>
       </div>
+
+      <button onclick="showToast('Customer contact details hidden for privacy.')" class="chat-info-btn" aria-label="Customer info">
+        <i class="fa-solid fa-circle-info"></i>
+      </button>
     </div>
 
     <div class="chat-messages" id="chatMessages"></div>
@@ -280,18 +594,22 @@
     </div>
 
     <div class="chat-input-bar">
-      <button class="icon-btn" style="background:none;" onclick="showToast('Photo upload coming soon!')"><i class="fa-solid fa-camera" style="font-size:16px;color:var(--text-muted)"></i></button>
+      <button class="icon-btn" style="background:transparent;color:var(--text-muted);" onclick="showToast('Photo upload coming soon!')">
+        <i class="fa-solid fa-paperclip" style="font-size:16px;"></i>
+      </button>
       <input type="text" class="chat-input" id="messageInput" placeholder="Reply to customer..." onkeypress="if(event.key==='Enter')sendMessage()">
-      <button class="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+      <button class="send-btn" onclick="sendMessage()" aria-label="Send message">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
     </div>
   </div>
 
-  <nav class="bottom-nav">
+  <nav class="bottom-nav" id="bottomNav">
     <a href="farmer-dashboard.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
     <a href="manage-products.html" class="nav-item">
-      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Products
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
     <a href="manage-orders.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
@@ -309,17 +627,18 @@
 
 <script src="data.js"></script>
 <script src="script.js"></script>
+
 <script>
   let currentConvo = null;
+  let replyIdx = 0;
 
   const AUTO_CUSTOMER_REPLIES = [
     "Alright, thank you! I will place an order now via the app. 👍",
     "Great! Can I choose farm pickup for this?",
     "Perfect. Is it organically grown?",
     "Okay, please let me know when it's ready.",
-    "Thanks for the fast response! See you later.",
+    "Thanks for the fast response! See you later."
   ];
-  let replyIdx = 0;
 
   const FARMER_SIDE_CONVOS = [
     {
@@ -329,7 +648,11 @@
       lastMessage: "Is this organic tomato available today?",
       time: "5m ago",
       unread: 1,
-      productId: 101,
+      product: {
+        name: "Organic Tomato",
+        image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&h=400&fit=crop",
+        price: "RM 4.50 / 1 kg"
+      },
       messages: [
         { from: "consumer", text: "Hi, I am looking at your Organic Tomatoes.", time: "9:40 AM" },
         { from: "consumer", text: "Is this organic tomato available today?", time: "9:41 AM" }
@@ -342,7 +665,11 @@
       lastMessage: "Thank you for prepping my order! 🙏",
       time: "2h ago",
       unread: 0,
-      productId: 102,
+      product: {
+        name: "Fresh Butterhead Lettuce",
+        image: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=400&h=400&fit=crop",
+        price: "RM 3.00 / 250g"
+      },
       messages: [
         { from: "consumer", text: "Hi, I just bought the Fresh Lettuce bundle.", time: "7:00 AM" },
         { from: "farmer", text: "Hi Sarah, yes! We are packing it fresh now.", time: "7:15 AM" },
@@ -356,7 +683,7 @@
       lastMessage: "Can I collect around 11AM?",
       time: "1d ago",
       unread: 0,
-      productId: null,
+      product: null,
       messages: [
         { from: "consumer", text: "Hello, what time is your farm open for collection?", time: "Yesterday" },
         { from: "farmer", text: "Hi! We are open from 7:00 AM until 12:00 PM.", time: "Yesterday" },
@@ -367,37 +694,59 @@
 
   function renderConvos() {
     const list = document.getElementById('convoListItems');
-    if(!list) return;
+    if (!list) return;
+
+    const q = (document.getElementById('conversationSearch')?.value || '').toLowerCase();
+    const filtered = FARMER_SIDE_CONVOS.filter(convo =>
+      convo.customerName.toLowerCase().includes(q) ||
+      convo.lastMessage.toLowerCase().includes(q)
+    );
+
     list.innerHTML = '';
 
-    FARMER_SIDE_CONVOS.forEach(convo => {
+    filtered.forEach(convo => {
       const div = document.createElement('div');
       div.className = 'convo-item';
       div.onclick = () => openChat(convo.id);
 
       div.innerHTML = `
-      <div class="convo-avatar-wrap">
-        <img src="${convo.customerImage}" class="convo-avatar" alt="">
-        ${convo.unread > 0 ? '<div class="online-dot"></div>' : ''}
-      </div>
-      <div class="convo-info">
-        <div class="convo-name">
-          <span>${convo.customerName}</span>
+        <div class="convo-avatar-wrap">
+          <img src="${convo.customerImage}" class="convo-avatar" alt="">
+          ${convo.unread > 0 ? '<div class="online-dot"></div>' : ''}
         </div>
-        <div class="convo-last">${convo.lastMessage}</div>
-      </div>
-      <div class="convo-right">
-        <div class="convo-time">${convo.time}</div>
-        ${convo.unread > 0 ? `<span class="unread-badge">${convo.unread}</span>` : ''}
-      </div>
-    `;
+
+        <div class="convo-info">
+          <div class="convo-name">
+            <span>${convo.customerName}</span>
+          </div>
+          <div class="convo-last">${convo.lastMessage}</div>
+        </div>
+
+        <div class="convo-right">
+          <div class="convo-time">${convo.time}</div>
+          ${convo.unread > 0 ? `<span class="unread-badge">${convo.unread}</span>` : ''}
+        </div>
+      `;
+
       list.appendChild(div);
     });
+
+    if (filtered.length === 0) {
+      list.innerHTML = `
+        <div style="padding:32px 20px;text-align:center;color:var(--text-muted);font-size:13px;font-weight:600;">
+          No conversations found
+        </div>
+      `;
+    }
+  }
+
+  function filterConvos() {
+    renderConvos();
   }
 
   function openChat(id) {
     currentConvo = FARMER_SIDE_CONVOS.find(c => c.id === id);
-    if(!currentConvo) return;
+    if (!currentConvo) return;
 
     document.getElementById('chatAvatar').src = currentConvo.customerImage;
     document.getElementById('chatName').textContent = currentConvo.customerName;
@@ -405,68 +754,107 @@
     currentConvo.unread = 0;
     renderConvos();
 
-    const prodCtx = document.getElementById('productContext');
-    if (currentConvo.productId === 101) {
-      prodCtx.style.display = 'block';
-      document.getElementById('ppbImg').src = "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&h=400&fit=crop";
-      document.getElementById('ppbName').textContent = "Organic Tomato";
-      document.getElementById('ppbPrice').textContent = "RM 4.50 / 1 kg";
-    } else if (currentConvo.productId === 102) {
-      prodCtx.style.display = 'block';
-      document.getElementById('ppbImg').src = "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?w=200";
-      document.getElementById('ppbName').textContent = "Fresh Butterhead Lettuce";
-      document.getElementById('ppbPrice').textContent = "RM 3.00 / 250g";
-    } else {
-      prodCtx.style.display = 'none';
-    }
-
     renderMessages();
+
+    document.getElementById('convoList').style.display = 'none';
     document.getElementById('chatScreen').style.display = 'flex';
-    setTimeout(scrollToBottom, 100);
+
+    const bottomNav = document.getElementById('bottomNav');
+    if (bottomNav) bottomNav.style.display = 'none';
+
+    setTimeout(scrollToBottom, 80);
   }
 
   function closeChat() {
     document.getElementById('chatScreen').style.display = 'none';
-    document.getElementById('productContext').style.display = 'none';
+    document.getElementById('convoList').style.display = 'block';
+
+    const bottomNav = document.getElementById('bottomNav');
+    if (bottomNav) bottomNav.style.display = 'flex';
+
     currentConvo = null;
   }
 
   function renderMessages() {
     const container = document.getElementById('chatMessages');
-    if(!container) return;
+    if (!container || !currentConvo) return;
+
     container.innerHTML = '<div class="msg-day-label">Today</div>';
 
+    if (currentConvo.product) {
+      appendProductInquiry(currentConvo.product);
+    }
+
     currentConvo.messages.forEach(msg => {
-      const position = (msg.from === 'farmer') ? 'consumer' : 'farmer';
-      appendMessage(position, msg.text, msg.time);
+      const bubbleSide = msg.from === 'farmer' ? 'sent' : 'received';
+      appendMessage(bubbleSide, msg.text, msg.time);
     });
   }
 
-  function appendMessage(position, text, time) {
+  function appendProductInquiry(product) {
     const container = document.getElementById('chatMessages');
-    if(!container) return;
-    const row = document.createElement('div');
+    if (!container || !product) return;
 
-    row.className = 'msg-row ' + (position === 'consumer' ? 'sent' : '');
+    const row = document.createElement('div');
+    row.className = 'product-inquiry-row received';
+
+    row.innerHTML = `
+      <div class="product-inquiry-card">
+        <div class="product-inquiry-label">
+          <i class="fa-solid fa-circle-info"></i>
+          Customer inquiring about this product
+        </div>
+
+        <div class="product-inquiry-content">
+          <img src="${product.image}" class="product-inquiry-img" alt="">
+
+          <div>
+            <div class="product-inquiry-name">${product.name}</div>
+            <div class="product-inquiry-price">${product.price}</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(row);
+  }
+
+  function appendMessage(side, text, time) {
+    const container = document.getElementById('chatMessages');
+    if (!container) return;
+
+    const row = document.createElement('div');
+    row.className = 'msg-row ' + (side === 'sent' ? 'sent' : '');
+
     row.innerHTML = `
       <div class="msg-wrapper">
-        <div class="message-bubble ${position === 'consumer' ? 'sent' : 'received'}">${text}</div>
+        <div class="message-bubble ${side === 'sent' ? 'sent' : 'received'}">${text}</div>
         <div class="message-time">${time}</div>
       </div>
     `;
+
     container.appendChild(row);
   }
 
   function sendMessage() {
     const input = document.getElementById('messageInput');
     const text = input.value.trim();
-    if (!text) return;
 
-    const now = new Date().toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' });
+    if (!text || !currentConvo) return;
 
-    appendMessage('consumer', text, now);
+    const now = new Date().toLocaleTimeString('en-MY', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
 
-    currentConvo.messages.push({ from: 'farmer', text: text, time: now });
+    appendMessage('sent', text, now);
+
+    currentConvo.messages.push({
+      from: 'farmer',
+      text: text,
+      time: now
+    });
+
     currentConvo.lastMessage = text;
     currentConvo.time = "Just now";
 
@@ -478,13 +866,20 @@
       const reply = AUTO_CUSTOMER_REPLIES[replyIdx % AUTO_CUSTOMER_REPLIES.length];
       replyIdx++;
 
-      appendMessage('farmer', reply, now);
-      currentConvo.messages.push({ from: 'consumer', text: reply, time: now });
+      appendMessage('received', reply, now);
+
+      currentConvo.messages.push({
+        from: 'consumer',
+        text: reply,
+        time: now
+      });
+
       currentConvo.lastMessage = reply;
+      currentConvo.time = "Just now";
 
       scrollToBottom();
       renderConvos();
-    }, 1000 + Math.random() * 500);
+    }, 1000);
   }
 
   function sendQuick(text) {
@@ -494,12 +889,12 @@
 
   function scrollToBottom() {
     const m = document.getElementById('chatMessages');
-    if(m) m.scrollTop = m.scrollHeight;
+    if (m) m.scrollTop = m.scrollHeight;
   }
 
   window.showToast = function(msg) {
     const t = document.getElementById('customToast');
-    if(t) {
+    if (t) {
       t.textContent = msg;
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2000);
@@ -507,7 +902,10 @@
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    if(typeof AppState !== 'undefined' && AppState.init) AppState.init();
+    if (typeof AppState !== 'undefined' && AppState.init) {
+      AppState.init();
+    }
+
     renderConvos();
   });
 </script>

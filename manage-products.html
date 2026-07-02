@@ -9,6 +9,67 @@
   <style>
     body { background: #e0ead8; }
 
+    .status-bar {
+      background:#1F5A2D !important;
+      color:#fff !important;
+    }
+
+    .screen {
+      background:#F5F5EE;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .green-zone {
+      background:#1F5A2D;
+      padding:0 20px 20px;
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+
+    .market-header-row {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 0 12px;
+    }
+
+    .market-title {
+      font-size:20px;
+      font-weight:700;
+      color:#fff;
+      line-height:1;
+      letter-spacing:.2px;
+    }
+
+    .market-subtitle {
+      font-size:12.5px;
+      font-weight:500;
+      color:#E7F2E1;
+      margin-top:6px;
+    }
+
+    .green-zone .icon-btn {
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      cursor:pointer;
+      text-decoration:none;
+      position:relative;
+    }
+
+    .green-zone .icon-btn:active {
+      background:rgba(255,255,255,.24);
+    }
+
     /* Lock kedudukan elemen absolute di dalam frame telefon */
     .phone-frame { position: relative !important; }
 
@@ -28,17 +89,110 @@
     .pr-edit { padding: 6px 12px; background: var(--green-100); border: none; border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--green-700); cursor: pointer; display: flex; align-items: center; gap: 4px; }
     .pr-delete { padding: 6px 12px; background: #fee2e2; border: none; border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--red-500); cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
-    .filter-tabs { display: flex; gap: 6px; padding: 12px 16px 0; overflow-x: auto; scrollbar-width: none; }
-    .filter-tabs::-webkit-scrollbar { display: none; }
-    .f-tab { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; border: 1.5px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; white-space: nowrap; }
-    .f-tab.active { background: var(--primary); border-color: var(--primary); color: white; }
+    /* ── Search bar inside green header, same as Marketplace ── */
+    .search-bar {
+      display:flex;
+      align-items:center;
+      background:#ffffff;
+      border:none;
+      border-radius:14px;
+      box-shadow:0 4px 12px rgba(0,0,0,.12);
+      margin-top:15px;
+      padding:12px 16px;
+      gap:12px;
+    }
+    .search-icon { color:#64748b; font-size:16px; display:flex; align-items:center; }
+    .search-bar input { border:none; background:none; outline:none; width:100%; font-size:14px; color:var(--text); }
+    .search-bar input::placeholder { color:#94a3b8; }
+    .filter-icon { color:#000000; font-size:16px; cursor:pointer; display:flex; align-items:center; margin-left:auto; }
 
-    /* SEARCH BAR BULAT */
-    .search-bar { display: flex; align-items: center; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 30px; padding: 10px 18px; gap: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
-    .search-icon { color: #64748b; font-size: 16px; display: flex; align-items: center; }
-    .search-bar input { border: none; background: none; outline: none; width: 100%; font-size: 14px; color: var(--text); }
-    .search-bar input::placeholder { color: #94a3b8; }
-    .filter-icon { color: #000000; font-size: 16px; cursor: pointer; display: flex; align-items: center; margin-left: auto; }
+    /* ── Filter section below green header, same position as Marketplace ── */
+    .filter-section {
+      padding:16px 20px 0;
+      background:#F5F5EE;
+      border-bottom:1px solid #E4E8DD;
+    }
+    .filter-tabs { display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:14px; }
+    .filter-tabs::-webkit-scrollbar { display:none; }
+    .f-tab { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; border:1.5px solid var(--border); background:var(--surface); color:var(--text-muted); cursor:pointer; white-space:nowrap; }
+    .f-tab.active { background:#1F5A2D; border-color:#1F5A2D; color:white; }
+
+    /* Sponsored Listing badge (shown on product cards that are boosted) */
+    .sponsored-badge {
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      font-size:10px;
+      font-weight:800;
+      color:#8A5A00;
+      background:#FFF3C4;
+      border:1px solid #F4D36A;
+      padding:2px 7px;
+      border-radius:999px;
+      margin-left:2px;
+    }
+
+    /* ── Ad banner: clickable, opens the Boost Product modal ── */
+    .ad-banner {
+      background:#FFF8DC;
+      border:1px solid #F4D36A;
+      border-radius:14px;
+      padding:12px 14px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      cursor:pointer;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .ad-banner:active { transform:scale(0.98); }
+    .ad-banner-icon {
+      width:38px;
+      height:38px;
+      border-radius:11px;
+      background:#FFE8A3;
+      color:#B7791F;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      flex-shrink:0;
+    }
+    .ad-banner-text { flex:1; min-width:0; }
+    .ad-banner-title { font-size:13px; font-weight:800; color:#5F3D00; }
+    .ad-banner-sub { font-size:11px; font-weight:600; color:#8A6A18; margin-top:2px; }
+    .ad-banner-arrow { color:#B7791F; font-size:14px; flex-shrink:0; }
+
+    /* Per-product sponsored status strip (read-only, click opens modal preselected) */
+    .sponsor-status-row {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-top:10px;
+      padding:7px 10px;
+      border-radius:12px;
+      cursor:pointer;
+    }
+    .sponsor-status-row.is-off {
+      background:var(--gray-50);
+      border:1px dashed var(--border);
+    }
+    .sponsor-status-row.is-on {
+      background:#FFF8DC;
+      border:1px solid #F4D36A;
+    }
+    .sponsor-status-left { display:flex; align-items:center; gap:7px; min-width:0; }
+    .sponsor-status-icon {
+      width:22px; height:22px; border-radius:7px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:10.5px; flex-shrink:0;
+    }
+    .sponsor-status-row.is-off .sponsor-status-icon { background:var(--gray-200); color:var(--text-muted); }
+    .sponsor-status-row.is-on .sponsor-status-icon { background:#FFE8A3; color:#B7791F; }
+    .sponsor-status-text { font-size:11.5px; font-weight:700; }
+    .sponsor-status-row.is-off .sponsor-status-text { color:var(--text-muted); }
+    .sponsor-status-row.is-on .sponsor-status-text { color:#5F3D00; }
+    .sponsor-status-chevron { font-size:11px; color:var(--text-muted); flex-shrink:0; }
 
     .nav-icon { font-size: 18px; margin-bottom: 4px; }
 
@@ -81,7 +235,7 @@
       right: 20px;
       width: 56px;
       height: 56px;
-      background: var(--primary);
+      background: #1F5A2D;
       color: white;
       border-radius: 50%;
       display: flex;
@@ -94,6 +248,78 @@
       z-index: 999;
     }
     .fab-add:active { transform: scale(0.92); }
+
+    /* ── Boost Product Modal ── */
+    #boostModal .modal { text-align:left; max-height:85vh; overflow-y:auto; }
+    .boost-section-label {
+      font-size:12px;
+      font-weight:800;
+      color:var(--text-muted);
+      text-transform:uppercase;
+      letter-spacing:.4px;
+      margin:18px 0 8px;
+    }
+    .boost-product-list { display:flex; flex-direction:column; gap:8px; max-height:220px; overflow-y:auto; }
+    .boost-product-option {
+      display:flex; align-items:center; gap:10px;
+      padding:9px 10px;
+      border-radius:12px;
+      border:1.5px solid var(--border);
+      background:var(--surface);
+      cursor:pointer;
+      transition:all .15s ease;
+    }
+    .boost-product-option img { width:42px; height:42px; border-radius:9px; object-fit:cover; flex-shrink:0; }
+    .boost-product-option.selected { border-color:#1F5A2D; background:#f0f7ec; }
+    .boost-po-info { flex:1; min-width:0; }
+    .boost-po-name { font-size:13px; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .boost-po-meta { font-size:10.5px; color:var(--text-muted); margin-top:1px; }
+    .boost-po-meta.is-active { color:#B7791F; font-weight:700; }
+    .boost-po-radio {
+      width:19px; height:19px; border-radius:50%;
+      border:2px solid var(--border);
+      flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .boost-product-option.selected .boost-po-radio { border-color:#1F5A2D; }
+    .boost-product-option.selected .boost-po-radio::after {
+      content:''; width:10px; height:10px; border-radius:50%; background:#1F5A2D;
+    }
+
+    .boost-tier-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; }
+    .boost-tier-option {
+      border:1.5px solid var(--border);
+      background:var(--surface);
+      border-radius:12px;
+      padding:10px 6px;
+      text-align:center;
+      cursor:pointer;
+      transition:all .15s ease;
+    }
+    .boost-tier-option.selected { border-color:#1F5A2D; background:#f0f7ec; }
+    .boost-tier-days { font-size:11px; font-weight:700; color:var(--text-muted); }
+    .boost-tier-price { font-size:15px; font-weight:800; color:var(--text); margin-top:3px; }
+    .boost-tier-option.selected .boost-tier-price { color:#1F5A2D; }
+    .boost-tier-badge {
+      display:inline-block; font-size:9px; font-weight:800; color:#8A5A00;
+      background:#FFF3C4; border:1px solid #F4D36A; border-radius:999px;
+      padding:1px 6px; margin-top:4px;
+    }
+
+    .boost-summary {
+      margin-top:16px;
+      padding:12px 14px;
+      border-radius:12px;
+      background:var(--gray-50);
+      border:1px solid var(--border);
+      font-size:12.5px;
+      color:var(--text-muted);
+      display:none;
+    }
+    .boost-summary.show { display:block; }
+    .boost-summary b { color:var(--text); }
+
+    .boost-empty-note { font-size:12px; color:var(--text-muted); padding:8px 2px; }
   </style>
 </head>
 <body>
@@ -109,30 +335,45 @@
   </div>
 
   <div class="screen">
-    <div class="page-header" style="display:flex; align-items:center; justify-content:flex-start; gap:12px; padding: 16px 20px 12px;">
-      <a href="farmer-dashboard.html" style="text-decoration:none; width:40px; height:40px; border-radius:12px; background:var(--gray-100); border:none; display:flex; align-items:center; justify-content:center; font-size:16px; color:var(--text); flex-shrink:0;">
-        <i class="fa-solid fa-chevron-left"></i>
-      </a>
-      <div class="page-title" style="font-size:20px; font-weight:800; color:var(--text); flex:1; margin:0;">
-        My Products
+    <div class="green-zone">
+      <div class="market-header-row">
+        <div class="market-title">My Shop</div>
+        <a href="notifications.html" class="icon-btn nav-badge" aria-label="Notifications">
+          <i class="fas fa-bell"></i>
+        </a>
       </div>
-    </div>
 
-    <div class="filter-tabs">
-      <div class="f-tab active" onclick="filterTab(this,'all')" id="tabAll">All Products (0)</div>
-      <div class="f-tab" onclick="filterTab(this,'active')" id="tabActive">Active (0)</div>
-      <div class="f-tab" onclick="filterTab(this,'paused')" id="tabPaused">Paused (0)</div>
-    </div>
-
-    <div style="padding:14px 16px 0">
       <div class="search-bar">
-        <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-        <input type="text" placeholder="Search vegetables, fruits, herbs..." id="prodSearch" oninput="filterProds()">
-        <span class="filter-icon"><i class="fa-solid fa-sliders"></i></span>
+        <span class="search-icon">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </span>
+        <input type="text" placeholder="Search products..." id="prodSearch" oninput="filterProds()">
+        <span class="filter-icon">
+          <i class="fa-solid fa-sliders"></i>
+        </span>
       </div>
     </div>
 
-    <div style="padding:12px 16px 90px; height: calc(100% - 180px); overflow-y: auto;" id="productList"></div>
+    <div class="filter-section">
+      <div class="filter-tabs">
+        <div class="f-tab active" onclick="filterTab(this,'all')" id="tabAll">All Products (0)</div>
+        <div class="f-tab" onclick="filterTab(this,'active')" id="tabActive">Active (0)</div>
+        <div class="f-tab" onclick="filterTab(this,'paused')" id="tabPaused">Paused (0)</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 20px 0;">
+      <div class="ad-banner" onclick="openBoostModal()">
+        <div class="ad-banner-icon"><i class="fa-solid fa-star"></i></div>
+        <div class="ad-banner-text">
+          <div class="ad-banner-title">Sponsored Listing</div>
+          <div class="ad-banner-sub" id="adBannerSub">Boost a product to the top of search, from RM2/day</div>
+        </div>
+        <i class="fa-solid fa-chevron-right ad-banner-arrow"></i>
+      </div>
+    </div>
+
+    <div style="padding:12px 16px 90px; overflow-y:auto;" id="productList"></div>
 
     <div class="modal-overlay" id="deleteModal" style="display:none">
       <div class="modal" style="text-align:center">
@@ -172,6 +413,28 @@
         <button class="btn btn-primary btn-full" onclick="saveEdit()" style="margin-top:20px;">Save Changes <i class="fa-solid fa-check" style="margin-left: 4px;"></i></button>
       </div>
     </div>
+
+    <!-- Boost Product Modal: pick a product, pick a duration/price tier -->
+    <div class="modal-overlay" id="boostModal" style="display:none">
+      <div class="modal">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <div style="font-size:18px;font-weight:800;color:var(--text)">Boost a Product</div>
+          <button onclick="closeBoostModal()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-muted)"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div style="font-size:12.5px;color:var(--text-muted);">Sponsored products appear higher in marketplace search and category listings.</div>
+
+        <div class="boost-section-label">1. Choose Product</div>
+        <div class="boost-product-list" id="boostProductList"></div>
+
+        <div class="boost-section-label">2. Choose Duration</div>
+        <div class="boost-tier-grid" id="boostTierGrid"></div>
+
+        <div class="boost-summary" id="boostSummary"></div>
+
+        <button class="btn btn-primary btn-full" id="boostConfirmBtn" style="margin-top:18px;" onclick="confirmBoost()">Activate Boost <i class="fa-solid fa-star" style="margin-left:4px;"></i></button>
+        <button class="btn btn-ghost btn-full" id="boostStopBtn" style="margin-top:8px;display:none;background:#fee2e2;color:var(--red-500);" onclick="stopBoostFromModal()">Stop Sponsored Listing</button>
+      </div>
+    </div>
   </div>
 
   <a href="add-product.html" class="fab-add" title="Add Product">
@@ -183,7 +446,7 @@
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
     <a href="manage-products.html" class="nav-item active">
-      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Products
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
     <a href="manage-orders.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
@@ -217,6 +480,16 @@
   let editTarget = null;
   let tempPricingList = [];
 
+  // Boost/Sponsored Listing pricing tiers (price starts from RM2)
+  const BOOST_TIERS = [
+    { days: 1,  price: 2,  label: '1 Day' },
+    { days: 7,  price: 12, label: '7 Days', badge: 'Popular' },
+    { days: 30, price: 40, label: '30 Days', badge: 'Best Value' }
+  ];
+
+  let boostSelectedProductId = null;
+  let boostSelectedTier = null;
+
   // Fungsi utiliti untuk kemas kini data di LocalStorage
   function saveToLocalStorage() {
     localStorage.setItem('myProductsData', JSON.stringify(myProducts));
@@ -232,8 +505,18 @@
     if(document.getElementById('tabPaused')) document.getElementById('tabPaused').innerText = `Paused (${paused})`;
   }
 
+  function updateAdBannerSub() {
+    const sponsoredCount = myProducts.filter(p => p.sponsored).length;
+    const sub = document.getElementById('adBannerSub');
+    if (!sub) return;
+    sub.textContent = sponsoredCount > 0
+      ? `${sponsoredCount}product${sponsoredCount > 1 ? 's' : ''} currently boosted — tap to manage`
+      : 'Boost a product to the top of search, from RM2/day';
+  }
+
   function renderProducts() {
     updateTabs();
+    updateAdBannerSub();
     const q = (document.getElementById('prodSearch')?.value || '').toLowerCase();
 
     let list = myProducts;
@@ -264,6 +547,7 @@
 
         <div class="pr-name">
           ${p.name}
+          ${p.sponsored ? '<span class="sponsored-badge"><i class="fa-solid fa-star"></i> Sponsored</span>' : ''}
         </div>
 
         <div class="pr-overview-meta">
@@ -278,6 +562,15 @@
             <span class="tiny-slider"></span>
           </label>
         </div>
+
+        ${p.sponsored ? `
+        <div class="sponsor-status-row is-on" onclick="event.stopPropagation();openBoostModal(${p.id})">
+          <div class="sponsor-status-left">
+            <div class="sponsor-status-icon"><i class="fa-solid fa-bullhorn"></i></div>
+            <div class="sponsor-status-text">Sponsored · RM${p.sponsoredPrice || 2}${p.sponsoredDays ? ' / ' + p.sponsoredDays + 'd' : '/day'}</div>
+          </div>
+          <i class="fa-solid fa-chevron-right sponsor-status-chevron"></i>
+        </div>` : ''}
       </div>
       <div class="pr-actions">
         <button class="pr-edit" onclick="event.stopPropagation();openEdit(${p.id})"><i class="fa-solid fa-pen"></i></button>
@@ -307,6 +600,147 @@
     saveToLocalStorage(); // Simpan perubahan status toggle
     renderProducts();
     if(typeof showToast === 'function') showToast(val ? '✅ Listed on App' : '⏸️ Hidden from App');
+  }
+
+  // ── Boost Product Modal logic ──
+
+  function openBoostModal(preselectId) {
+    boostSelectedProductId = preselectId || null;
+    boostSelectedTier = null;
+
+    // If opened on an already-sponsored product, preselect its current tier
+    if (boostSelectedProductId) {
+      const p = myProducts.find(p => p.id === boostSelectedProductId);
+      if (p && p.sponsored && p.sponsoredDays) {
+        const matchedTier = BOOST_TIERS.find(t => t.days === p.sponsoredDays);
+        if (matchedTier) boostSelectedTier = matchedTier.days;
+      }
+    }
+
+    renderBoostProductList();
+    renderBoostTiers();
+    updateBoostSummary();
+    document.getElementById('boostModal').style.display = 'flex';
+  }
+
+  function closeBoostModal() {
+    document.getElementById('boostModal').style.display = 'none';
+  }
+
+  function renderBoostProductList() {
+    const container = document.getElementById('boostProductList');
+    container.innerHTML = '';
+
+    if (myProducts.length === 0) {
+      container.innerHTML = '<div class="boost-empty-note">Add a product first before boosting it.</div>';
+      return;
+    }
+
+    myProducts.forEach(p => {
+      const isSelected = p.id === boostSelectedProductId;
+      const opt = document.createElement('div');
+      opt.className = `boost-product-option ${isSelected ? 'selected' : ''}`;
+      opt.onclick = () => selectBoostProduct(p.id);
+      opt.innerHTML = `
+        <img src="${p.images[0]}" alt="${p.name}">
+        <div class="boost-po-info">
+          <div class="boost-po-name">${p.name}</div>
+          <div class="boost-po-meta ${p.sponsored ? 'is-active' : ''}">${p.sponsored ? `Currently sponsored · RM${p.sponsoredPrice || 2}${p.sponsoredDays ? ' / ' + p.sponsoredDays + 'd' : '/day'}` : p.category}</div>
+        </div>
+        <div class="boost-po-radio"></div>
+      `;
+      container.appendChild(opt);
+    });
+  }
+
+  function selectBoostProduct(id) {
+    boostSelectedProductId = id;
+    const p = myProducts.find(p => p.id === id);
+    boostSelectedTier = (p && p.sponsored && p.sponsoredDays) ? p.sponsoredDays : boostSelectedTier;
+    renderBoostProductList();
+    renderBoostTiers();
+    updateBoostSummary();
+  }
+
+  function renderBoostTiers() {
+    const grid = document.getElementById('boostTierGrid');
+    grid.innerHTML = '';
+
+    BOOST_TIERS.forEach(tier => {
+      const isSelected = tier.days === boostSelectedTier;
+      const opt = document.createElement('div');
+      opt.className = `boost-tier-option ${isSelected ? 'selected' : ''}`;
+      opt.onclick = () => selectBoostTier(tier.days);
+      opt.innerHTML = `
+        <div class="boost-tier-days">${tier.label}</div>
+        <div class="boost-tier-price">RM${tier.price}</div>
+        ${tier.badge ? `<div class="boost-tier-badge">${tier.badge}</div>` : ''}
+      `;
+      grid.appendChild(opt);
+    });
+  }
+
+  function selectBoostTier(days) {
+    boostSelectedTier = days;
+    renderBoostTiers();
+    updateBoostSummary();
+  }
+
+  function updateBoostSummary() {
+    const summary = document.getElementById('boostSummary');
+    const confirmBtn = document.getElementById('boostConfirmBtn');
+    const stopBtn = document.getElementById('boostStopBtn');
+
+    const p = myProducts.find(p => p.id === boostSelectedProductId);
+    const tier = BOOST_TIERS.find(t => t.days === boostSelectedTier);
+    const alreadySponsored = p && p.sponsored;
+
+    stopBtn.style.display = alreadySponsored ? 'block' : 'none';
+
+    if (p && tier) {
+      summary.className = 'boost-summary show';
+      summary.innerHTML = `<b>${p.name}</b> will be sponsored for <b>${tier.label}</b> at <b>RM${tier.price}</b> total (starting from RM2/day). It will appear higher in marketplace search and category listings.`;
+      confirmBtn.disabled = false;
+      confirmBtn.style.opacity = 1;
+      confirmBtn.textContent = '';
+      confirmBtn.innerHTML = `${alreadySponsored ? 'Update Boost' : 'Activate Boost'} <i class="fa-solid fa-star" style="margin-left:4px;"></i>`;
+    } else {
+      summary.className = 'boost-summary';
+      summary.innerHTML = '';
+      confirmBtn.disabled = true;
+      confirmBtn.style.opacity = 0.5;
+      confirmBtn.innerHTML = 'Activate Boost <i class="fa-solid fa-star" style="margin-left:4px;"></i>';
+    }
+  }
+
+  function confirmBoost() {
+    const p = myProducts.find(p => p.id === boostSelectedProductId);
+    const tier = BOOST_TIERS.find(t => t.days === boostSelectedTier);
+    if (!p || !tier) return;
+
+    p.sponsored = true;
+    p.sponsoredPrice = tier.price;
+    p.sponsoredDays = tier.days;
+    p.sponsoredStartedAt = new Date().toISOString();
+
+    saveToLocalStorage();
+    closeBoostModal();
+    renderProducts();
+    if (typeof showToast === 'function') showToast(`⭐ ${p.name} boosted for ${tier.label} (RM${tier.price})`);
+  }
+
+  function stopBoostFromModal() {
+    const p = myProducts.find(p => p.id === boostSelectedProductId);
+    if (!p) return;
+    const ok = confirm(`Stop sponsored listing for "${p.name}"?`);
+    if (!ok) return;
+
+    p.sponsored = false;
+    delete p.sponsoredDays;
+    saveToLocalStorage();
+    closeBoostModal();
+    renderProducts();
+    if (typeof showToast === 'function') showToast('Sponsored listing stopped');
   }
 
   function openDelete(id) {
@@ -387,8 +821,8 @@
     if (p) {
       const validPricing = tempPricingList.filter(v => v.label.trim() !== '');
 
-      if(validPricing.length === 0) {
-        alert("Sila masukkan sekurang-kurangnya satu variasi lengkap bersama nama saiz/pek!");
+      if (validPricing.length === 0) {
+        alert("Please add at least one complete pricing variation, including the variation name and price.");
         return;
       }
 

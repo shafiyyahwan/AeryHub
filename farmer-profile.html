@@ -10,20 +10,32 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <link rel="stylesheet" href="css/style1.css">
   <style>
-    /* ── PERBAIKAN: NAVBAR DAH IKUT KOD ASAL DASHBOARD & STYLE1.CSS ── */
-    .status-icons { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+    body { background:#e0ead8; }
+    .phone-frame{ position:relative; }
+    .status-bar{
+      position:absolute;
+      top:0; left:0; right:0;
+      z-index:30;
+      background:transparent!important;
+      color:#fff!important;
+    }
+    .status-bar span,.status-icons,.status-icons i{ color:#fff!important; }
+    .screen{ background:#F5F5EE; overflow-y:auto; -webkit-overflow-scrolling:touch; }
     .nav-icon { font-size: 18px; margin-bottom: 4px; }
 
     /* ── PROFILE COVER & AVATAR ── */
-    .farm-cover {
-      height: 180px;
-      position: relative;
-      flex-shrink: 0;
-      overflow: visible;
+    .farm-cover{
+      height:160px;
+      position:relative;
+      overflow:visible;
+      flex-shrink:0;
     }
-    .farm-cover img {
-      width: 100%; height: 180px;
-      object-fit: cover; display: block;
+
+    .farm-cover img{
+      width:100%;
+      height:160px;
+      object-fit:cover;
+      display:block;
     }
     .farm-cover-overlay {
       position: absolute; inset: 0;
@@ -368,6 +380,71 @@
       transform: scale(1.06);
     }
 
+
+
+    /* ── FARMER OWN PROFILE EDITING ── */
+    .screen { background:#F5F5EE; }
+    .edit-inline-btn {
+      border:none;
+      background:#F0F7EC;
+      color:#1F5A2D;
+      border-radius:999px;
+      padding:6px 11px;
+      font-size:11px;
+      font-weight:800;
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      cursor:pointer;
+    }
+    .section-label-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:20px;
+      margin-bottom:8px;
+    }
+    .section-label-row .sec-label{
+      margin:0;
+    }
+    .location-edit-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .distance-line{ display:none !important; }
+    .gallery-add-card{
+      border:2px dashed #C9D8C0;
+      border-radius:10px;
+      aspect-ratio:1/1;
+      background:#F8FBF4;
+      color:#1F5A2D;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      font-size:12px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .gallery-add-card i{ font-size:22px; }
+    .review-item{
+      background:#ffffff;
+      border:1px solid #E5EADF;
+      border-radius:16px;
+      padding:14px !important;
+      margin-bottom:12px;
+      box-shadow:0 3px 10px rgba(0,0,0,.03);
+    }
+    .review-item:last-child{ margin-bottom:0; }
+    .pickup-edit-note{
+      font-size:11px;
+      color:rgba(255,255,255,.8);
+      font-weight:600;
+    }
+
     /* ── CSS KHUSUS UNTUK POPUP BORANG TAMBAH SIJIL SAHAJA ── */
     .add-cert-dashed-btn {
       width: 100%; padding: 10px; border: 2px dashed #cbd5e1; border-radius: 10px;
@@ -389,15 +466,59 @@
     .form-group label { display: block; font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 4px; }
     .form-group input, .form-group select { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; box-sizing: border-box; }
     .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 14px; }
+    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color:#fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99999; opacity:0; transition: opacity .2s; pointer-events:none; white-space:nowrap; font-weight:500; }
+    .toast.show { opacity:1; }
+
+
+    /* ── Consumer-style farmer profile spacing ── */
+    .farmer-identity{
+      background:#F5F5EE !important;
+      padding:16px 18px 18px !important;
+      border-bottom:1px solid #E4E8DD !important;
+    }
+    .avatar-action-row{
+      align-items:flex-start !important;
+      margin-top:-44px !important;
+      margin-bottom:24px !important;
+    }
+    .profile-controls{
+      margin-top:48px !important;
+      margin-bottom:0 !important;
+    }
+    .edit-profile-btn{
+      background:#ffffff !important;
+      color:#1F5A2D !important;
+      border:1px solid #E4E8DD !important;
+      border-radius:22px !important;
+      padding:9px 18px !important;
+      box-shadow:0 2px 8px rgba(0,0,0,.06) !important;
+    }
+    .edit-profile-btn:active{ background:#F7F8F5 !important; }
+    .farmer-avatar{
+      width:100px !important;
+      height:100px !important;
+      border-radius:50px !important;
+      border:4px solid #F5F5EE !important;
+      background:#F5F5EE !important;
+    }
+    .shop-name{ font-size:20px !important; }
+    .name-row{ margin-bottom:10px !important; }
+    .farm-location-line{ margin-top:2px; }
+    .farmer-stats-row{ background:#F5F5EE !important; }
+    .profile-tab-bar{ background:#F5F5EE !important; top:0; }
+    .location-card,.pickup-card,.product-card{ background:#fff !important; border:1px solid #E5EADF !important; border-radius:16px !important; box-shadow:0 3px 10px rgba(0,0,0,.03); }
+    #tab-about,#tab-products,#tab-reviews,#tab-gallery{ background:#F5F5EE; }
+    .cover-share{ right:16px; background:rgba(255,255,255,.18)!important; color:#fff!important; box-shadow:none!important; backdrop-filter:blur(8px); }
+
   </style>
 </head>
 <body>
 <div class="phone-frame">
 
-  <div class="status-bar" style="position:absolute;top:0;left:0;right:0;z-index:20;background:transparent">
-    <span style="color:white">9:41</span>
+  <div class="status-bar">
+    <span>9:41</span>
     <div class="notch"></div>
-    <div class="status-icons" style="color:white">
+    <div class="status-icons">
       <i class="fa-solid fa-signal"></i>
       <i class="fa-solid fa-wifi"></i>
       <i class="fa-solid fa-battery-full"></i>
@@ -410,9 +531,6 @@
     <div class="farm-cover">
       <img id="coverImg" src="">
       <div class="farm-cover-overlay"></div>
-      <a href="javascript:history.back()" class="cover-btn cover-back">
-        <i class="fas fa-chevron-left"></i>
-      </a>
       <button class="cover-btn cover-share" onclick="alert('Link copied! 🔗')">
         <i class="fas fa-share-nodes"></i>
       </button>
@@ -424,7 +542,7 @@
         <img id="farmerAvatarEl" src="" class="farmer-avatar">
 
         <div class="profile-controls">
-          <button class="edit-profile-btn" onclick="alert('Navigating to Edit Profile page… 📝')">
+          <button class="edit-profile-btn" onclick="editFarmProfile()">
             <i class="fas fa-edit"></i> Edit Profile
           </button>
         </div>
@@ -479,19 +597,21 @@
 
     <!-- ABOUT TAB -->
     <div id="tab-about" style="padding:16px 18px 28px">
-      <div class="sec-label">About this Farm</div>
+      <div class="section-label-row">
+        <div class="sec-label">About this Farm</div>
+      </div>
       <div style="font-size:14px;color:var(--text-muted);line-height:1.75" id="bioTextEl"></div>
 
-      <div class="sec-label">Farm Location</div>
+      <div class="section-label-row">
+        <div class="sec-label">Farm Location</div>
+      </div>
       <div class="location-card">
         <div class="location-map-thumb">
           <i class="fas fa-map" style="font-size:30px;color:#16a34a;opacity:0.4"></i>
         </div>
         <div class="location-body">
-          <div class="location-full" id="fullAddressEl"></div>
-          <div class="distance-line">
-            <i class="fas fa-route"></i>
-            <div><span id="locationDistEl"></span> from you</div>
+          <div class="location-edit-row">
+            <div class="location-full" id="fullAddressEl"></div>
           </div>
           <button class="btn btn-sm btn-ghost" style="margin-top:14px;width:100%" onclick="alert('Opening Google Maps…')">
             <i class="fas fa-diamond-turn-right" style="color:var(--primary)"></i> Get Directions
@@ -499,7 +619,9 @@
         </div>
       </div>
 
-      <div class="sec-label">Farm Pickup Hours</div>
+      <div class="section-label-row">
+        <div class="sec-label">Farm Pickup Hours</div>
+      </div>
       <div class="pickup-card">
         <div class="pickup-card-header">
           <span class="pickup-header-label">Open for pickup</span>
@@ -542,7 +664,12 @@
 
     <!-- GALLERY TAB -->
     <div id="tab-gallery" style="display:none;padding:16px 18px 28px">
-      <div class="gallery-grid">
+      <div class="gallery-grid" id="galleryGrid">
+        <label class="gallery-add-card" for="galleryUpload">
+          <i class="fa-solid fa-plus"></i>
+          <span>Add Photo</span>
+        </label>
+        <input type="file" id="galleryUpload" accept="image/*" style="display:none" onchange="addGalleryPhoto(this)">
         <div class="gallery-item">
           <img src="img/farm2.jpg" alt="Planting Veggies">
         </div>
@@ -563,7 +690,7 @@
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
     <a href="manage-products.html" class="nav-item">
-      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Products
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
     <a href="manage-orders.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
@@ -613,6 +740,19 @@
 <script src="data.js"></script>
 <script src="script.js"></script>
 <script>
+  window.showToast = window.showToast || function(msg) {
+    let t = document.getElementById('customToast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'customToast';
+      t.className = 'toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
+  };
+
   const FARMER_REVIEWS = [
     {
       name: "Amir Hamzah",
@@ -643,6 +783,21 @@
   function buildPickupSchedule() {
     const el = document.getElementById('pickupSchedule');
     el.innerHTML = '';
+
+    const customHours = localStorage.getItem('farmer_pickup_hours');
+    if (customHours) {
+      customHours.split('\n').forEach(line => {
+        const div = document.createElement('div');
+        div.className = 'pickup-day-row';
+        const parts = line.split(':');
+        const day = parts.shift() || 'Day';
+        const hours = parts.join(':').trim() || 'Closed';
+        div.innerHTML = `<div class="pickup-day-name">${day.trim()}</div><div class="pickup-day-hours">${hours}</div>`;
+        el.appendChild(div);
+      });
+      return;
+    }
+
     PICKUP_SCHEDULE.forEach(row => {
       const div = document.createElement('div');
       div.className = 'pickup-day-row';
@@ -679,6 +834,109 @@
     document.getElementById('certForm').reset();
   }
 
+
+
+  function editFarmProfile() {
+    const bioEl = document.getElementById('bioTextEl');
+    const addrEl = document.getElementById('fullAddressEl');
+    const cityEl = document.getElementById('cityStateEl');
+
+    const currentBio = bioEl?.textContent || '';
+    const updatedBio = prompt('Edit farm about section:', currentBio);
+    if (updatedBio && updatedBio.trim()) {
+      bioEl.textContent = updatedBio.trim();
+      localStorage.setItem('farmer_profile_bio', updatedBio.trim());
+    }
+
+    const currentAddress = addrEl?.textContent || '';
+    const updatedAddress = prompt('Edit farm address:', currentAddress);
+    if (updatedAddress && updatedAddress.trim()) {
+      addrEl.textContent = updatedAddress.trim();
+      localStorage.setItem('farmer_profile_address', updatedAddress.trim());
+    }
+
+    const currentCityState = cityEl?.textContent || '';
+    const updatedCityState = prompt('Edit city and state:', currentCityState);
+    if (updatedCityState && updatedCityState.trim()) {
+      cityEl.textContent = updatedCityState.trim();
+      localStorage.setItem('farmer_profile_city_state', updatedCityState.trim());
+    }
+
+    const currentHours = localStorage.getItem('farmer_pickup_hours') || 'Monday-Friday: 7:00 am – 12:00 pm\nSaturday: 7:00 am – 10:00 am\nSunday: Closed';
+    const updatedHours = prompt('Edit pickup hours:', currentHours);
+    if (updatedHours && updatedHours.trim()) {
+      localStorage.setItem('farmer_pickup_hours', updatedHours.trim());
+      buildPickupSchedule();
+    }
+
+    if (typeof showToast === 'function') showToast('Profile updated');
+  }
+
+  function editAbout() {
+    const bioEl = document.getElementById('bioTextEl');
+    const current = bioEl.textContent || '';
+    const updated = prompt('Edit farm about section:', current);
+    if (updated && updated.trim()) {
+      bioEl.textContent = updated.trim();
+      localStorage.setItem('farmer_profile_bio', updated.trim());
+      if (typeof showToast === 'function') showToast('About updated');
+    }
+  }
+
+  function editLocation() {
+    const addrEl = document.getElementById('fullAddressEl');
+    const cityEl = document.getElementById('cityStateEl');
+    const newAddress = prompt('Edit farm address:', addrEl.textContent || '');
+    if (newAddress && newAddress.trim()) {
+      addrEl.textContent = newAddress.trim();
+      localStorage.setItem('farmer_profile_address', newAddress.trim());
+    }
+    const newCityState = prompt('Edit city and state:', cityEl.textContent || '');
+    if (newCityState && newCityState.trim()) {
+      cityEl.textContent = newCityState.trim();
+      localStorage.setItem('farmer_profile_city_state', newCityState.trim());
+    }
+    if (typeof showToast === 'function') showToast('Location updated');
+  }
+
+  function editPickupHours() {
+    const current = localStorage.getItem('farmer_pickup_hours') || 'Monday-Friday: 7:00 am – 12:00 pm\nSaturday: 7:00 am – 10:00 am\nSunday: Closed';
+    const updated = prompt('Edit pickup hours:', current);
+    if (updated && updated.trim()) {
+      localStorage.setItem('farmer_pickup_hours', updated.trim());
+      buildPickupSchedule();
+      if (typeof showToast === 'function') showToast('Pickup hours updated');
+    }
+  }
+
+  function addGalleryPhoto(input) {
+    if (!input.files || !input.files[0]) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const saved = JSON.parse(localStorage.getItem('farmer_gallery_photos') || '[]');
+      saved.unshift(e.target.result);
+      localStorage.setItem('farmer_gallery_photos', JSON.stringify(saved));
+      renderSavedGalleryPhotos();
+      input.value = '';
+      if (typeof showToast === 'function') showToast('Photo added to gallery');
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+
+  function renderSavedGalleryPhotos() {
+    const grid = document.getElementById('galleryGrid');
+    if (!grid) return;
+    grid.querySelectorAll('.saved-gallery-item').forEach(el => el.remove());
+    const saved = JSON.parse(localStorage.getItem('farmer_gallery_photos') || '[]');
+    saved.forEach(src => {
+      const item = document.createElement('div');
+      item.className = 'gallery-item saved-gallery-item';
+      item.innerHTML = `<img src="${src}" alt="Farm Gallery Photo">`;
+      const after = document.getElementById('galleryUpload');
+      after.insertAdjacentElement('afterend', item);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const fid = parseInt(localStorage.getItem('currentFarmer') || '1');
     const farmer = (typeof FARMERS !== 'undefined') ? (FARMERS.find(f => f.id === fid) || FARMERS[0]) : null;
@@ -688,16 +946,14 @@
       document.getElementById('farmerAvatarEl').src = farmer.image;
       document.getElementById('shopNameEl').textContent = farmer.farm;
       if (farmer.certified) document.getElementById('verifiedBadge').style.display = 'inline-flex';
-      document.getElementById('cityStateEl').textContent = farmer.city + ', ' + farmer.state;
-
       document.getElementById('ratingEl').textContent   = farmer.rating;
       document.getElementById('reviewsEl').textContent  = farmer.reviews;
       document.getElementById('productsEl').textContent = farmer.products;
       document.getElementById('soldEl').textContent     = farmer.sold;
 
-      document.getElementById('bioTextEl').textContent = farmer.bio;
-      document.getElementById('fullAddressEl').textContent = farmer.address + ', ' + farmer.city + ', ' + farmer.state;
-      document.getElementById('locationDistEl').textContent = farmer.distance || '0 km';
+      document.getElementById('bioTextEl').textContent = localStorage.getItem('farmer_profile_bio') || farmer.bio;
+      document.getElementById('fullAddressEl').textContent = localStorage.getItem('farmer_profile_address') || (farmer.address + ', ' + farmer.city + ', ' + farmer.state);
+      document.getElementById('cityStateEl').textContent = localStorage.getItem('farmer_profile_city_state') || (farmer.city + ', ' + farmer.state);
 
       // Certifications asal
       const certsEl = document.getElementById('certsEl');
@@ -746,6 +1002,8 @@
     // REVIEWS DISPLAY
     const rl = document.getElementById('reviewsList');
     rl.innerHTML = '';
+
+    renderSavedGalleryPhotos();
 
     FARMER_REVIEWS.forEach(r => {
       let starsHtml = '';

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AeryHub - Earnings</title>
+  <title>AeryHub Pro Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -125,6 +125,136 @@
     .status-icons { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
     .nav-icon { font-size: 18px; margin-bottom: 4px; }
 
+    .pro-active-banner{
+      margin:16px;
+      background:#ffffff;
+      border:2px solid #1F5A2D;
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 4px 14px rgba(31,90,45,.08);
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .pro-active-icon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      background:#EAF3E5;
+      color:#1F5A2D;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:18px;
+      flex-shrink:0;
+    }
+    .pro-active-title{
+      font-size:15px;
+      font-weight:900;
+      color:#1f2937;
+      margin-bottom:3px;
+    }
+    .pro-active-text{
+      font-size:12.5px;
+      line-height:1.45;
+      color:#6b7280;
+      font-weight:600;
+    }
+    .pro-insights{
+      padding:0 16px 16px;
+    }
+    .insight-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .insight-card{
+      background:#ffffff;
+      border:1px solid #E5EADF;
+      border-radius:16px;
+      padding:14px;
+      box-shadow:0 3px 10px rgba(0,0,0,.03);
+    }
+    .insight-icon{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      background:#EAF3E5;
+      color:#1F5A2D;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:10px;
+      font-size:15px;
+    }
+    .insight-title{
+      font-size:12px;
+      font-weight:900;
+      color:#1f2937;
+      margin-bottom:4px;
+    }
+    .insight-value{
+      font-size:17px;
+      font-weight:900;
+      color:#1F5A2D;
+      margin-bottom:3px;
+    }
+    .insight-desc{
+      font-size:11px;
+      color:#6b7280;
+      line-height:1.35;
+      font-weight:600;
+    }
+    .pro-tools-card{
+      background:#ffffff;
+      border:1px solid #E5EADF;
+      border-radius:18px;
+      padding:16px;
+      margin:0 16px 16px;
+      box-shadow:0 3px 10px rgba(0,0,0,.03);
+    }
+    .tool-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:12px 0;
+      border-bottom:1px solid #F1F3EF;
+    }
+    .tool-row:last-child{border-bottom:none;}
+    .tool-icon{
+      width:36px;
+      height:36px;
+      border-radius:12px;
+      background:#EAF3E5;
+      color:#1F5A2D;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+    }
+    .tool-info{flex:1;min-width:0;}
+    .tool-title{
+      font-size:13px;
+      font-weight:900;
+      color:#1f2937;
+    }
+    .tool-desc{
+      font-size:11.5px;
+      color:#6b7280;
+      font-weight:600;
+      margin-top:2px;
+      line-height:1.35;
+    }
+    .tool-status{
+      font-size:10px;
+      font-weight:900;
+      color:#1F5A2D;
+      background:#EAF3E5;
+      border-radius:999px;
+      padding:4px 8px;
+    }
+
+
     .pro-plan-badge{
       display:inline-flex;
       align-items:center;
@@ -228,7 +358,7 @@
         <a href="farmer-dashboard.html" class="earn-back-btn" aria-label="Back">
           <i class="fa-solid fa-chevron-left"></i>
         </a>
-        <div class="earn-page-title">Earnings & Plans</div>
+        <div class="earn-page-title">Pro Dashboard</div>
       </div>
 
       <div class="earn-total">
@@ -241,6 +371,14 @@
         <div class="p-tab" onclick="setPeriod('week',this)">Week</div>
         <div class="p-tab" onclick="setPeriod('month',this)">Month</div>
         <div class="p-tab" onclick="setPeriod('all',this)">All Time</div>
+      </div>
+    </div>
+
+    <div class="pro-active-banner">
+      <div class="pro-active-icon"><i class="fa-solid fa-check"></i></div>
+      <div>
+        <div class="pro-active-title">AeryHub Pro is Active</div>
+        <div class="pro-active-text">Your account now includes featured product placement, advanced analytics, demand forecasting and priority support.</div>
       </div>
     </div>
 
@@ -287,6 +425,77 @@
         </div>
       </div>
       <div class="mini-chart" id="earningsChart"></div>
+    </div>
+
+    <div class="pro-insights">
+      <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:10px">Pro Insights</div>
+      <div class="insight-grid">
+        <div class="insight-card">
+          <div class="insight-icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+          <div class="insight-title">Demand Forecast</div>
+          <div class="insight-value">High</div>
+          <div class="insight-desc">Tomato and herbs are expected to perform well this week.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon"><i class="fa-solid fa-eye"></i></div>
+          <div class="insight-title">Product Visibility</div>
+          <div class="insight-value">+32%</div>
+          <div class="insight-desc">Featured placement increased product views.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon"><i class="fa-solid fa-users"></i></div>
+          <div class="insight-title">Customer Interest</div>
+          <div class="insight-value">128</div>
+          <div class="insight-desc">Buyers viewed your product details this week.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon"><i class="fa-solid fa-bullhorn"></i></div>
+          <div class="insight-title">Campaign Boost</div>
+          <div class="insight-value">Active</div>
+          <div class="insight-desc">Your premium products are highlighted in marketplace.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pro-tools-card">
+      <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:4px">Pro Tools</div>
+      <div style="font-size:12px;color:var(--text-muted);font-weight:600;margin-bottom:8px">Unlocked features for better sales planning</div>
+
+      <div class="tool-row">
+        <div class="tool-icon"><i class="fa-solid fa-check"></i></div>
+        <div class="tool-info">
+          <div class="tool-title">Featured Product Placement</div>
+          <div class="tool-desc">Your selected products can appear higher in buyer discovery sections.</div>
+        </div>
+        <div class="tool-status">ON</div>
+      </div>
+
+      <div class="tool-row">
+        <div class="tool-icon"><i class="fa-solid fa-check"></i></div>
+        <div class="tool-info">
+          <div class="tool-title">Advanced Analytics</div>
+          <div class="tool-desc">Track views, conversion and top-performing products.</div>
+        </div>
+        <div class="tool-status">ON</div>
+      </div>
+
+      <div class="tool-row">
+        <div class="tool-icon"><i class="fa-solid fa-check"></i></div>
+        <div class="tool-info">
+          <div class="tool-title">Demand Forecasting</div>
+          <div class="tool-desc">Plan harvest and stock based on expected buyer demand.</div>
+        </div>
+        <div class="tool-status">ON</div>
+      </div>
+
+      <div class="tool-row">
+        <div class="tool-icon"><i class="fa-solid fa-check"></i></div>
+        <div class="tool-info">
+          <div class="tool-title">Priority Support</div>
+          <div class="tool-desc">Get faster help for listing, order and payout issues.</div>
+        </div>
+        <div class="tool-status">ON</div>
+      </div>
     </div>
 
     <div style="padding-bottom: 12px;">
@@ -350,79 +559,47 @@
     </div>
 
     <div class="plan-section">
-      <div style="font-size:17px;font-weight:800;color:var(--text);margin-bottom:4px">Subscription Plans</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px">You are on the <strong>Free Plan</strong></div>
+      <div style="font-size:17px;font-weight:800;color:var(--text);margin-bottom:4px">Subscription Status</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px">You are currently using <strong>AeryHub Pro</strong></div>
 
-      <div class="free-plan">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <div>
-            <div class="plan-name" style="color:var(--text)">Free Plan</div>
-            <div class="plan-price" style="color:var(--text)">RM 0 <span>/month</span></div>
-          </div>
-          <span class="badge" style="background: #dcfce7; color: #15803d; padding:6px 14px; font-size:12px; font-weight:700; border-radius: 8px;">Current Plan</span>
-        </div>
-        <div class="plan-feat free-feat"><i class="fa-solid fa-circle-check" style="color: #4ade80"></i> <span>Unlimited product listings</span></div>
-        <div class="plan-feat free-feat"><i class="fa-solid fa-circle-check" style="color: #4ade80"></i> <span>Unlimited orders</span></div>
-        <div class="plan-feat free-feat"><i class="fa-solid fa-circle-check" style="color: #4ade80"></i> <span>Customer chat</span></div>
-        <div class="plan-feat free-feat"><i class="fa-solid fa-circle-check" style="color: #4ade80"></i> <span>Basic sales overview</span></div>
-        <div class="plan-feat free-feat"><i class="fa-solid fa-circle-check" style="color: #4ade80"></i> <span>Delivery & farm pickup</span></div>
-        <div class="plan-feat free-feat"><i class="fa-solid fa-circle-check" style="color: #4ade80"></i> <span>Basic farmer profile</span></div>
-        <div class="plan-feat free-feat"><i class="fa-solid fa-circle-check" style="color: #4ade80"></i> <span>Standard marketplace visibility</span></div>
-        <div class="plan-feat" style="color:#94a3b8"><i class="fa-solid fa-lock" style="margin-right:2px"></i> <span>Advanced analytics</span></div>
-        <div class="plan-feat" style="color:#94a3b8"><i class="fa-solid fa-lock" style="margin-right:2px"></i> <span>Featured placement</span></div>
-        <div class="plan-feat" style="color:#94a3b8"><i class="fa-solid fa-lock" style="margin-right:2px"></i> <span>Verified badge</span></div>
-      </div>
-
-      <div class="pro-plan" onclick="openProPreview()">
+      <div class="pro-plan" style="cursor:default" onclick="return false;">
         <div class="pro-plan-badge">
           <i class="fa-solid fa-check"></i>
-          <span>AeryHub Pro</span>
+          <span>AeryHub Pro Active</span>
         </div>
         <div class="plan-name" style="color:#1f2937">Pro Plan</div>
         <div class="plan-price" style="color:#1F5A2D">RM 19.90 <span>/month</span></div>
-        <div style="font-size:12px;color:#6b7280;margin-bottom:16px;font-weight:600">Everything in Free, plus:</div>
+        <div style="font-size:12px;color:#6b7280;margin-bottom:16px;font-weight:600">Your Pro benefits are currently active:</div>
 
         <div class="plan-feat">
           <span class="pro-check-icon"><i class="fa-solid fa-check"></i></span>
           Featured Product Placement
         </div>
-
         <div class="plan-feat">
           <span class="pro-check-icon"><i class="fa-solid fa-check"></i></span>
           Advanced Sales Analytics
         </div>
-
         <div class="plan-feat">
           <span class="pro-check-icon"><i class="fa-solid fa-check"></i></span>
           Demand Forecasting
         </div>
-
         <div class="plan-feat">
           <span class="pro-check-icon"><i class="fa-solid fa-check"></i></span>
           Marketing Campaign Tools
         </div>
-
         <div class="plan-feat">
           <span class="pro-check-icon"><i class="fa-solid fa-check"></i></span>
           Priority Support
         </div>
 
-        <div style="margin-top:20px">
-          <button class="btn btn-full" style="background:linear-gradient(135deg,#d97706,#f59e0b);color:white;border:none;padding:12px;border-radius:8px;font-weight:700;width:100%;box-shadow:0 4px 20px rgba(217,119,6,0.4);cursor:pointer" onclick="event.stopPropagation(); upgradeToPro()">
-            🚀 Upgrade to Pro — RM 19.90/month
-          </button>
-          <div style="text-align:center;margin-top:10px;font-size:12px;opacity:0.65">Cancel anytime · No commitment</div>
+        <div style="margin-top:18px;background:#F7FAF5;border:1px solid #D7E8CE;border-radius:14px;padding:12px">
+          <div style="font-size:12px;font-weight:900;color:#1F5A2D;margin-bottom:3px">Next billing date</div>
+          <div style="font-size:13px;font-weight:700;color:#1f2937">3 August 2026 · RM 19.90</div>
         </div>
-      </div>
-
-      <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:12px;padding:14px;margin-top:12px">
-        <div style="font-size:13px;font-weight:700;color:#166534;margin-bottom:4px"><i class="fa-solid fa-lightbulb" style="color: #eab308; margin-right:4px;"></i> Is Pro worth it?</div>
-        <div style="font-size:12px;color:#14532d;line-height:1.5">Farmers on Pro average <strong>43% more monthly revenue</strong> thanks to featured placement and advanced analytics. At RM19.90/month, just 1–2 extra orders covers the cost!</div>
       </div>
 
       <div style="height:24px"></div>
     </div>
-
 
     <div class="modal-overlay pro-preview-modal" id="proPreviewModal" style="display:none">
       <div class="modal">
@@ -478,42 +655,6 @@
       </div>
     </div>
 
-    <div class="modal-overlay" id="proModal" style="display:none">
-      <div class="modal" style="text-align:center">
-        <div style="font-size:48px;margin-bottom:12px;color:#eab308"><i class="fa-solid fa-star"></i></div>
-        <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px">Upgrade to AeryHub Pro</div>
-        <div style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.5">You'll be charged <strong>RM 19.90</strong> monthly. Cancel anytime from settings.</div>
-        <div style="background:#f0fdf4;border-radius:12px;padding:12px;margin-bottom:20px;text-align:left">
-          <div style="font-size:12px;font-weight:700;color:#166534;margin-bottom:8px">Select Payment Method</div>
-          <div class="pay-method selected" style="padding:10px;border:1.5px solid var(--primary);background:#f0fdf4;border-radius:10px;display:flex;align-items:center;gap:10px;margin-bottom:6px;cursor:pointer">
-            <span style="font-size:16px; color: var(--primary);"><i class="fa-solid fa-building-columns"></i></span><span style="font-size:13px;font-weight:700">FPX Online Banking</span>
-          </div>
-          <div style="padding:10px;border:1.5px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer" onclick="showToast('Switch payment method')">
-            <span style="font-size:16px; color: #0284c7;"><i class="fa-solid fa-wallet"></i></span><span style="font-size:13px;font-weight:700">Touch n Go eWallet</span>
-          </div>
-        </div>
-        <button class="btn btn-primary btn-full" style="background:linear-gradient(135deg,#d97706,#f59e0b);border:none;color:white;padding:12px;width:100%;border-radius:8px;font-weight:700;" onclick="confirmUpgrade()">Confirm Upgrade — RM19.90/month</button>
-        <button class="btn btn-ghost btn-full" style="margin-top:10px;background:none;border:none;color:var(--text-muted);cursor:pointer;" onclick="document.getElementById('proModal').style.display='none'">Maybe Later</button>
-      </div>
-    </div>
-
-    <div class="modal-overlay" id="proSuccessModal" style="display:none">
-      <div class="modal" style="text-align:center">
-        <div style="font-size:54px;margin-bottom:12px;color:#16a34a;"><i class="fa-solid fa-circle-check"></i></div>
-        <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px">Welcome to Pro!</div>
-        <div style="font-size:14px;color:var(--text-muted);margin-bottom:20px;line-height:1.5">Your Verified Farmer Badge is now active. Your products will get featured placement starting tomorrow!</div>
-        <div style="background:linear-gradient(135deg,#14532d,#166534);border-radius:14px;padding:16px;margin-bottom:20px">
-          <div style="font-size:14px;font-weight:800;color:white;margin-bottom:12px">Pro Features Unlocked ✓</div>
-          <div style="font-size:12px;color:rgba(255,255,255,0.85);text-align:left">
-            <div style="margin-bottom:6px"><i class="fa-solid fa-crown" style="color: #fbbf24; margin-right:4px;"></i> Verified Farmer Badge — Active</div>
-            <div style="margin-bottom:6px"><i class="fa-solid fa-circle-up" style="color: #38bdf8; margin-right:4px;"></i> Featured Placement — Active tomorrow</div>
-            <div style="margin-bottom:6px"><i class="fa-solid fa-chart-pie" style="color: #a7f3d0; margin-right:4px;"></i> Advanced Analytics — Active now</div>
-            <div><i class="fa-solid fa-magnifying-glass-chart" style="color: #fbcfe8; margin-right:4px;"></i> Higher Search Ranking — Active now</div>
-          </div>
-        </div>
-        <a href="pro-dashboard.html" class="btn btn-primary btn-full" style="display:block; text-decoration:none; text-align:center; background:var(--primary); color:white; padding:12px; border-radius:8px; font-weight:700">Back to Dashboard →</a>
-      </div>
-    </div>
   </div>
 
   <nav class="bottom-nav">
@@ -521,12 +662,12 @@
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
     <a href="manage-products.html" class="nav-item">
-      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Products
     </a>
-    <a href="manage-orders.html" class="nav-item">
+    <a href="earnings.html" class="nav-item active">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
     </a>
-    <a href="farmer-chat.html" class="nav-item">
+    <a href="consumer-chat.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
     </a>
     <a href="farmer-profile.html" class="nav-item">
@@ -564,21 +705,7 @@
       <span style="color:#16a34a"><i class="fa-solid fa-circle" style="font-size: 8px; margin-right: 4px;"></i>You (${netPercent}%) — RM ${p.net.toFixed(0)}</span>
       <span style="color:#ea580c"><i class="fa-solid fa-circle" style="font-size: 8px; margin-right: 4px;"></i>AeryHub (${commPercent}%) — RM ${p.comm.toFixed(0)}</span>
     `;
-  }
-
-  function openProPreview() {
-    document.getElementById('proPreviewModal').style.display = 'flex';
-  }
-
-  function upgradeToPro() {
-    document.getElementById('proModal').style.display = 'flex';
-  }
-
-  function confirmUpgrade() {
-    document.getElementById('proModal').style.display = 'none';
-    setTimeout(() => {
-      document.getElementById('proSuccessModal').style.display = 'flex';
-    }, 1000);
+  }, 1000);
   }
 
   document.addEventListener('DOMContentLoaded', () => {

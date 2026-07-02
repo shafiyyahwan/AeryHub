@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeryHub - B2B Home</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style1.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+  <style>
+    body { background:#e0ead8; }
+
+    .status-bar{
+      background:#1F5A2D !important;
+      color:#fff !important;
+    }
+
+    .screen{
+      flex:1;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      background:#F5F5EE;
+      position:relative;
+      scrollbar-width:none;
+      padding-bottom:80px;
+    }
+    .screen::-webkit-scrollbar{ display:none; }
+
+    .green-zone{
+      background:#1F5A2D;
+      padding:0 20px 20px;
+      position:sticky;
+      top:0;
+      z-index:100;
+    }
+
+    .home-header{
+      background:transparent !important;
+      padding:14px 0 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .app-brand{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+
+    .brand-name{
+      font-size:20px;
+      font-weight:700;
+      color:#ffffff;
+      line-height:1;
+      letter-spacing:.2px;
+    }
+
+    .user-location{
+      display:flex;
+      align-items:center;
+      gap:5px;
+      font-size:13px;
+      font-weight:500;
+      color:#E6F2DF;
+      margin-top:5px;
+    }
+
+    .header-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .icon-btn{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:17px;
+      cursor:pointer;
+      text-decoration:none;
+      position:relative;
+      flex-shrink:0;
+    }
+    .icon-btn:active{ background:rgba(255,255,255,.24); }
+
+    .search-bar{
+      background:#fff;
+      border:none;
+      border-radius:14px;
+      box-shadow:0 4px 12px rgba(0,0,0,.12);
+      margin-top:15px;
+    }
+
+    .section{ padding:28px 20px 0; margin-bottom:6px; }
+
+    .section-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:12px;
+    }
+
+    .section-title{
+      font-size:16px;
+      font-weight:800;
+      color:#1f2937;
+    }
+
+    .section-link{
+      font-size:12px;
+      font-weight:700;
+      color:#1F5A2D;
+      text-decoration:none;
+    }
+
+    .business-banner{
+      background:linear-gradient(135deg,#1F5A2D,#2E7A3D);
+      color:#fff;
+      padding:18px;
+      border-radius:0 0 22px 22px;
+      margin-top:-1px;
+      min-height:145px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      position:relative;
+      overflow:hidden;
+    }
+    .business-banner::after{
+      content:'';
+      position:absolute;
+      right:-40px;
+      top:-30px;
+      width:150px;
+      height:150px;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+    }
+    .banner-label{
+      font-size:11px;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.8px;
+      opacity:.85;
+      margin-bottom:6px;
+    }
+    .banner-title{
+      font-family:var(--font-display, 'DM Serif Display', serif);
+      font-size:24px;
+      font-weight:800;
+      line-height:1.15;
+      margin-bottom:8px;
+    }
+    .banner-text{
+      font-size:12.5px;
+      font-weight:500;
+      line-height:1.5;
+      color:#E6F2DF;
+      max-width:250px;
+    }
+
+    .btn-bulk{
+      margin-top:14px;
+      width:max-content;
+      background:#fff;
+      color:#1F5A2D;
+      border:none;
+      border-radius:20px;
+      padding:9px 15px;
+      font-size:12px;
+      font-weight:800;
+      text-decoration:none;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      box-shadow:0 4px 12px rgba(0,0,0,.12);
+    }
+
+    .quick-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+    .quick-card{
+      background:#ffffff;
+      border-radius:16px;
+      padding:14px;
+      border:1px solid #edf0e8;
+      box-shadow:0 2px 8px rgba(0,0,0,.03);
+      cursor:pointer;
+    }
+    .quick-icon{
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      background:#E7F2DF;
+      color:#1F5A2D;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      margin-bottom:10px;
+    }
+    .quick-title{
+      font-size:13px;
+      font-weight:800;
+      color:#1f2937;
+      margin-bottom:3px;
+    }
+    .quick-sub{
+      font-size:11.5px;
+      font-weight:500;
+      color:#6b7280;
+      line-height:1.35;
+    }
+
+    .supplier-card{
+      background:#ffffff;
+      border-radius:18px;
+      padding:14px;
+      border:1px solid #edf0e8;
+      box-shadow:0 2px 8px rgba(0,0,0,.03);
+      display:flex;
+      gap:13px;
+      align-items:flex-start;
+      cursor:pointer;
+    }
+    .supplier-img{
+      width:82px;
+      height:72px;
+      border-radius:14px;
+      object-fit:cover;
+      flex-shrink:0;
+      background:#ebeeeb;
+    }
+    .supplier-info{ flex:1; min-width:0; }
+    .supplier-name{
+      font-size:14px;
+      font-weight:800;
+      color:#1f2937;
+      margin-bottom:5px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .supplier-meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      font-size:11px;
+      font-weight:600;
+      color:#6b7280;
+      margin-bottom:8px;
+    }
+    .supplier-meta span{
+      display:flex;
+      align-items:center;
+      gap:3px;
+    }
+    .assigned-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      padding:4px 9px;
+      border-radius:18px;
+      background:#E7F2DF;
+      color:#1F5A2D;
+      font-size:10.5px;
+      font-weight:800;
+    }
+
+    .h-scroll{
+      display:flex;
+      gap:12px;
+      overflow-x:auto;
+      scrollbar-width:none;
+      padding-bottom:2px;
+    }
+    .h-scroll::-webkit-scrollbar{ display:none; }
+
+    .bulk-product-card{
+      min-width:132px;
+      background:#ffffff;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid #edf0e8;
+      box-shadow:0 2px 8px rgba(0,0,0,.03);
+      cursor:default;
+    }
+    .bulk-product-card img{
+      width:132px;
+      height:95px;
+      object-fit:cover;
+      background:#ebeeeb;
+    }
+    .bulk-product-body{
+      padding:10px;
+    }
+    .bulk-product-name{
+      font-size:12.5px;
+      font-weight:800;
+      color:#1f2937;
+      line-height:1.25;
+      margin-bottom:6px;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+    .bulk-product-price{
+      font-size:13px;
+      font-weight:900;
+      color:#1F5A2D;
+    }
+    .bulk-tag{
+      font-size:10px;
+      font-weight:800;
+      color:#6b7280;
+      margin-top:3px;
+    }
+
+    .reminder-card{
+      background:#FFF7ED;
+      border:1px solid #FED7AA;
+      border-radius:18px;
+      padding:15px;
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .reminder-icon{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:#F97316;
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+      font-size:17px;
+    }
+    .reminder-label{
+      font-size:11px;
+      font-weight:900;
+      color:#EA580C;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      margin-bottom:4px;
+    }
+    .reminder-text{
+      font-size:12.5px;
+      font-weight:600;
+      color:#9A3412;
+      line-height:1.45;
+    }
+
+
+
+    .matching-view{
+      padding:20px;
+      min-height:calc(100% - 80px);
+      background:#F5F5EE;
+    }
+
+    .matching-hero{
+      background:linear-gradient(135deg,#1F5A2D,#2E7A3D);
+      color:#fff;
+      padding:22px 18px;
+      border-radius:0 0 24px 24px;
+      margin:0 -20px 20px;
+      position:relative;
+      overflow:hidden;
+    }
+    .matching-hero::after{
+      content:'';
+      position:absolute;
+      right:-45px;
+      top:-35px;
+      width:150px;
+      height:150px;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+    }
+    .matching-badge{
+      width:52px;
+      height:52px;
+      border-radius:18px;
+      background:rgba(255,255,255,.16);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+      margin-bottom:14px;
+    }
+    .matching-title{
+      font-family:var(--font-display, 'DM Serif Display', serif);
+      font-size:25px;
+      font-weight:800;
+      line-height:1.18;
+      margin-bottom:8px;
+      max-width:260px;
+    }
+    .matching-sub{
+      font-size:12.8px;
+      line-height:1.5;
+      color:#E6F2DF;
+      max-width:290px;
+      font-weight:500;
+    }
+
+    .match-card{
+      background:#ffffff;
+      border-radius:18px;
+      padding:15px;
+      border:1px solid #edf0e8;
+      box-shadow:0 2px 8px rgba(0,0,0,.03);
+      margin-bottom:14px;
+    }
+    .match-card-title{
+      font-size:14px;
+      font-weight:900;
+      color:#1f2937;
+      margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .match-row{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:10px 0;
+      border-top:1px solid #F0F2EC;
+    }
+    .match-row:first-of-type{ border-top:none; padding-top:0; }
+    .match-icon{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      background:#E7F2DF;
+      color:#1F5A2D;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      flex-shrink:0;
+    }
+    .match-label{
+      font-size:11px;
+      color:#6b7280;
+      font-weight:800;
+      margin-bottom:3px;
+    }
+    .match-value{
+      font-size:13px;
+      color:#1f2937;
+      font-weight:800;
+      line-height:1.35;
+    }
+
+
+
+    .prefill-form{
+      display:flex;
+      flex-direction:column;
+      gap:11px;
+      margin-top:2px;
+    }
+    .form-field{
+      background:#F8FAF5;
+      border:1px solid #E5EBDD;
+      border-radius:15px;
+      padding:11px 12px;
+    }
+    .form-label{
+      display:flex;
+      align-items:center;
+      gap:7px;
+      font-size:11px;
+      color:#1F5A2D;
+      font-weight:900;
+      margin-bottom:7px;
+      text-transform:uppercase;
+      letter-spacing:.35px;
+    }
+    .prefill-input,
+    .prefill-select{
+      width:100%;
+      border:none;
+      background:transparent;
+      color:#1f2937;
+      font-family:'DM Sans', sans-serif;
+      font-size:13px;
+      font-weight:800;
+      outline:none;
+      resize:none;
+      line-height:1.35;
+    }
+    .prefill-input::placeholder{ color:#9ca3af; }
+    .field-hint{
+      font-size:10.8px;
+      color:#6b7280;
+      font-weight:600;
+      margin-top:5px;
+      line-height:1.35;
+    }
+    .match-result{
+      display:none;
+      animation:fadeUp .22s ease;
+    }
+    .match-result.show{ display:block; }
+    @keyframes fadeUp{
+      from{ opacity:0; transform:translateY(8px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+
+    .matched-supplier-box{
+      background:#E7F2DF;
+      border:1px solid #CFE4C6;
+      border-radius:18px;
+      padding:14px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .matched-supplier-box img{
+      width:54px;
+      height:54px;
+      border-radius:16px;
+      object-fit:cover;
+      background:#dbe7d3;
+      flex-shrink:0;
+    }
+    .matched-label{
+      font-size:10.5px;
+      font-weight:900;
+      color:#1F5A2D;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      margin-bottom:4px;
+    }
+    .matched-name{
+      font-size:14px;
+      font-weight:900;
+      color:#1f2937;
+      margin-bottom:3px;
+    }
+    .matched-reason{
+      font-size:11.5px;
+      color:#4b5563;
+      font-weight:600;
+      line-height:1.35;
+    }
+
+    .btn-dashboard{
+      width:100%;
+      border:none;
+      background:#1F5A2D;
+      color:white;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:13px;
+      font-weight:900;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      box-shadow:0 6px 14px rgba(31,90,45,.2);
+      cursor:pointer;
+    }
+    .btn-dashboard:active{ transform:scale(.99); }
+
+    .small-link-btn{
+      width:100%;
+      border:none;
+      background:transparent;
+      color:#1F5A2D;
+      font-size:12px;
+      font-weight:800;
+      padding:12px 0 2px;
+      cursor:pointer;
+    }
+
+    .main-dashboard{ display:none; }
+    .main-dashboard.show{ display:block; }
+    .matching-view.hide{ display:none; }
+
+    .nav-icon{ font-size:18px; margin-bottom:4px; }
+
+    .toast{
+      position:fixed;
+      bottom:90px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(0,0,0,.85);
+      color:#fff;
+      padding:8px 18px;
+      border-radius:20px;
+      font-size:12px;
+      z-index:999;
+      opacity:0;
+      transition:opacity .2s;
+      pointer-events:none;
+      white-space:nowrap;
+      font-weight:500;
+    }
+    .toast.show{ opacity:1; }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <i class="fa-solid fa-signal"></i>
+      <i class="fa-solid fa-wifi"></i>
+      <i class="fa-solid fa-battery-full"></i>
+    </div>
+  </div>
+
+  <div class="screen" id="mainScreen">
+    <div class="matching-view" id="matchingView">
+      <div class="matching-hero">
+        <div class="matching-badge"><i class="fa-solid fa-clipboard-list"></i></div>
+        <div class="matching-title">Find your supplier match</div>
+        <div class="matching-sub">Before entering the dashboard, business buyers confirm their supply needs so AeryHub can match them with a suitable farmer.</div>
+      </div>
+
+      <div class="match-card" id="matchingFormCard">
+        <div class="match-card-title"><i class="fa-solid fa-pen-to-square" style="color:#1F5A2D"></i> Supplier matching form</div>
+        <div class="prefill-form">
+          <div class="form-field">
+            <div class="form-label"><i class="fa-solid fa-store"></i> Business name</div>
+            <input class="prefill-input" type="text" value="Restoran Seri Selera">
+          </div>
+
+          <div class="form-field">
+            <div class="form-label"><i class="fa-solid fa-location-dot"></i> Business location</div>
+            <input class="prefill-input" type="text" value="Seri Kembangan, Selangor">
+            <div class="field-hint">Used to find a nearby farmer and reduce fulfilment distance.</div>
+          </div>
+
+          <div class="form-field">
+            <div class="form-label"><i class="fa-solid fa-leaf"></i> Products required</div>
+            <input class="prefill-input" type="text" value="Tomato, lettuce, cucumber">
+          </div>
+
+          <div class="form-field">
+            <div class="form-label"><i class="fa-solid fa-boxes-stacked"></i> Estimated weekly demand</div>
+            <input class="prefill-input" type="text" value="Around 120 kg per week">
+            <div class="field-hint">Helps match with farmers who can supply consistently.</div>
+          </div>
+
+          <div class="form-field">
+            <div class="form-label"><i class="fa-solid fa-truck-fast"></i> Fulfilment preference</div>
+            <select class="prefill-select">
+              <option selected>Delivery through logistics partner</option>
+              <option>Self-pickup from farm</option>
+              <option>Flexible</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-dashboard" id="findMatchBtn" onclick="submitMatchingForm()">
+        Find Supplier Match
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+
+      <div class="match-result" id="matchResult">
+        <div class="match-card" style="margin-top:14px;">
+          <div class="match-card-title"><i class="fa-solid fa-wand-magic-sparkles" style="color:#1F5A2D"></i> Match result</div>
+
+          <div class="match-row">
+            <div class="match-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div>
+              <div class="match-label">Nearby location</div>
+              <div class="match-value">Supplier is located within a suitable fulfilment range</div>
+            </div>
+          </div>
+
+          <div class="match-row">
+            <div class="match-icon"><i class="fa-solid fa-leaf"></i></div>
+            <div>
+              <div class="match-label">Required products</div>
+              <div class="match-value">Tomato, lettuce and cucumber available</div>
+            </div>
+          </div>
+
+          <div class="match-row">
+            <div class="match-icon"><i class="fa-solid fa-seedling"></i></div>
+            <div>
+              <div class="match-label">Farmer availability</div>
+              <div class="match-value">Consistent stock available for weekly bulk orders</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="matched-supplier-box" id="matchedSupplierBox">
+          <div style="width:54px;height:54px;border-radius:16px;background:#dbe7d3;display:flex;align-items:center;justify-content:center;color:#1F5A2D;font-size:20px;flex-shrink:0;">
+            <i class="fa-solid fa-user-check"></i>
+          </div>
+          <div>
+            <div class="matched-label">Assigned supplier</div>
+            <div class="matched-name">Green Valley Farm</div>
+            <div class="matched-reason">Matched for location, required produce and weekly demand.</div>
+          </div>
+        </div>
+
+        <button class="btn-dashboard" onclick="showDashboard()">
+          Continue to Dashboard
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <button class="small-link-btn" onclick="requestNewMatch()">Request New Match</button>
+      </div>
+    </div>
+
+    <div class="main-dashboard" id="mainDashboard">
+      <div class="green-zone">
+        <div class="home-header">
+          <div class="app-brand">
+            <div class="brand-name">Business Home</div>
+            <div class="user-location">
+              <i class="fa-solid fa-briefcase"></i>
+              Restoran Seri Selera
+            </div>
+          </div>
+
+          <div class="header-actions">
+            <a href="notifications.html" class="icon-btn">
+              <i class="fa-regular fa-bell"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="search-bar" onclick="goBulkOrder()" style="cursor:pointer">
+          <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input type="text" placeholder="Search bulk products..." readonly>
+          <span style="font-size:16px;color:#1F5A2D"><i class="fa-solid fa-boxes-stacked"></i></span>
+        </div>
+      </div>
+
+      <div class="business-banner">
+        <div>
+          <div class="banner-label">B2B Supply Account</div>
+          <div class="banner-title">Restock faster with your assigned farmer</div>
+          <div class="banner-text">Create weekly bulk orders directly from your dedicated supplier for more consistent restaurant supply.</div>
+          <a href="javascript:void(0)" onclick="goBulkOrder()" class="btn-bulk">
+            <i class="fa-solid fa-plus"></i>
+            Create Bulk Order
+          </a>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="quick-grid">
+          <div class="quick-card" onclick="goBulkOrder()">
+            <div class="quick-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <div class="quick-title">Bulk Order</div>
+            <div class="quick-sub">Request large quantities</div>
+          </div>
+
+          <div class="quick-card" onclick="window.location.href='b2b-orders.html'">
+            <div class="quick-icon"><i class="fa-solid fa-truck-fast"></i></div>
+            <div class="quick-title">Active Orders</div>
+            <div class="quick-sub">Track supply requests</div>
+          </div>
+
+          <div class="quick-card" onclick="goSupplier()">
+            <div class="quick-icon"><i class="fa-solid fa-user-check"></i></div>
+            <div class="quick-title">Assigned Supplier</div>
+            <div class="quick-sub">View farmer profile</div>
+          </div>
+
+          <div class="quick-card" onclick="window.location.href='b2b-orders.html#history'">
+            <div class="quick-icon"><i class="fa-solid fa-chart-line"></i></div>
+            <div class="quick-title">Order History</div>
+            <div class="quick-sub">Review past purchases</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">Assigned Supplier</div>
+          <a href="javascript:void(0)" onclick="goSupplier()" class="section-link">View &rarr;</a>
+        </div>
+        <div id="assignedSupplierCard"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">Frequently Ordered</div>
+          <a href="javascript:void(0)" onclick="goBulkOrder()" class="section-link">Bulk order &rarr;</a>
+        </div>
+        <div class="h-scroll" id="frequentProducts"></div>
+      </div>
+
+      <div class="section">
+        <div class="match-card">
+          <div class="match-card-title"><i class="fa-solid fa-handshake" style="color:#1F5A2D"></i> Supplier Match Summary</div>
+          <div class="match-row">
+            <div class="match-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div>
+              <div class="match-label">Matched based on</div>
+              <div class="match-value">Location, produce needs, weekly demand and farmer availability</div>
+            </div>
+          </div>
+          <button class="small-link-btn" onclick="requestNewMatch()">Request New Match</button>
+        </div>
+      </div>
+
+      <div style="height:24px"></div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav">
+    <a href="b2b-home.html" class="nav-item active">
+      <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
+    </a>
+    <a href="bulk-orders.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-boxes-stacked"></i></span>Bulk
+    </a>
+    <a href="b2b-orders.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
+    </a>
+    <a href="b2b-chat.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-comment"></i></span>Chat
+    </a>
+    <a href="b2b-profile.html" class="nav-item">
+      <span class="nav-icon"><i class="fa-solid fa-user"></i></span>Profile
+    </a>
+  </nav>
+</div>
+
+<div class="toast" id="customToast"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+  const ASSIGNED_FARMER_ID = 1;
+
+  function getLowestPrice(product){
+    if(product && product.pricing && product.pricing.length > 0){
+      return Math.min(...product.pricing.map(p => Number(p.price) || 0));
+    }
+    return product && typeof product.price === 'number' ? product.price : 0;
+  }
+
+  function getFirstPriceLabel(product){
+    if(product && product.pricing && product.pricing.length > 0){
+      return product.pricing[0].label;
+    }
+    return product?.unit || 'unit';
+  }
+
+  function renderAssignedSupplier(){
+    const wrap = document.getElementById('assignedSupplierCard');
+    const farmer = FARMERS.find(f => f.id === ASSIGNED_FARMER_ID) || FARMERS[0];
+    const products = PRODUCTS.filter(p => p.farmerId === farmer.id && p.active !== false);
+
+    wrap.innerHTML = `
+      <div class="supplier-card" onclick="goSupplier()">
+        <img class="supplier-img" src="${farmer.farmImage || farmer.image}" alt="${farmer.farm}">
+        <div class="supplier-info">
+          <div class="supplier-name">${farmer.farm}</div>
+          <div class="supplier-meta">
+            <span><i class="fa-solid fa-location-dot" style="color:#1F5A2D"></i> ${farmer.city}, ${farmer.state}</span>
+            <span><i class="fa-solid fa-star" style="color:#f59e0b"></i> ${farmer.rating}</span>
+            <span><i class="fa-solid fa-seedling" style="color:#1F5A2D"></i> ${products.length} products</span>
+          </div>
+          <div class="assigned-badge"><i class="fa-solid fa-circle-check"></i> Assigned Supplier</div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderFrequentProducts(){
+    const wrap = document.getElementById('frequentProducts');
+    const products = PRODUCTS
+      .filter(p => p.farmerId === ASSIGNED_FARMER_ID && p.active !== false)
+      .slice(0, 6);
+
+    wrap.innerHTML = '';
+
+    products.forEach(product => {
+      const img = product.images && product.images.length > 0 ? product.images[0] : 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=300';
+      const price = getLowestPrice(product);
+      const unit = getFirstPriceLabel(product);
+
+      const card = document.createElement('div');
+      card.className = 'bulk-product-card';
+      card.innerHTML = `
+        <img src="${img}" alt="${product.name}">
+        <div class="bulk-product-body">
+          <div class="bulk-product-name">${product.name}</div>
+          <div class="bulk-product-price">RM ${price.toFixed(2)}</div>
+        </div>
+      `;
+      wrap.appendChild(card);
+    });
+  }
+
+  function goBulkOrder(){
+    localStorage.setItem('assignedFarmerId', ASSIGNED_FARMER_ID);
+    window.location.href = 'bulk-orders.html';
+  }
+
+  function goSupplier(){
+    localStorage.setItem('currentFarmer', ASSIGNED_FARMER_ID);
+    window.location.href = 'profile-farmer.html';
+  }
+
+
+  function submitMatchingForm(){
+    const result = document.getElementById('matchResult');
+    const btn = document.getElementById('findMatchBtn');
+    if(result){
+      result.classList.add('show');
+    }
+    if(btn){
+      btn.style.display = 'none';
+    }
+    showToast('Supplier matched successfully!');
+    setTimeout(() => {
+      result?.scrollIntoView({ behavior:'smooth', block:'start' });
+    }, 120);
+  }
+
+  function showDashboard(){
+    document.getElementById('matchingView').classList.add('hide');
+    document.getElementById('mainDashboard').classList.add('show');
+    document.getElementById('mainScreen').scrollTop = 0;
+  }
+
+  function requestNewMatch(){
+    showToast('New supplier match request submitted!');
+  }
+
+  function renderMatchedSupplierBox(){
+    const box = document.getElementById('matchedSupplierBox');
+    const farmer = FARMERS.find(f => f.id === ASSIGNED_FARMER_ID) || FARMERS[0];
+    if(!box || !farmer) return;
+
+    box.innerHTML = `
+      <img src="${farmer.farmImage || farmer.image}" alt="${farmer.farm}">
+      <div>
+        <div class="matched-label">Assigned supplier</div>
+        <div class="matched-name">${farmer.farm}</div>
+        <div class="matched-reason">Matched for nearby location, required produce and available supply.</div>
+      </div>
+    `;
+  }
+
+  window.showToast = function(msg){
+    const t = document.getElementById('customToast');
+    if(t){
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderMatchedSupplierBox();
+    renderAssignedSupplier();
+    renderFrequentProducts();
+  });
+</script>
+</body>
+</html>

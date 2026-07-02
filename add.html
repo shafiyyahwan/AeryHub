@@ -48,28 +48,19 @@
     .header-back-btn{
       width:34px;
       height:34px;
-      background:transparent;
-      color:#ffffff;
-      border:none;
-      border-radius:0;
+      background:#ffffff;
+      color:#1F5A2D;
+      border:1.5px solid #ffffff;
+      border-radius:50%;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:18px;
+      font-size:14px;
       text-decoration:none;
       flex-shrink:0;
       padding:0;
-      box-shadow:none;
-    }
-
-    .header-back-btn i{
-      background:transparent !important;
-      border:none !important;
-      border-radius:0 !important;
-      box-shadow:none !important;
-      color:#ffffff !important;
-      padding:0;
-      margin:0;
+      box-shadow:0 2px 6px rgba(0,0,0,.12);
+      transition:transform .15s ease;
     }
 
     .header-back-btn:active{ transform:scale(.92); }
@@ -550,18 +541,6 @@
       font-weight:500;
     }
     .toast.show{ opacity:1; }
-
-    .btn-ghost{
-      background:#ffffff !important;
-      color:#1F5A2D !important;
-      border:2px solid #1F5A2D !important;
-      box-shadow:none !important;
-    }
-
-    .btn-ghost:hover{
-      background:#F5FAF2 !important;
-    }
-
   </style>
 </head>
 <body>
@@ -1160,7 +1139,7 @@
       name: document.getElementById('prodName').value,
       category: selectedCat,
       description: document.getElementById('prodDesc').value || '',
-      images: productImages.length ? productImages : ['img/durian.jpg'],
+      images: productImages.length ? productImages : ['https://images.unsplash.com/photo-1695624479590-349f802773c6?w=400&h=300&fit=crop'],
       rating: 5.0,
       reviews: 0,
       organic: document.getElementById('isOrganic').checked,
@@ -1197,7 +1176,7 @@
     const today = new Date().toISOString().slice(0,10);
     document.getElementById('prodHarvest').value = today;
 
-    addDemoImg('img/durian.jpg');
+    addDemoImg('https://images.unsplash.com/photo-1695624479590-349f802773c6?w=400&h=300&fit=crop');
 
     document.getElementById('prodName').value = 'Premium Musang King Durian';
     document.getElementById('prodDesc').value = 'Gred A Musang King directly from Raub orchard with rich creamy yellow flesh and bittersweet premium taste.';

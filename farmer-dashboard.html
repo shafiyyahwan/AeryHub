@@ -11,13 +11,116 @@
   <link rel="stylesheet" href="css/style1.css">
   <style>
     body { background: #e0ead8; }
-    .home-header { padding: 16px 20px 12px; display: flex; align-items: center; justify-content: space-between; background: var(--surface); }
-    .header-left .greeting { font-size: 13px; color: var(--text-muted); }
-    .header-left .user-name { font-size: 18px; font-weight: 800; color: var(--text); }
-    .header-actions { display: flex; gap: 10px; }
-    .icon-btn { width: 40px; height: 40px; border-radius: 12px; background: var(--gray-100); border: none; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text); cursor: pointer; text-decoration: none; position: relative; }
+
+    /* ── Standardised AeryHub green status/header ── */
+    .status-bar {
+      background: #1F5A2D !important;
+      color: #fff !important;
+    }
+
+    .screen {
+      background: #F5F5EE;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .green-zone {
+      background: #1F5A2D;
+      padding: 0 20px 26px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .home-header {
+      background: transparent !important;
+      padding: 16px 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .header-left .greeting {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #E6F2DF;
+    }
+
+    .header-left .user-name-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .header-left .user-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.35;
+      letter-spacing: .2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 210px;
+      padding-bottom: 1px;
+    }
+
+    .tier-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #1F5A2D;
+      background: #E6F2DF;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.14);
+      color: #fff;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .icon-btn:active {
+      background: rgba(255,255,255,.24);
+    }
+
     .section { padding: 20px; }
     .section + .section { padding-top: 0; }
+
+    /* extra breathing room between stacked sections for clarity */
+    .section-gap {
+      margin-bottom: 18px;
+    }
+
+    /* remove any arrow glyph appended after section links (e.g. "View All", "Manage") */
+    .section-link::after { content: none !important; }
 
     /* 4-Grid KPI Cards Feature */
     .kpi-container { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -107,8 +210,21 @@
     .pro-banner-sub { font-size: 12px; color: rgba(255,255,255,0.7); margin-bottom: 14px; line-height: 1.4; }
     .pro-feature { display: flex; align-items: center; gap: 2px; font-size: 12px; color: rgba(255,255,255,0.85); margin-bottom: 6px; }
 
+    /* Hero Banner (Total Sales) — ensure text/button never get clipped or blend in */
+    .hero-banner {
+      padding: 18px 18px 20px;
+      overflow: visible;
+    }
+    .hero-banner .hero-title {
+      color: #ffffff !important;
+      line-height: 1.3;
+      padding-bottom: 2px;
+    }
+    .hero-banner .btn.btn-sm {
+      box-shadow: 0 3px 8px rgba(0,0,0,.12);
+    }
+
     /* Global Utilities */
-    .status-icons { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
     .nav-icon { font-size: 18px; margin-bottom: 4px; }
     .cart-count { position: absolute; top: -4px; right: -4px; background: #ee4d2d; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: 700; line-height: 1; }
   </style>
@@ -127,31 +243,37 @@
 
   <div class="screen" id="mainScreen">
 
-    <div class="home-header">
-      <div class="header-left">
-        <div class="greeting">Farmer Portal</div>
-        <div class="user-name">Ladang Hijau Selangor</div>
-      </div>
-      <div class="header-actions">
-        <a href="notifications.html" class="icon-btn nav-badge">
-          <i class="fas fa-bell"></i>
-        </a>
+    <div class="green-zone">
+      <div class="home-header">
+        <div class="header-left">
+          <div class="user-name-row">
+            <div class="user-name">Ladang Hijau Selangor</div>
+            <span class="tier-badge">Free Tier</span>
+          </div>
+          <div class="greeting">Farmer Portal</div>
+        </div>
+
+        <div class="header-actions">
+          <a href="notifications.html" class="icon-btn nav-badge" aria-label="Notifications">
+            <i class="fas fa-bell"></i>
+          </a>
+        </div>
       </div>
     </div>
 
-    <div class="section" style="padding-bottom:0; margin-bottom:12px;">
+    <div class="section section-gap" style="padding-bottom:0; padding-top:16px;">
       <div class="hero-banner fade-in" style="background: linear-gradient(135deg, #14532d, #16a34a);">
         <div class="hero-greeting" style="color: rgba(255,255,255,0.9);">Total Sales This Month</div>
         <div class="hero-title" style="font-size: 26px;">RM 3,240.00</div>
-        <div style="font-size: 12px; opacity: 0.85; margin-top: 2px; margin-bottom: 12px;">
+        <div style="font-size: 12px; opacity: 0.85; margin-top: 2px; margin-bottom: 12px; color: #ffffff;">
           <i class="fa-solid fa-arrow-trend-up"></i> +18% vs last month
         </div>
-        <a href="earnings.html" class="btn btn-sm" style="background:white;color:#16a34a;width:auto;display:inline-flex">View Wallet &rarr;</a>
+        <a href="earnings.html" class="btn btn-sm" style="background:white;color:#16a34a;width:auto;display:inline-flex">View Wallet</a>
       </div>
     </div>
 
-    <div class="section" style="padding-bottom: 10px;">
-      <a href="orders.html" class="pickup-card fade-in">
+    <div class="section section-gap" style="padding-bottom: 10px;">
+      <a href="manage-orders.html" class="pickup-card fade-in">
         <div class="pickup-icon-wrap">
           <i class="fa-solid fa-wheat-awn"></i>
         </div>
@@ -163,7 +285,7 @@
       </a>
     </div>
 
-    <div class="section fade-in-delay" style="padding-bottom: 0;">
+    <div class="section section-gap fade-in-delay" style="padding-bottom: 0;">
       <div class="kpi-container">
         <div class="kpi-card">
           <div class="kpi-icon-row">
@@ -200,7 +322,7 @@
       </div>
     </div>
 
-    <div class="section" style="padding-bottom: 0; padding-top: 16px;">
+    <div class="section section-gap" style="padding-bottom: 0; padding-top: 16px;">
       <div class="commission-strip">
         <div class="cs-icon-wrap"><i class="fa-solid fa-hand-holding-dollar"></i></div>
         <div class="cs-text">
@@ -209,7 +331,7 @@
       </div>
     </div>
 
-    <div class="section" style="padding-bottom: 12px;">
+    <div class="section section-gap" style="padding-bottom: 12px;">
       <div class="chart-card">
         <div class="chart-header">
           <div class="chart-title">Sales This Week</div>
@@ -230,13 +352,13 @@
       </div>
     </div>
 
-    <div class="section" style="padding-top:0">
+    <div class="section section-gap" style="padding-top:0">
       <div class="section-header">
         <div class="section-title">Recent Orders</div>
-        <a href="orders.html" class="section-link">View All &rarr;</a>
+        <a href="manage-orders.html" class="section-link">View All</a>
       </div>
       <div class="card" style="padding:4px 16px" id="farmerOrdersList">
-        <div class="nearby-farm" onclick="window.location.href='order-details.html'">
+        <div class="nearby-farm" onclick="window.location.href='manage-orders.html'">
           <div class="order-avatar-wrap">
             <img src="img/sarahLim.jpg" alt="Sarah">
           </div>
@@ -267,10 +389,10 @@
       </div>
     </div>
 
-    <div class="section" style="padding-top:0">
+    <div class="section section-gap" style="padding-top:0">
       <div class="section-header">
         <div class="section-title">Top Products</div>
-        <a href="manage-products.html" class="section-link">Manage &rarr;</a>
+        <a href="manage-products.html" class="section-link">Manage</a>
       </div>
       <div class="card" style="padding:4px 16px">
         <div class="top-product-row">
@@ -302,12 +424,13 @@
         </div>
         <div class="pro-banner-title">Grow faster with Pro</div>
         <div class="pro-banner-sub">Unlock premium placement and targeted analytical instruments to amplify your localized yield conversions.</div>
-        <div class="pro-feature"><i class="fa-solid fa-circle-check" style="margin-right: 6px; color: #4ade80"></i> Verified Farmer Badge</div>
-        <div class="pro-feature"><i class="fa-solid fa-circle-check" style="margin-right: 6px; color: #4ade80"></i> Advanced Sales Analytics</div>
         <div class="pro-feature"><i class="fa-solid fa-circle-check" style="margin-right: 6px; color: #4ade80"></i> Featured Product Placement</div>
-        <div class="pro-feature"><i class="fa-solid fa-circle-check" style="margin-right: 6px; color: #4ade80"></i> Revenue Forecasting</div>
+        <div class="pro-feature"><i class="fa-solid fa-circle-check" style="margin-right: 6px; color: #4ade80"></i> Advanced Sales Analytics</div>
+        <div class="pro-feature"><i class="fa-solid fa-circle-check" style="margin-right: 6px; color: #4ade80"></i> Demand Forecasting</div>
+        <div class="pro-feature"><i class="fa-solid fa-circle-check" style="margin-right: 6px; color: #4ade80"></i> Marketing Campaign Tools</div>
+        <div class="pro-feature"><i class="fa-solid fa-circle-check" style="margin-right: 6px; color: #4ade80"></i> Priority Support</div>
         <a href="earnings.html" style="background: linear-gradient(135deg, #d97706, #f59e0b); color: white; border: none; margin-top: 12px; width: max-content; padding: 10px 16px; border-radius: 8px; font-weight: 700; text-decoration: none; display: block; text-align: center; box-shadow: 0 4px 12px rgba(217,119,6,0.3)">
-          Upgrade to Pro — RM29/month &rarr;
+          Upgrade to Pro — RM19.90/month &rarr;
         </a>
       </div>
     </div>
@@ -319,7 +442,7 @@
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
     <a href="manage-products.html" class="nav-item">
-      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Products
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
     <a href="manage-orders.html" class="nav-item">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders

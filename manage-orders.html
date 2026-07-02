@@ -7,101 +7,340 @@
   <link rel="stylesheet" href="css/style1.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <style>
-    body { background: #e0ead8; }
+    body { background:#e0ead8; }
 
-    /* CORE SCREEN CANVAS */
+    .status-bar {
+      background:#1F5A2D !important;
+      color:#fff !important;
+    }
+    .status-bar span,
+    .status-icons,
+    .status-icons i { color:#fff !important; }
+    .status-icons {
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size:12px;
+      font-weight:600;
+    }
+
     .screen {
-      flex: 1;
-      overflow-y: auto;
-      background: #fafafa;
-      position: relative;
-      scrollbar-width: none;
-      padding-bottom: 90px;
+      flex:1;
+      overflow-y:auto;
+      -webkit-overflow-scrolling:touch;
+      background:#F5F5EE;
+      position:relative;
+      scrollbar-width:none;
+      padding-bottom:90px;
     }
-    .screen::-webkit-scrollbar { display: none; }
+    .screen::-webkit-scrollbar { display:none; }
 
-    /* APPBAR SYSTEM */
-    .orders-header {
-      padding: 16px 20px 12px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
+    /* Standard green header, same style as Marketplace / Manage Products */
+    .green-zone {
+      background:#1F5A2D;
+      padding:0 20px 18px;
+      position:sticky;
+      top:0;
+      z-index:100;
     }
-    .header-row { display: flex; align-items: center; justify-content: space-between; }
 
-    /* MINI REVENUE EXPANDED WIDGET */
+    .market-header-row {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:14px 0 12px;
+    }
+
+    .market-title {
+      font-size:20px;
+      font-weight:700;
+      color:#ffffff;
+      line-height:1;
+      letter-spacing:.2px;
+    }
+
+    .icon-btn {
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:rgba(255,255,255,.14);
+      color:#fff;
+      border:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:17px;
+      cursor:pointer;
+      text-decoration:none;
+      position:relative;
+      flex-shrink:0;
+    }
+    .icon-btn:active { background:rgba(255,255,255,.24); }
+
+    /* Revenue card inside the green header */
     .revenue-mini-card {
-      background: linear-gradient(135deg, #16a34a, #15803d);
-      border-radius: 14px;
-      margin: 14px 16px 4px;
-      padding: 14px 16px;
-      color: white;
-      box-shadow: 0 4px 12px rgba(22,163,74,0.15);
+      background:rgba(255,255,255,.13);
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:16px;
+      padding:14px 16px;
+      color:white;
+      box-shadow:0 4px 12px rgba(0,0,0,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
     }
-    .rev-label { font-size: 11px; opacity: 0.85; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .rev-amount { font-size: 22px; font-weight: 800; margin-top: 2px; }
 
-    /* SEGMENTED STATUS TABS */
+    .rev-label {
+      font-size:11px;
+      opacity:.84;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.5px;
+      margin-bottom:3px;
+    }
+
+    .rev-amount {
+      font-size:23px;
+      font-weight:800;
+      line-height:1.1;
+    }
+
+    .revenue-icon {
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:rgba(255,255,255,.16);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:19px;
+      flex-shrink:0;
+    }
+
+    /* Tabs below green header */
+    .status-tabs-wrap {
+      background:#F5F5EE;
+      padding:14px 16px 0;
+      border-bottom:1px solid #E4E8DD;
+    }
+
     .status-tabs {
-      display: flex;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      position: sticky; top: 0; z-index: 10;
-      overflow-x: auto;
-      scrollbar-width: none;
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      scrollbar-width:none;
+      padding-bottom:14px;
     }
-    .status-tabs::-webkit-scrollbar { display: none; }
-    .stab {
-      flex: 1; min-width: 90px; padding: 12px 6px; text-align: center;
-      font-size: 12px; font-weight: 700; color: var(--text-muted);
-      cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s;
-    }
-    .stab.active { color: var(--primary); border-bottom-color: var(--primary); background: #fbfdfa; }
+    .status-tabs::-webkit-scrollbar { display:none; }
 
-    /* ORDER CARD ENGINE CONTAINER */
-    .orders-feed { padding: 12px 16px; display: flex; flex-direction: column; gap: 12px; }
+    .stab {
+      padding:7px 14px;
+      border-radius:20px;
+      font-size:12px;
+      font-weight:700;
+      border:1.5px solid var(--border);
+      background:#ffffff;
+      color:var(--text-muted);
+      cursor:pointer;
+      white-space:nowrap;
+      transition:.2s;
+      flex-shrink:0;
+    }
+
+    .stab.active {
+      background:#1F5A2D;
+      border-color:#1F5A2D;
+      color:#ffffff;
+    }
+
+    .stab.active span { color:#ffffff !important; }
+
+    .orders-feed {
+      padding:14px 16px 96px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
 
     .order-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: var(--shadow);
+      background:#ffffff;
+      border:1px solid #E5EADF;
+      border-radius:16px;
+      padding:14px;
+      box-shadow:0 3px 10px rgba(0,0,0,.03);
     }
 
-    .oc-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px dashed var(--border); padding-bottom: 10px; margin-bottom: 10px; }
-    .oc-id { font-size: 12.5px; font-weight: 700; color: var(--text); }
-    .oc-time { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .oc-top {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      border-bottom:1px dashed #E5EADF;
+      padding-bottom:10px;
+      margin-bottom:10px;
+    }
 
-    /* Type Badge system (Pickup vs Delivery) */
-    .type-badge { font-size: 10.5px; font-weight: 800; padding: 3px 8px; border-radius: 6px; text-transform: uppercase; }
-    .type-badge.pickup { background: #eff6ff; color: #1d4ed8; }
-    .type-badge.delivery { background: #faf5ff; color: #6b21a8; }
+    .oc-id {
+      font-size:12.5px;
+      font-weight:800;
+      color:var(--text);
+    }
 
-    /* Customer metadata info layout */
-    .customer-info-line { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-    .customer-img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
-    .customer-name { font-size: 12.5px; font-weight: 700; color: var(--text); }
+    .oc-time {
+      font-size:11px;
+      color:var(--text-muted);
+      margin-top:2px;
+      font-weight:600;
+    }
 
-    /* Product layout lists inside order card */
-    .order-items-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-    .oi-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 500; color: var(--text-muted); }
-    .oi-name { color: var(--text); font-weight: 600; }
+    .type-badge {
+      font-size:10.5px;
+      font-weight:800;
+      padding:4px 9px;
+      border-radius:999px;
+      text-transform:uppercase;
+    }
+    .type-badge.pickup { background:#EFF6FF; color:#1D4ED8; }
+    .type-badge.delivery { background:#FAF5FF; color:#6B21A8; }
 
-    .oc-total-row { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f3f4f6; padding-top: 10px; margin-top: 4px; }
-    .total-label { font-size: 12px; color: var(--text-muted); font-weight: 600; }
-    .total-price { font-size: 14.5px; font-weight: 800; color: var(--primary); }
-    .nav-icon { font-size: 18px; margin-bottom: 4px; }
+    .customer-info-line {
+      display:flex;
+      align-items:center;
+      gap:9px;
+      margin-bottom:11px;
+    }
 
-    /* STATUS COLOR INDICATORS */
-    .status-lbl { font-size: 11.5px; font-weight: 700; }
-    .status-lbl.pending { color: #d97706; }
-    .status-lbl.preparing { color: #2563eb; }
-    .status-lbl.ready { color: #16a34a; }
-    .status-lbl.completed { color: var(--text-muted); }
+    .customer-img {
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      object-fit:cover;
+      border:1px solid #E5EADF;
+      background:#ebeeeb;
+    }
 
-    /* TOAST SYSTEM */
-    .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 8px 18px; border-radius: 20px; font-size: 12px; z-index: 99; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; font-weight: 500; }
-    .toast.show { opacity: 1; }
+    .customer-name {
+      font-size:13px;
+      font-weight:800;
+      color:var(--text);
+    }
+
+    .chat-link {
+      margin-left:auto;
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      background:#F0F7EC;
+      color:#1F5A2D;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      font-size:14px;
+    }
+
+    .order-items-list {
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      margin-bottom:12px;
+    }
+
+    .oi-row {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      font-size:13px;
+      font-weight:500;
+      color:var(--text-muted);
+    }
+
+    .oi-name {
+      color:var(--text);
+      font-weight:700;
+      line-height:1.35;
+    }
+
+    .oc-total-row {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-top:1px solid #F0F2EC;
+      padding-top:10px;
+      margin-top:4px;
+      gap:12px;
+    }
+
+    .total-label {
+      font-size:11px;
+      color:var(--text-muted);
+      font-weight:700;
+      display:block;
+      text-align:right;
+    }
+
+    .total-price {
+      font-size:15px;
+      font-weight:800;
+      color:#1F5A2D;
+      display:block;
+      text-align:right;
+    }
+
+    .status-lbl {
+      font-size:11.5px;
+      font-weight:800;
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      white-space:nowrap;
+    }
+    .status-lbl.pending { color:#D97706; }
+    .status-lbl.preparing { color:#2563EB; }
+    .status-lbl.ready { color:#16A34A; }
+    .status-lbl.completed { color:var(--text-muted); }
+
+    .btn.btn-primary {
+      background:#1F5A2D;
+      border-color:#1F5A2D;
+      color:#ffffff;
+    }
+
+    .nav-icon {
+      font-size:18px;
+      margin-bottom:4px;
+    }
+
+    .empty-orders {
+      text-align:center;
+      padding:42px 20px;
+      color:var(--text-muted);
+    }
+
+    .empty-orders i {
+      font-size:38px;
+      opacity:.35;
+      margin-bottom:10px;
+    }
+
+    .toast {
+      position:fixed;
+      bottom:90px;
+      left:50%;
+      transform:translateX(-50%);
+      background:rgba(0,0,0,.85);
+      color:#fff;
+      padding:8px 18px;
+      border-radius:20px;
+      font-size:12px;
+      z-index:999;
+      opacity:0;
+      transition:opacity .2s;
+      pointer-events:none;
+      white-space:nowrap;
+      font-weight:500;
+    }
+    .toast.show { opacity:1; }
   </style>
 </head>
 <body>
@@ -119,27 +358,34 @@
 
   <div class="screen">
 
-    <div class="orders-header">
-      <div class="header-row">
-        <div style="font-size:20px; font-weight:800; color:var(--text)">
-          Manage Orders
-        </div>
-        <button class="icon-btn" style="width:36px; height:36px; border-radius:10px; background:#f4f5f7; border:none; display:flex; align-items:center; justify-content:center;" onclick="showToast('Refreshing dashboard...'), setTimeout(renderOrders, 600)">
+    <div class="green-zone">
+      <div class="market-header-row">
+        <div class="market-title">Manage Orders</div>
+
+        <button class="icon-btn" onclick="showToast('Refreshing orders...'); setTimeout(renderOrders, 600)" aria-label="Refresh orders">
           <i class="fa-solid fa-rotate"></i>
         </button>
       </div>
+
+      <div class="revenue-mini-card">
+        <div>
+          <div class="rev-label">This Week's Net Revenue</div>
+          <div class="rev-amount" id="revenueWidget">RM 0.00</div>
+        </div>
+        <div class="revenue-icon">
+          <i class="fa-solid fa-wallet"></i>
+        </div>
+      </div>
     </div>
 
-    <div class="revenue-mini-card">
-      <div class="rev-label">This Week's Net Revenue</div>
-      <div class="rev-amount" id="revenueWidget">RM 0.00</div>
-    </div>
-
-    <div class="status-tabs">
-      <div class="stab active" id="tab-all" onclick="filterTab('all', this)">All Orders</div>
-      <div class="stab" id="tab-pending" onclick="filterTab('pending', this)">Pending <span id="badge-p" style="color:#d97706"></span></div>
-      <div class="stab" id="tab-preparing" onclick="filterTab('preparing', this)">Preparing</div>
-      <div class="stab" id="tab-ready" onclick="filterTab('ready', this)">Ready</div>
+    <div class="status-tabs-wrap">
+      <div class="status-tabs">
+        <div class="stab active" id="tab-all" onclick="filterTab('all', this)">All Orders</div>
+        <div class="stab" id="tab-pending" onclick="filterTab('pending', this)">Pending <span id="badge-p" style="color:#d97706"></span></div>
+        <div class="stab" id="tab-preparing" onclick="filterTab('preparing', this)">Preparing</div>
+        <div class="stab" id="tab-ready" onclick="filterTab('ready', this)">Ready</div>
+        <div class="stab" id="tab-completed" onclick="filterTab('completed', this)">Completed</div>
+      </div>
     </div>
 
     <div class="orders-feed" id="ordersContainer"></div>
@@ -151,7 +397,7 @@
       <span class="nav-icon"><i class="fa-solid fa-house"></i></span>Home
     </a>
     <a href="manage-products.html" class="nav-item">
-      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Products
+      <span class="nav-icon"><i class="fa-solid fa-store"></i></span>Shop
     </a>
     <a href="manage-orders.html" class="nav-item active">
       <span class="nav-icon"><i class="fa-solid fa-box"></i></span>Orders
@@ -246,9 +492,9 @@
 
     if(filtered.length === 0) {
       container.innerHTML = `
-        <div style="text-align:center; padding:40px 20px; color:var(--text-muted)">
-          <i class="fa-solid fa-box-open" style="font-size:36px; opacity:0.3; margin-bottom:10px;"></i>
-          <div style="font-size:13px; font-weight:600;">No orders found in this category</div>
+        <div class="empty-orders">
+          <i class="fa-solid fa-box-open"></i>
+          <div style="font-size:13px; font-weight:700;">No orders found in this category</div>
         </div>`;
       return;
     }
@@ -310,7 +556,7 @@
         <div class="customer-info-line">
           <img src="${order.customerAvatar}" class="customer-img" alt="">
           <div class="customer-name">${order.customerName}</div>
-          <a href="farmer-chat.html" style="margin-left:auto; color:var(--primary); font-size:14px;"><i class="fa-solid fa-comment-dots"></i></a>
+          <a href="farmer-chat.html" class="chat-link"><i class="fa-solid fa-comment-dots"></i></a>
         </div>
 
         <div class="order-items-list">
