@@ -503,7 +503,7 @@
       <!-- SHOP BLOCK -->
       <div class="shop-block">
         <div class="block-title">Shop Information</div>
-        <div class="shop-row" id="shopPreview">
+        <div class="shop-row" id="shopPreview" onclick="goToFarmerProfile()">
           <div class="shop-av" id="shopAvSlot"><i class="fa-solid fa-shop"></i></div>
           <div class="shop-info">
 
@@ -565,6 +565,7 @@
   let currentQty = 1;
   let selectedPrice = 0;
   let selectedUnitLabel = '';
+  let selectedFarmerId = null;
 
   const REVIEWS = [
     { name: "Amir Hamzah", rating: 5, date: "28 May 2025", text: "Super fresh! Tomato tiba hari yang sama dipetik." },
@@ -618,6 +619,18 @@
     });
   }
 
+
+  function goToFarmerProfile(farmerId) {
+    const idToUse = farmerId || selectedFarmerId || (currentProduct ? currentProduct.farmerId : null);
+
+    if (idToUse) {
+      localStorage.setItem('currentFarmer', idToUse);
+    }
+
+    // This is the correct farmer profile page for the buyer/product flow.
+    window.location.href = 'profile-farmer.html';
+  }
+
   function loadProductDetails() {
     if (typeof AppState !== 'undefined' && AppState.init) AppState.init();
     currentQty = 1;
@@ -626,6 +639,7 @@
     const pid = parseInt(localStorage.getItem('currentProduct') || '1');
     currentProduct = PRODUCTS.find(p => p.id === pid) || PRODUCTS[0];
     const farmer = (typeof FARMERS !== 'undefined') ? FARMERS.find(f => f.id === currentProduct.farmerId) : null;
+    selectedFarmerId = farmer ? farmer.id : currentProduct.farmerId;
 
     setTimeout(() => {
       document.getElementById('loadingState').style.display = 'none';
@@ -749,9 +763,11 @@
           </div>
         `;
 
-        document.getElementById('shopPreview').onclick = () => {
-          localStorage.setItem('currentFarmer', farmer.id);
-          window.location.href = 'profile-farmer.html';
+        const shopPreviewEl = document.getElementById('shopPreview');
+        shopPreviewEl.onclick = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          goToFarmerProfile(farmer.id);
         };
       }
 
