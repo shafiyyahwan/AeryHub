@@ -108,6 +108,24 @@
       background: #e5e7eb;
     }
 
+    .signout-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #fff5f5;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      font-size: 14px;
+    }
+    .signout-btn:hover {
+      background: #fee2e2;
+    }
+
     /* ── GRID & PRODUCT CARD STYLE ── */
     .grid-2 {
       display: grid;
@@ -545,6 +563,9 @@
           <button class="edit-profile-btn" onclick="editFarmProfile()">
             <i class="fas fa-edit"></i> Edit Profile
           </button>
+          <button class="signout-btn" onclick="signOutFarmer()" title="Sign Out">
+            <i class="fas fa-right-from-bracket"></i>
+          </button>
         </div>
       </div>
 
@@ -937,9 +958,30 @@
     });
   }
 
+  function signOutFarmer() {
+    localStorage.removeItem('currentFarmer');
+    localStorage.removeItem('farmer_profile_bio');
+    localStorage.removeItem('farmer_profile_address');
+    localStorage.removeItem('farmer_profile_city_state');
+    localStorage.removeItem('farmer_pickup_hours');
+    localStorage.removeItem('farmer_gallery_photos');
+
+    if (typeof showToast === 'function') {
+      showToast('Signed out');
+      setTimeout(() => { window.location.href = 'login.html'; }, 600);
+    } else {
+      window.location.href = 'login.html';
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
-    const fid = parseInt(localStorage.getItem('currentFarmer') || '1');
-    const farmer = (typeof FARMERS !== 'undefined') ? (FARMERS.find(f => f.id === fid) || FARMERS[0]) : null;
+    const farmer = (typeof FARMERS !== 'undefined')
+      ? (FARMERS.find(f => f.farm && f.farm.toLowerCase().includes('ladang hijau')) || FARMERS[0])
+      : null;
+
+    if (farmer) {
+      localStorage.setItem('currentFarmer', farmer.id);
+    }
 
     if (farmer) {
       document.getElementById('coverImg').src = farmer.farmImage;
