@@ -12,20 +12,28 @@
     .screen{flex:1;overflow-y:auto;background:#F5F5EE;position:relative;scrollbar-width:none;padding-bottom:96px;}
     .screen::-webkit-scrollbar{display:none;}
 
-    .green-zone{background:#1F5A2D;padding:0 20px 16px;position:sticky;top:0;z-index:100;}
+    .green-zone{background:#1F5A2D;padding:0 20px 22px;position:sticky;top:0;z-index:100;}
     .header-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0 12px;}
     .back-btn{background:transparent;border:none;color:#fff;font-size:18px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;text-decoration:none;}
     .page-title{font-size:20px;font-weight:700;color:#fff;line-height:1;letter-spacing:.2px;}
     .header-spacer{width:28px;height:28px;}
     .header-subtitle{font-size:13px;color:#E6F2DF;font-weight:500;margin-top:4px;text-align:center;}
 
-    /* Filter tabs */
-    .filter-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-top:2px;}
+    /* Filter tabs under green header */
+    .filter-wrapper{
+      background:#F5F5EE;
+      padding:12px 20px 4px;
+      margin-top:-10px;
+      border-radius:18px 18px 0 0;
+      position:relative;
+      z-index:50;
+    }
+    .filter-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px;}
     .filter-tabs::-webkit-scrollbar{display:none;}
-    .filter-tab{flex-shrink:0;padding:8px 15px;border-radius:20px;background:rgba(255,255,255,.14);color:#E6F2DF;font-size:12.5px;font-weight:700;border:1px solid rgba(255,255,255,.18);white-space:nowrap;}
-    .filter-tab.active{background:#fff;color:#1F5A2D;border-color:#fff;}
+    .filter-tab{flex-shrink:0;padding:8px 15px;border-radius:20px;background:#ffffff;color:#1F5A2D;font-size:12.5px;font-weight:700;border:1px solid #D7E4D2;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.03);}
+    .filter-tab.active{background:#1F5A2D;color:#ffffff;border-color:#1F5A2D;}
 
-    .section{padding:0 20px;margin-top:16px;}
+    .section{padding:0 20px;margin-top:12px;}
     .section-title{font-size:14px;font-weight:800;color:#1f2937;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
     .section-count{font-size:12px;font-weight:700;color:#8a8f87;}
 
@@ -97,6 +105,9 @@
         </div>
         <div class="header-spacer"></div>
       </div>
+    </div>
+
+    <div class="filter-wrapper">
       <div class="filter-tabs" id="filterTabs">
         <button class="filter-tab active" data-filter="all">All</button>
         <button class="filter-tab" data-filter="pending">Pending</button>
